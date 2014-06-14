@@ -10,7 +10,7 @@ chatbot
      * [Redshift Github](https://github.com/syllog1sm/redshift) This is the program described by the above link
    * [Any tutorials for developing chatbots?](http://stackoverflow.com/questions/9706769/any-tutorials-for-developing-chatbots)
    * [Therapist.py ("a cheezy little Eliza knock-off by Joe Strout")](http://www.strout.net/info/coding/python/ai/therapist.py)
-   * [Howie the Chatterbot](http://howie.sourceforge.net/
+   * [Howie the Chatterbot](http://howie.sourceforge.net/)
    * 
    
 ##Possible packages:

@@ -55,6 +55,13 @@ We are trying to create a *simple* chatbot with a basic *sense of self*. It will
     * Syntactically valid sentence
     * Semantically valid sentence
   * Be able to generate stylistically appropriate sentence based on training materials
+  * 
+
+##Milestones for Tuesday 6/17:
+
+* Research and identify POS tagger (Nathan)
+* Draft plan for web interface (Josh)
+* Outline next steps and research potential packages (Corinne)
 
 
 ###Stage 2 (Ephemeral Stage)

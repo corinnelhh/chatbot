@@ -15,6 +15,7 @@ chatbot
 
 ##Similar projects
 * [thebot 0.1.1](https://github.com/svetlyak40wt/thebot)
+* [Videogrep](http://lav.io/2014/06/videogrep-automatic-supercuts-with-python/) (not that similar, but uses CLiPS packages to search for sentence structure)
 
 ##Possible packages:
    

@@ -11,6 +11,7 @@ chatbot
    * [Any tutorials for developing chatbots?](http://stackoverflow.com/questions/9706769/any-tutorials-for-developing-chatbots)
    * [Therapist.py ("a cheezy little Eliza knock-off by Joe Strout")](http://www.strout.net/info/coding/python/ai/therapist.py)
    * [Howie the Chatterbot](http://howie.sourceforge.net/)
+   * [Computational Linguistics & Psycholinguistics Research Center](http://www.clips.ua.ac.be/)
 
 ##Similar projects
 * [thebot 0.1.1](https://github.com/svetlyak40wt/thebot)

@@ -16,15 +16,15 @@
         <article>
         <div id="output_box">
         {% if reply %}
-        Output box has says: {{reply}}.
+        Output box says: {{reply}}.
         {% else %}
         Output box is empty!
         {% endif %}
         </div>
-            <form>
+            <form action="{{ url_for('submit') }}" method="POST" class="submit">
                 <div class="field">
                 <label for="title">Input box.</label>
-                <input type="text" size="30" name="user_input" id="user_input"/>
+                <input type="text" size="30" name="submission" id="submission"/>
                 </div>
                 <div class="control_row">
                     <input type="submit" value="Share" name="Share"/>

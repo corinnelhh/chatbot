@@ -76,6 +76,19 @@ We are trying to create a *simple* chatbot with a basic *sense of self*. It will
 ###Stage 4 (Profit)
 
 
+****************
+
+###User Stories
+
+ * 1) As an anonymous user, when I enter a single sentence into the text field the bot generates a single sentence response. 
+ * 2) As an anonymous user, when I select a filter in the checklist the filter is applied to the next response. 
+ * 3) As an anonymous user, when I click the "show me" button I see a log of the steps to generate the output. 
+ * 4) As an anonymous user, when I visit the page I see a "Tweet" button to share the response. 
+ * 5) An an anonymous user, when I visit the website I see the chatbot page. 
+ * 6) As an anonymous user, when I visit the website I see a "Contact Us" link that takes me to the project email address and a link to the GitHub page. 
+ * 7) As an anonymous user, when I have a noteworthy interaction with the bot I can click on a button to add that interaction to a "Best Of" page. 
+
+
 
 
 

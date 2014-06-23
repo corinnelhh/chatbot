@@ -3,18 +3,29 @@
     <head>
     <meta charset="utf-8">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
-    <title>Chatbot title</title>
-    <aside id="About">
+    <title>Chatbot 5000</title>
+    <body>
+    <aside id="about">
         About info goes here!
     </aside>
-    <aside id="Filters">
+    <aside id="filters">
         Filters go here!
     </aside>
-    <body>
+    <h1 id="title">Title for chatbot 5000</h1>
         <main>
-        Output box.
+        {% if reply %}
+        Output box has says: {{reply}}.
+        {% else %}
+        Output box is empty!
+        {% endif %}
             <form>
-            Input box.
+                <div class="field">
+                <label for="title">Input box.</label>
+                <input type="text" size="30" name="user_input" id="user_input"/>
+                </div>
+                <div class="control_row">
+                    <input type="submit" value="Share" name="Share"/>
+                </div>
             </form>
         </main>
         <footer>

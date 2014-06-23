@@ -8,30 +8,50 @@
     <main id="main">
     <body>
     <aside id="about">
-        About info goes here!
+        About Chatbot5000:
     </aside>
     <aside id="filters">
-        Filters go here!
+        Input filters:
+        <form>
+            <select>
+                <option value = "1"></option>
+                <option value = "2">Orange</option>
+                <option value = "3">Banana</option>
+                <option value = "4">Apple</option>
+            </select>
+        </form>
+        Output filters:
+        <form>
+            <select>
+                <option value = "1"></option>
+                <option value = "2">Orange</option>
+                <option value = "3">Banana</option>
+                <option value = "4">Apple</option>
+            </select>
+        </form>
     </aside>
         <article>
         <div id="output_box">
         {% if reply %}
-        Output box says: {{reply}}.
-        {% else %}
-        Output box is empty!
+        Chatbot5000 says: {{reply}}.
         {% endif %}
         </div>
             <form action="{{ url_for('submit') }}" method="POST" class="submit">
                 <div class="field">
-                <label for="title">Input box.</label>
-                <input type="text" size="30" name="submission" id="submission"/>
+                <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
                 </div>
             </form>
+            <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
+            <div class="slidingDiv">
+                Fill this space with really interesting content.
+<!--                 <a href="#" class="show_hide">hide</a> -->
+            </div>
         </article>
     </main>
         <footer>
-            <p>Comment/link to github</p>
-            <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey</p>
+            <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey<br>
+            View the source code on <a href="https://github.com/corinnelhh/chatbot">github</a>.<br>
+            <a href="mailto:chatbot5000@gmail.com"> Email us.</a></p>
         </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='application.js') }}"></script>

@@ -1,11 +1,11 @@
 #output_box{
-    width: 200px;
-    height: 200px;
+    width: auto;
+    height: auto;
     background-color: #ffffaa;
-    border: solid 3px #000000;
+    border: solid 3px #ffffab;
+    border-radius: 7pt;
     padding: 10px
 }
-
 
 body {
     font: 24px Helvetica;
@@ -13,7 +13,7 @@ body {
 }
 
 #main {
-    min-height: 800px;
+    min-height: 600px;
     margin: 0px;
     padding: 0px;
     display: -webkit-flex;
@@ -88,4 +88,13 @@ header, footer {
         max-height: 50px;
     }
 }
+
+footer p, header{
+    text-align: center;
+}
+
+header{
+    font-size: 64px;
+}
+
 /*Inspired by https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes*/

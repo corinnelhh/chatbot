@@ -194,4 +194,6 @@ def deploy():
     generate_nginx_config()
     run_command_on_selected_server(contrib.project.upload_project)
     install_supervisor()
+    run_command_on_selected_server('sudo apt-get install python-pip')
+    run_command_on_selected_server('pip install flask')
     move_nginx_files()

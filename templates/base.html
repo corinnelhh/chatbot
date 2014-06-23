@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
     <title>Chatbot 5000</title>
+    <header id="title">Title for chatbot 5000</header>
     <body>
     <aside id="about">
         About info goes here!
@@ -11,13 +12,14 @@
     <aside id="filters">
         Filters go here!
     </aside>
-    <h1 id="title">Title for chatbot 5000</h1>
-        <main>
+        <main id="main">
+        <div id="output_box">
         {% if reply %}
         Output box has says: {{reply}}.
         {% else %}
         Output box is empty!
         {% endif %}
+        </div>
             <form>
                 <div class="field">
                 <label for="title">Input box.</label>

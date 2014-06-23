@@ -151,6 +151,13 @@ def move_nginx_files():
     run_command_on_selected_server(_move_nginx_files)
 
 
+def _install_flask():
+    sudo ('apt-get install python-pip')
+    sudo ('pip install flask')
+
+def install_flask():
+    run_command_on_selected_server(_install_flask)
+
 def stop_instance():
     conn = get_ec2_connection()
     select_instance('running')
@@ -194,6 +201,5 @@ def deploy():
     generate_nginx_config()
     run_command_on_selected_server(contrib.project.upload_project)
     install_supervisor()
-    run_command_on_selected_server('sudo apt-get install python-pip')
-    run_command_on_selected_server('pip install flask')
+    install_flask()
     move_nginx_files()

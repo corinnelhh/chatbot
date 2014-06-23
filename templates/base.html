@@ -8,10 +8,27 @@
     <main id="main">
     <body>
     <aside id="about">
-        About info goes here!
+        About Chatbot5000:
     </aside>
     <aside id="filters">
-        Filters go here!
+        Input filters:
+        <form>
+            <select>
+                <option value = "1"></option>
+                <option value = "2">Orange</option>
+                <option value = "3">Banana</option>
+                <option value = "4">Apple</option>
+            </select>
+        </form>
+        Output filters:
+        <form>
+            <select>
+                <option value = "1"></option>
+                <option value = "2">Orange</option>
+                <option value = "3">Banana</option>
+                <option value = "4">Apple</option>
+            </select>
+        </form>
     </aside>
         <article>
         <div id="output_box">
@@ -21,15 +38,14 @@
         </div>
             <form action="{{ url_for('submit') }}" method="POST" class="submit">
                 <div class="field">
-                <input type="text" size="30" name="submission" id="submission" placeholder="Type here..."/>
+                <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
                 </div>
             </form>
         </article>
     </main>
         <footer>
-            <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey</p>
-            <p id="github">View the source code on <a href="https://github.com/corinnelhh/chatbot">github</a></p>
-            <p id="email"><a href="mailto:chatbot5000@gmail.com">Email us.</a></p>
+            <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey<br>
+            View the source code on <a href="https://github.com/corinnelhh/chatbot">github</a>. <a href="mailto:chatbot5000@gmail.com"> Email us.</a></p>
         </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='application.js') }}"></script>

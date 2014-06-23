@@ -5,6 +5,7 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
     <title>Chatbot 5000</title>
     <header id="title">Title for chatbot 5000</header>
+    <main id="main">
     <body>
     <aside id="about">
         About info goes here!
@@ -12,7 +13,7 @@
     <aside id="filters">
         Filters go here!
     </aside>
-        <main id="main">
+        <article>
         <div id="output_box">
         {% if reply %}
         Output box has says: {{reply}}.
@@ -29,7 +30,8 @@
                     <input type="submit" value="Share" name="Share"/>
                 </div>
             </form>
-        </main>
+        </article>
+    </main>
         <footer>
             <p>Comment/link to github</p>
             <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey</p>

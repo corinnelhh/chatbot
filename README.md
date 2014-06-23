@@ -11,9 +11,11 @@ chatbot
    * [Any tutorials for developing chatbots?](http://stackoverflow.com/questions/9706769/any-tutorials-for-developing-chatbots)
    * [Therapist.py ("a cheezy little Eliza knock-off by Joe Strout")](http://www.strout.net/info/coding/python/ai/therapist.py)
    * [Howie the Chatterbot](http://howie.sourceforge.net/)
+   * [Computational Linguistics & Psycholinguistics Research Center](http://www.clips.ua.ac.be/)
 
 ##Similar projects
 * [thebot 0.1.1](https://github.com/svetlyak40wt/thebot)
+* [Videogrep](http://lav.io/2014/06/videogrep-automatic-supercuts-with-python/) (not that similar, but uses CLiPS packages to search for sentence structure)
 
 ##Possible packages:
    
@@ -72,6 +74,19 @@ We are trying to create a *simple* chatbot with a basic *sense of self*. It will
 * Can appropriately answer basic questions regardless of form:
 
 ###Stage 4 (Profit)
+
+
+****************
+
+###User Stories
+
+ * 1) As an anonymous user, when I enter a single sentence into the text field the bot generates a single sentence response. 
+ * 2) As an anonymous user, when I select a filter in the checklist the filter is applied to the next response. 
+ * 3) As an anonymous user, when I click the "show me" button I see a log of the steps to generate the output. 
+ * 4) As an anonymous user, when I visit the page I see a "Tweet" button to share the response. 
+ * 5) An an anonymous user, when I visit the website I see the chatbot page. 
+ * 6) As an anonymous user, when I visit the website I see a "Contact Us" link that takes me to the project email address and a link to the GitHub page. 
+ * 7) As an anonymous user, when I have a noteworthy interaction with the bot I can click on a button to add that interaction to a "Best Of" page. 
 
 
 

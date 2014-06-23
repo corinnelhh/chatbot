@@ -6,25 +6,25 @@ from flask import request
 from flask import url_for
 from flask import redirect
 from flask import session
-import chatbot_brain
+
+#import chatbot_brain
 
 app = Flask(__name__)
 
 @app.route('/')
-def show_chatbot():
+def show_chatbot(reply="1test"):
     """Displays base.html when user goes to main page."""
     return render_template('base.html', reply=reply)
 
 
-@app.route('/submit', methods=['POST'])
+@app.route('/submit', methods=['GET','POST'])
 def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
-    try:
-        submission = request.form['submission']
-        reply = cbot.<"analyze the input">(submission)
-    return redirect(url_for('show_chatbot'))
+    submission = request.form['submission']
+    reply = "test" #cbot.<"analyze the input">(submission)
+    return show_chatbot(reply)
 
 
 if __name__ == '__main__':
-    cbot = chatbot_brain.Chatbot()
+    #cbot = chatbot_brain.Chatbot()
     app.run(debug=True)

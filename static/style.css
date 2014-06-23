@@ -13,7 +13,7 @@ body {
 }
 
 #main {
-    min-height: 600px;
+    min-height: 400px;
     margin: 0px;
     padding: 0px;
     display: -webkit-flex;
@@ -62,7 +62,7 @@ header, footer {
     display: block;
     margin: 4px;
     padding: 5px;
-    min-height: 100px;
+    min-height: 60px;
     border: 1px solid #eebb55;
     border-radius: 7pt;
     background: #ffeebb;
@@ -95,6 +95,10 @@ footer p, header{
 
 header{
     font-size: 64px;
+}
+
+#submission{
+    width: 99%;
 }
 
 /*Inspired by https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes*/

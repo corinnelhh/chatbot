@@ -11,7 +11,7 @@ def filter_content(words):
     of the nouns, verbs, and adjectives the orig list contained."""
     tagged = pos_tag(words)
     possible_seeds = []
-    content_pos = ['NN','JJ']
+    content_pos = ['VV','NN','JJ']
     for word,pos in tagged:
         if pos[:2] in content_pos:
             possible_seeds.append(word)

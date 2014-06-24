@@ -50,13 +50,12 @@ class Chatbot(object):
 
     def i_filter_random(self, words):
         count = 0
-        while True:
+        while count < len(words):
             seed = random.choice(words)
             if (seed in self.bi_lexicon) and (seed not in self.stop_puncts):
                 return seed
             count += 1
-            if count == len(words):
-                return "What a funny thing to say!"
+        return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
         return str(random.choice(sentences))

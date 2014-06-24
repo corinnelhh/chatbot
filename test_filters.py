@@ -12,3 +12,8 @@ sentences = ["good breeding and of the match Lady Catherine is not know and let 
 def test_length():
     reduced_sentences = output_filters.filter_length(sentences)
     assert len(reduced_sentences) == 4
+
+def test_length_null():
+    reduced_sentences = output_filters.filter_length(sentences)
+    same_sentences = output_filters.filter_length(reduced_sentences)
+    assert len(same_sentences) == len(reduced_sentences)

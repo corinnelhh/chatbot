@@ -1,8 +1,9 @@
 import nltk
-import random, copy
+import random
 import os
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
+import pdb
 
 
 class Chatbot(object):
@@ -12,20 +13,20 @@ class Chatbot(object):
         self.tri_lexicon = {}
         self.bi_lexicon = {}
         self.stop_puncts = ['.', '!', '?']
-        self.puncts = [',', ';', ':', '"', "'", '-', '--']
+        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?"]
 
     def parse_training_input(self, text):
         while True:
-            our_text = text.read(1024)
+            our_text = text.read(64)
             if not our_text:
                 break
             yield wordpunct_tokenize(our_text)
 
-    def remove_non_final_punctuation(self, list):
-        for i in copy.copy(list):
+    def remove_non_final_punctuation(self, our_list):
+        for i in our_list[:]:
             if i in self.puncts:
-                list.remove(i)
-        return list
+                our_list.remove(i)
+        return our_list
 
     def tag_input(self, our_string):
         our_string = wordpunct_tokenize(our_string)
@@ -73,33 +74,27 @@ class Chatbot(object):
             seed = first_seed
             candidate_sentence = [seed]
             while True:
-                pair = None
-                while not pair:
-                    try:
-                        pair = random.choice(self.bi_lexicon[seed])
-                    except KeyError:
-                        continue
-                bigram = "{} {}".format(seed, pair)
+                word_2 = None
                 next_word = None
-                while not next_word:
+                while (not word_2) and (not next_word):
                     try:
+                        word_2 = random.choice(self.bi_lexicon[seed])
+                        bigram = "{} {}".format(seed, word_2)
                         next_word = random.choice(self.tri_lexicon[bigram])
                     except KeyError:
-                        continue
-                if pair not in self.stop_puncts:
-                    candidate_sentence.append(pair)
-                bigram = "{} {}".format(pair, next_word)
-                seed = pair
+                        break
+                if word_2 not in self.stop_puncts:
+                    candidate_sentence.append(word_2)
+                bigram = "{} {}".format(word_2, next_word)
+                seed = word_2
                 if (next_word in self.stop_puncts) or (next_word not in self.bi_lexicon):
                     response_candidates.append(" ".join(candidate_sentence))
                     break
-        return " \n ".join(response_candidates)
+        return " \n\n ".join(response_candidates)
 
 
 if __name__ == '__main__':
     bot = Chatbot()
     bot.fill_lexicon()
     print "Filled the lexicon!"
-    #response = raw_input("Please enter a sentence.")
-    print
     print bot.generate_response("How are you doing?")

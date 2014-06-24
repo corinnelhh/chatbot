@@ -78,9 +78,12 @@ def filter_content_priority(words, lexicon=None):
     possible_seeds = []
     for word, pos in tagged:
         if pos[:2] == 'NN':
-            possible_seeds += 3 * word
+            possible_seeds.append(word)
+            possible_seeds.append(word)
+            possible_seeds.append(word)
         elif pos[:2] == 'VV':
-            possible_seeds += 2 * word
+            possible_seeds.append(word)
+            possible_seeds.append(word)
         elif pos[:2] == 'JJ':
-            possible_seeds += word
+            possible_seeds.append(word)
     return possible_seeds

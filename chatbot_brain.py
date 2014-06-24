@@ -71,6 +71,7 @@ class Chatbot(object):
         print "Given the seed: {}".format(first_seed)
         response_candidates = []
         while len(response_candidates) < 10:
+            bad_sentence = False
             seed = first_seed
             candidate_sentence = [seed]
             while True:
@@ -82,7 +83,10 @@ class Chatbot(object):
                         bigram = "{} {}".format(seed, word_2)
                         next_word = random.choice(self.tri_lexicon[bigram])
                     except KeyError:
+                        bad_sentence = True
                         break
+                if bad_sentence:
+                    break
                 if word_2 not in self.stop_puncts:
                     candidate_sentence.append(word_2)
                 bigram = "{} {}".format(word_2, next_word)

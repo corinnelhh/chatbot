@@ -14,6 +14,7 @@ class Chatbot(Trainbot):
         self.training_file = training_file
 
     def i_filter_random(self, words):
+        u"""Return randomly selected, non-punctuation word from words."""
         count = 0
         while count < len(words):
             seed = random.choice(words)
@@ -23,11 +24,13 @@ class Chatbot(Trainbot):
         return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
+        u"""Return randomly selected sentence from sentecnces"""
         return str(random.choice(sentences))
 
-    def _create_chains(self, seed):
+    def _create_chains(self, seed, size=10):
+        u"""Return list of markov generated strings spawned from the seed."""
         response_candidates = []
-        while len(response_candidates) < 10:
+        while len(response_candidates) < size:
             bad_sentence = False
             candidate_sentence = [seed]
             while True:
@@ -53,6 +56,7 @@ class Chatbot(Trainbot):
         return response_candidates
 
     def compose_response(self, input_sent, input_filter, output_filter):
+        u"""Return a response sentence based on the input."""
         # Tokenize input
         tokenized_input = wordpunct_tokenize(input_sent)
         # Select seed based on input filter

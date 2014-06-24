@@ -16,7 +16,7 @@ def test_fill_lexicon():
 
 def test_create_chains():
     bot = chatbot_brain.Chatbot()
-    output = bot.generate_response("How are you doing?")
+    output = bot.compose_response("How are you doing?", bot.i_filter_random, bot.o_filter_random)
     assert "," not in output[0]
     for sentence in output:
         assert "." not in sentence[:-1]

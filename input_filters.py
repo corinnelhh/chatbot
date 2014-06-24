@@ -1,3 +1,12 @@
+import nltk
+from nltk.tokenize import wordpunct_tokenize
+
+
+def i_filter_small_talk_typer(input_):
+    input_ = wordpunct_tokenize(input_)
+
+
+
 def i_filter_small_talk(dict_key, keyword=None):
     """
     Takes in a dictkey and an optional keyword. Sentences are randomly
@@ -10,7 +19,8 @@ def i_filter_small_talk(dict_key, keyword=None):
         ["Talking about the weather is such a bore.",
         "I'm not the weatherman!"], 'feelings' : ["Why do you care how I feel?",
         "More importantly, how do you feel?", "Really, are *you* {}".format()],
-        'sports' : ["You're a sports fan!", "I've never been much of an athlete..."]
+        'sports' : ["You're a sports fan!", "I've never been much of an athlete..."],
+        'new_word': ['Wow, thanks for explaining that.',
     }
 
     if 

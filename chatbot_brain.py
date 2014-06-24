@@ -5,6 +5,7 @@ from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 
 from trainbot import Trainbot
+import input_filters
 
 
 class Chatbot(Trainbot):
@@ -55,15 +56,17 @@ class Chatbot(Trainbot):
                     break
         return response_candidates
 
-    def compose_response(self, input_sent, input_filter, output_filter):
+    def compose_response(self, input_sent, input_filter=None, output_filter=None, lexicon=None):
         u"""Return a response sentence based on the input."""
         # Tokenize input
         tokenized_input = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
-        seed = input_filter(tokenized_input)
-        # If seed not in lexicon, return default phrase:
-        if seed == "What a funny thing to say!":
-            return seed
+        seeds = input_filter(tokenized_input, lexicon=None)
+        #If a default sentence was picked, return it.
+        if isinstance(seeds, basestring):
+            return seeds
+        # Randomly pick a seed from the returned possibilities.
+        seed = self.i_filter_random(seeds)
         # Create chains
         chains = self._create_chains(seed)
         # Return output of filter
@@ -74,4 +77,5 @@ if __name__ == '__main__':
     bot = Chatbot()
     bot.fill_lexicon()
     print "Filled the lexicon!"
-    print bot.compose_response("How are you doing?", bot.i_filter_random, bot.o_filter_random)
+    print bot.compose_response("I am very happy!", \
+           input_filters.filter_length_words, bot.o_filter_random, bot.bi_lexicon)

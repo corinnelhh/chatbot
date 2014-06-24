@@ -1,5 +1,24 @@
 import input_filters
 import output_filters
+import chatbot_brain
+
+#input filters start here
+
+
+def test_small_talk_filter():
+    bot = chatbot_brain.Chatbot()
+    bot.fill_lexicon()
+    tester = "raining snowing sunny weather"
+    weather_opts = ["Talking about the weather is such a bore.",
+        "I'm not the weatherman!"]
+    sentence = input_filters.filter_small_talk(tester, bot.bi_lexicon)
+    assert sentence in weather_opts
+
+
+
+
+
+#output filters start here
 
 sentences = ["good breeding and of the match Lady Catherine is not know and let us the express To morrow fortnight and by any thing in a month You see it and sometimes made the very gravely glancing.",
             "here are to the company I congratulate you have seen Collins and he had recommended him from Jane I dare say",
@@ -29,7 +48,5 @@ def test_filter_pos():
             "perhaps your kindness shall be rewarded"]
     reduced_sentences = output_filters.filter_pos(sentences)
     assert len(reduced_sentences) == 6
-
-
 
 

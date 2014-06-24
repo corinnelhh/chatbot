@@ -12,7 +12,7 @@ class Chatbot(Trainbot):
 
     def __init__(self, training_file="tell_tale_heart.txt"):
         super(Chatbot, self).__init__()
-            self.training_file = training_file
+        self.training_file = training_file
 
     def i_filter_random(self, words):
         count = 0

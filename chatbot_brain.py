@@ -52,14 +52,6 @@ class Chatbot(Trainbot):
                     break
         return response_candidates
 
-    def _select_seed(self, input_sent):
-        #words = self.tag_input(input_sent)
-        words = wordpunct_tokenize(input_sent)
-        first_seed = self.i_filter_random(words)
-        print "Given the seed: {}".format(first_seed)
-        if first_seed == "What a funny thing to say!":
-            return first_seed
-
     def compose_response(self, input_sent, input_filter, output_filter):
         # Tokenize input
         tokenized_input = wordpunct_tokenize(input_sent)
@@ -70,9 +62,8 @@ class Chatbot(Trainbot):
             return seed
         # Create chains
         chains = self._create_chains(seed)
-        # Apply output filters--
+        # Return output of filter
         return output_filter(chains)
-        # Return one passing sentence
 
 
 if __name__ == '__main__':

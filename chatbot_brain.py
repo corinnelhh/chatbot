@@ -61,7 +61,7 @@ class Chatbot(object):
     def o_filter_random(self, sentences):
         return str(random.choice(sentences))
 
-    def generate_response(self, input_sent):
+    def _create_chains(self, input_sent):
         #words = self.tag_input(input_sent)
         words = wordpunct_tokenize(input_sent)
         first_seed = self.i_filter_random(words)
@@ -95,11 +95,16 @@ class Chatbot(object):
                     break
         return self.o_filter_random(response_candidates)
 
-# def full_package():
-#     gener
+
+def full_package(**kwargs):
+    # Select seed based on input filter
+    # Create chains
+    # Apply output filters
+    # Return one passing sentence
+
 
 if __name__ == '__main__':
     bot = Chatbot()
     bot.fill_lexicon()
     print "Filled the lexicon!"
-    print bot.generate_response("How are you doing?")
+    print bot._create_chains  ("How are you doing?")

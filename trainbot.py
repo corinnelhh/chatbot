@@ -11,6 +11,7 @@ class Trainbot(object):
         self.training_file = training_file
         self.tri_lexicon = {}
         self.bi_lexicon = {}
+        self.pos_lexicon_word_pos = {}
         self.stop_puncts = ['.', '!', '?']
         self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."']
 
@@ -31,6 +32,20 @@ class Trainbot(object):
         our_string = wordpunct_tokenize(our_string)
         return pos_tag(our_string)
 
+
+    def pos_lexicon(self):
+        f = open(self.training_file)
+        print "opened"
+        for words in self.parse_training_input(f):
+            tagged = pos_tag(words)
+            for word, pos in tagged:
+                if word in self.pos_lexicon_word_pos:
+                    self.pos_lexicon_word_pos[word].append(pos)
+                else:
+                    self.pos_lexicon_word_pos[word] = [pos]
+        return len(self.pos_lexicon_word_pos)
+
+
     def fill_lexicon(self):
         f = open(self.training_file)
         for words in self.parse_training_input(f):
@@ -46,3 +61,7 @@ class Trainbot(object):
                 else:
                     self.bi_lexicon[first_word].append(second_word)
                     self.tri_lexicon[word_pair].append(word)
+
+if __name__=='__main__' :
+    tb=Trainbot()
+    print tb.pos_lexicon()

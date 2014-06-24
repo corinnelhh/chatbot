@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+
 import codecs, os, sys, string, random
 table = string.maketrans("","")
 trigramfirst = {}
 readfile = codecs.open('kipling.txt','r')
+
 
 def makeOutput(firstWord,secondWord):
     try:

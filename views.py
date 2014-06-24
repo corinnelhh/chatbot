@@ -7,7 +7,7 @@ from flask import url_for
 from flask import redirect
 from flask import session
 
-#import chatbot_brain
+import chatbot_brain
 
 app = Flask(__name__)
 
@@ -21,13 +21,14 @@ def show_chatbot(reply="1test"):
 def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
     submission = request.form['submission']
-    reply = "test" #cbot.<"analyze the input">(submission)
+    reply = cbot.generate_response(submission)
     return show_chatbot(reply)
 
 
 if __name__ == '__main__':
-    #cbot = chatbot_brain.Chatbot()
-    #app.run(debug=True)
+    cbot = chatbot_brain.Chatbot()
+    cbot.fill_lexicon()
+    # app.run(debug=True)
     from wsgiref.simple_server import make_server
     srv = make_server('localhost', 8000, app)
     srv.serve_forever()

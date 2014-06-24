@@ -4,11 +4,9 @@ import random
 from trainbot import Trainbot
 
 
-def i_filter_small_talk_typer(input_):
+def i_filter_small_talk(input_):
     bot = Trainbot()
     bot.fill_lexicon()
-    print "That's the length of the lexicon"
-    print len(bot.bi_lexicon)
     sports_words = ["basketball", "soccer", "football", "baseball",
             "hockey", "tennis"]
     weather_words = ["weather", "raining", "rain", "snowing", "snows",
@@ -18,26 +16,26 @@ def i_filter_small_talk_typer(input_):
         return i_filter_small_talk('new_word')
     for word in input_:
         if word in sports_words:
-            return i_filter_small_talk('sports')
+            return small_talk_dict('sports')
         elif word in weather_words:
-            return i_filter_small_talk('weather')
+            return small_talk_dict('weather')
         elif word in feeling_words:
-            return i_filter_small_talk('feelings')
+            return small_talk_dict('feelings')
         elif word not in bot.bi_lexicon:
-            return i_filter_small_talk('unknown_word')
+            return small_talk_dict('unknown_word')
     else:
         no_small = True
         return input_, no_small
 
 
-def i_filter_small_talk(dict_key, keyword=None):
+def small_talk_dict(dict_key, keyword=None):
     """
     Takes in a dictkey and an optional keyword. Sentences are randomly
     selected from the list of values. If a keyword is present,
     keyword is added into the output string.
     """
 
-    small_talk_dict = {'unknown_word' : ["What a funny thing to say!",
+    small_talk_dict_ = {'unknown_word' : ["What a funny thing to say!",
         "That's a new one!", "Huh!"],'weather' :
         ["Talking about the weather is such a bore.",
         "I'm not the weatherman!"], 'feelings' :
@@ -48,11 +46,11 @@ def i_filter_small_talk(dict_key, keyword=None):
         'new_word': ['Wow, thanks for explaining that.']
         }
 
-    return random.choice(small_talk_dict[dict_key])
+    return random.choice(small_talk_dict_[dict_key])
 
 
 
 if __name__ == "__main__":
     tokenized = wordpunct_tokenize("How old are you?")
-    print i_filter_small_talk_typer(tokenized)
+    print i_filter_small_talk(tokenized)
 

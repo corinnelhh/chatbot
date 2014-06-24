@@ -36,19 +36,17 @@ class Chatbot(object):
         f = open(self.training_file)
         for words in self.parse_training_input(f):
             words = self.remove_non_final_punctuation(words)
-            for i in range(2, (len(words) - 2)):
-                word_pair = "{} {}".format(words[i - 2], words[i - 1])
-                first_word = str(words[i - 2])
-                second_word = str(words[i - 1])
-                next_word = words[i]
+            for idx, word in enumerate(words[2:]):
+                word_pair = "{} {}".format(words[idx - 2], words[idx - 1])
+                first_word = str(words[idx - 2])
+                second_word = str(words[idx - 1])
                 if first_word not in self.bi_lexicon:
                     self.bi_lexicon[first_word] = [second_word]
+                if word_pair not in self.tri_lexicon:
+                    self.tri_lexicon[word_pair] = [word]
                 else:
                     self.bi_lexicon[first_word].append(second_word)
-                if word_pair not in self.tri_lexicon:
-                        self.tri_lexicon[word_pair] = [next_word]
-                else:
-                    self.tri_lexicon[word_pair].append(next_word)
+                    self.tri_lexicon[word_pair].append(word)
 
     def i_filter_random(self, words):
         count = 0

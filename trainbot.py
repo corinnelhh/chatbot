@@ -35,11 +35,11 @@ class Trainbot(object):
 
 
     def pos_lexicons(self):
-        """Creates a pos dictionary with every word as a key,
+        """Creates two pos dictionaries.
 
-        and the values being a list of all it's parts of speech.
+        One with every word as a key and the values being a list of all it's parts of speech.
         The list may look like [noun,verb,noun,noun] implying that it
-        is a noun more often than a verb."""
+        is a noun more often than a verb. The second is the same, but inverted."""
 
         f = open(self.training_file)
         print "opened"

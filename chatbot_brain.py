@@ -13,7 +13,7 @@ class Chatbot(object):
         self.tri_lexicon = {}
         self.bi_lexicon = {}
         self.stop_puncts = ['.', '!', '?']
-        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?"]
+        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."']
 
     def parse_training_input(self, text):
         while True:
@@ -51,14 +51,14 @@ class Chatbot(object):
                     self.tri_lexicon[word_pair].append(next_word)
 
     def i_filter_random(self, words):
+        count = 0
         while True:
             seed = random.choice(words)
-            if seed not in self.bi_lexicon:
-                continue
-            elif (seed in self.bi_lexicon) and (seed not in self.stop_puncts):
+            if (seed in self.bi_lexicon) and (seed not in self.stop_puncts):
                 return seed
-            else:
-                return "was"
+            count += 1
+            if count == len(words):
+                return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
         return str(random.choice(sentences))
@@ -67,6 +67,8 @@ class Chatbot(object):
         #words = self.tag_input(input_sent)
         words = wordpunct_tokenize(input_sent)
         first_seed = self.i_filter_random(words)
+        if first_seed == "What a funny thing to say!":
+            return first_seed
         print "Given the seed: {}".format(first_seed)
         response_candidates = []
         while len(response_candidates) < 10:

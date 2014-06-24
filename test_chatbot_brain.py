@@ -16,4 +16,5 @@ def test_fill_lexicon():
 
 def test_create_chains():
     bot = Chatbot()
-
+    output = bot.create_chains()
+    assert "," not in output[0]

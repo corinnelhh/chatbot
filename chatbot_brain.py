@@ -78,4 +78,4 @@ if __name__ == '__main__':
     bot.fill_lexicon()
     print "Filled the lexicon!"
     print bot.compose_response("I am very happy!", \
-           input_filters.i_filter_small_talk, bot.o_filter_random, bot.bi_lexicon)
+           input_filters.filter_length_words, bot.o_filter_random, bot.bi_lexicon)

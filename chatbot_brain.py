@@ -17,7 +17,7 @@ class Chatbot(object):
 
     def parse_training_input(self, text):
         while True:
-            our_text = text.read(64)
+            our_text = text.read(2048)
             if not our_text:
                 break
             yield wordpunct_tokenize(our_text)

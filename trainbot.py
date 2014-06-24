@@ -1,3 +1,11 @@
+import nltk
+import random
+import os
+from nltk import pos_tag
+from nltk.tokenize import wordpunct_tokenize
+import pdb
+
+
 class Trainbot(object):
     def __init__(self, training_file="tell_tale_heart.txt"):
         self.training_file = training_file

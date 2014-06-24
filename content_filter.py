@@ -11,7 +11,7 @@ def filter_content(words):
     of the nouns, verbs, and adjectives the orig list contained."""
     tagged = pos_tag(words)
     possible_seeds = []
-    content_pos = ['VB','NN','JJ']
+    content_pos = ['NN','JJ']
     for word,pos in tagged:
         if pos[:2] in content_pos:
             possible_seeds.append(word)
@@ -28,4 +28,4 @@ def filter_length_words(words):
 
 
 if __name__ == '__main__':
-    print filter_content(token("hello my name is nathan and I am testing this new stuff"))
+    print filter_content(token("I went running yesterday"))

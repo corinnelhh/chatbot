@@ -61,10 +61,9 @@ class Chatbot(object):
                 return "was"
 
     def o_filter_random(self, sentences):
-        return random.choice(sentences)
+        return str(random.choice(sentences))
 
-    def generate_response(self, input_sent, i_filter1="i_filter_random()",
-                          o_filter1="o_filter_random"):
+    def generate_response(self, input_sent):
         #words = self.tag_input(input_sent)
         words = wordpunct_tokenize(input_sent)
         first_seed = self.i_filter_random(words)
@@ -94,8 +93,10 @@ class Chatbot(object):
                 if (next_word in self.stop_puncts) or (next_word not in self.bi_lexicon):
                     response_candidates.append(" ".join(candidate_sentence))
                     break
-        return " \n\n ".join(response_candidates)
+        return self.o_filter_random(response_candidates)
 
+# def full_package():
+#     gener
 
 if __name__ == '__main__':
     bot = Chatbot()

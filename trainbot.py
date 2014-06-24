@@ -11,6 +11,8 @@ class Trainbot(object):
         self.training_file = training_file
         self.tri_lexicon = {}
         self.bi_lexicon = {}
+        self.pos_lexicon_word_pos = {}
+        self.pos_lexicon_pos_word = {}
         self.stop_puncts = ['.', '!', '?']
         self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."']
 
@@ -31,6 +33,32 @@ class Trainbot(object):
         our_string = wordpunct_tokenize(our_string)
         return pos_tag(our_string)
 
+
+    def pos_lexicons(self):
+        """Creates two pos dictionaries.
+
+        One with every word as a key and the values being a list of all it's parts of speech.
+        The list may look like [noun,verb,noun,noun] implying that it
+        is a noun more often than a verb. The second is the same, but inverted."""
+
+        f = open(self.training_file)
+        print "opened"
+        for words in self.parse_training_input(f):
+            tagged = pos_tag(words)
+            for word, pos in tagged:
+                if word in self.pos_lexicon_word_pos:
+                    self.pos_lexicon_word_pos[word].append(pos)
+                else:
+                    self.pos_lexicon_word_pos[word] = [pos]
+
+                if pos in self.pos_lexicon_pos_word:
+                    self.pos_lexicon_pos_word[pos].append(word)
+                else:
+                    self.pos_lexicon_pos_word[pos] = [word]
+                if len(self.pos_lexicon_word_pos)>20:
+                    return len(self.pos_lexicon_word_pos), self.pos_lexicon_pos_word
+
+
     def fill_lexicon(self):
         f = open(self.training_file)
         for words in self.parse_training_input(f):
@@ -46,4 +74,3 @@ class Trainbot(object):
                 else:
                     self.bi_lexicon[first_word].append(second_word)
                     self.tri_lexicon[word_pair].append(word)
-

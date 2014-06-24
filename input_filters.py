@@ -1,7 +1,7 @@
 import nltk
 from nltk.tokenize import wordpunct_tokenize
 import random
-form trainbot import Trainbot
+from trainbot import Trainbot
 
 
 def i_filter_small_talk_typer(input_):
@@ -36,16 +36,17 @@ def i_filter_small_talk(dict_key, keyword=None):
         "I'm not the weatherman!"], 'feelings' :
         ["Why do you care how I feel?",
         "More importantly, how do you feel?",
-        "Really, are *you* {}".format()],
+        "Really, are *you* {}"],
         'sports' : ["You're a sports fan!",
         "I've never been much of an athlete..."],
         'new_word': ['Wow, thanks for explaining that.',
     }
 
-    while True:
-        response = random.choice(small_talk_dict[dict_key])
-        if response 
+    return random.choice(small_talk_dict[dict_key])
+
 
 
 if __name__ == "__main__":
+    tokenized = wordpunct_tokenize("I am really happy today!")
+    print i_filter_small_talk_typer(tokenized)
 

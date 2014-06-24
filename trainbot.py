@@ -74,7 +74,3 @@ class Trainbot(object):
                 else:
                     self.bi_lexicon[first_word].append(second_word)
                     self.tri_lexicon[word_pair].append(word)
-
-if __name__=='__main__' :
-    tb=Trainbot()
-    print tb.pos_lexicons()

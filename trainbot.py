@@ -34,6 +34,13 @@ class Trainbot(object):
 
 
     def pos_lexicon(self):
+        """Creates a pos dictionary with every word as a key,
+
+        and the values being a list of all it's parts of speech.
+        The list may look like [noun,verb,noun,noun] implying that it
+        is a noun more often than a verb."""
+
+
         f = open(self.training_file)
         print "opened"
         for words in self.parse_training_input(f):

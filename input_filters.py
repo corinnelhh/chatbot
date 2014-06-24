@@ -4,7 +4,7 @@ from nltk.tokenize import wordpunct_tokenize
 import random
 
 
-def i_filter_small_talk(input_, lexicon=None):
+def filter_small_talk(input_, lexicon=None):
     sports_words = ["basketball", "soccer", "football", "baseball",
             "hockey", "tennis"]
     weather_words = ["weather", "raining", "rain", "snowing", "snows",
@@ -69,4 +69,18 @@ def filter_length_words(words, lexicon=None):
     for word in words:
         if len(word) > 2:
             possible_seeds.append(word)
+    return possible_seeds
+
+
+def filter_content_priority(words, lexicon=None):
+    "Takes in a list of words and returns words with 'weighted' priorities"
+    tagged = pos_tag(words)
+    possible_seeds = []
+    for word, pos in tagged:
+        if pos[:2] == 'NN':
+            possible_seeds += 3 * word
+        elif pos[:2] == 'VV':
+            possible_seeds += 2 * word
+        elif pos[:2] == 'JJ':
+            possible_seeds += word
     return possible_seeds

@@ -118,7 +118,7 @@ def run_command_on_selected_server(command):
 
 
 def _install_nginx():
-    sudo('apt-get install nginx')
+    sudo('apt-get --yes install nginx')
     print "installed nginx"
     sudo('/etc/init.d/nginx start')
 
@@ -128,7 +128,7 @@ def install_nginx():
 
 
 def _install_supervisor():
-    sudo('apt-get install supervisor')
+    sudo('apt-get --yes install supervisor')
     print "installed supervisor"
     sudo('mv ./chatbot/supervisord.conf /etc/supervisor/conf.d/chatbot.conf')
     sudo('/etc/init.d/supervisor stop')
@@ -150,6 +150,13 @@ def _move_nginx_files():
 def move_nginx_files():
     run_command_on_selected_server(_move_nginx_files)
 
+
+def _install_flask():
+    sudo ('apt-get --yes install python-pip')
+    sudo ('pip install flask')
+
+def install_flask():
+    run_command_on_selected_server(_install_flask)
 
 def stop_instance():
     conn = get_ec2_connection()
@@ -193,5 +200,6 @@ def deploy():
     install_nginx()
     generate_nginx_config()
     run_command_on_selected_server(contrib.project.upload_project)
+    install_flask()
     install_supervisor()
     move_nginx_files()

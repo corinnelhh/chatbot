@@ -1,15 +1,26 @@
 import nltk
 from nltk.tokenize import wordpunct_tokenize
 import random
+form trainbot import Trainbot
 
 
 def i_filter_small_talk_typer(input_):
-    if wordpunct_tokenize(input_)[:2] == ["It", "means"]
+    sports_words = ["basketball", "soccer", "football", "baseball",
+            "hockey", "tennis"]
+    weather_words = ["weather", "raining", "rain", "snowing", "snows",
+            "sunny", "cloudy"]
+    if input_[:2] == ["It", "means"]:
         return i_filter_small_talk('new_word')
-    elif "weather" in input_:
-        return 'weather'
+    for word in input_:
+        if word in sports_words:
+            return i_filter_small_talk('sports')
+        elif word in weather_words:
+            return i_filter_small_talk('weather')
+        elif word not in Trainbot.bi_lexicon:
+            return i_filter_small_talk('unknown_word')
     else:
-        return _input
+        no_small = True
+        return _input, no_small
 
 
 def i_filter_small_talk(dict_key, keyword=None):
@@ -33,7 +44,7 @@ def i_filter_small_talk(dict_key, keyword=None):
 
     while True:
         response = random.choice(small_talk_dict[dict_key])
-        if 
+        if response 
 
 
 if __name__ == "__main__":

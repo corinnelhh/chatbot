@@ -3,7 +3,6 @@ import random
 import os
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
-import pdb
 
 from trainbot import Trainbot
 
@@ -11,10 +10,11 @@ from trainbot import Trainbot
 class Chatbot(Trainbot):
 
     def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__()
+        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
 
     def i_filter_random(self, words):
+        u"""Return randomly selected, non-punctuation word from words."""
         count = 0
         while count < len(words):
             seed = random.choice(words)
@@ -24,19 +24,14 @@ class Chatbot(Trainbot):
         return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
+        u"""Return randomly selected sentence from sentecnces"""
         return str(random.choice(sentences))
 
-    def generate_response(self, input_sent):
-        #words = self.tag_input(input_sent)
-        words = wordpunct_tokenize(input_sent)
-        first_seed = self.i_filter_random(words)
-        if first_seed == "What a funny thing to say!":
-            return first_seed
-        print "Given the seed: {}".format(first_seed)
+    def _create_chains(self, seed, size=10):
+        u"""Return list of markov generated strings spawned from the seed."""
         response_candidates = []
-        while len(response_candidates) < 10:
+        while len(response_candidates) < size:
             bad_sentence = False
-            seed = first_seed
             candidate_sentence = [seed]
             while True:
                 word_2 = None
@@ -58,13 +53,25 @@ class Chatbot(Trainbot):
                 if (next_word in self.stop_puncts) or (next_word not in self.bi_lexicon):
                     response_candidates.append(" ".join(candidate_sentence))
                     break
-        return self.o_filter_random(response_candidates)
+        return response_candidates
 
-# def full_package():
-#     gener
+    def compose_response(self, input_sent, input_filter, output_filter):
+        u"""Return a response sentence based on the input."""
+        # Tokenize input
+        tokenized_input = wordpunct_tokenize(input_sent)
+        # Select seed based on input filter
+        seed = input_filter(tokenized_input)
+        # If seed not in lexicon, return default phrase:
+        if seed == "What a funny thing to say!":
+            return seed
+        # Create chains
+        chains = self._create_chains(seed)
+        # Return output of filter
+        return output_filter(chains)
+
 
 if __name__ == '__main__':
     bot = Chatbot()
     bot.fill_lexicon()
     print "Filled the lexicon!"
-    print bot.generate_response("How are you doing?")
+    print bot.compose_response("How are you doing?", bot.i_filter_random, bot.o_filter_random)

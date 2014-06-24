@@ -46,3 +46,4 @@ class Trainbot(object):
                 else:
                     self.bi_lexicon[first_word].append(second_word)
                     self.tri_lexicon[word_pair].append(word)
+

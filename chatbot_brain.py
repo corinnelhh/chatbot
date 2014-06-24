@@ -3,7 +3,6 @@ import random
 import os
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
-import pdb
 
 from trainbot import Trainbot
 
@@ -26,17 +25,10 @@ class Chatbot(Trainbot):
     def o_filter_random(self, sentences):
         return str(random.choice(sentences))
 
-    def _create_chains(self, input_sent):
-        #words = self.tag_input(input_sent)
-        words = wordpunct_tokenize(input_sent)
-        first_seed = self.i_filter_random(words)
-        if first_seed == "What a funny thing to say!":
-            return first_seed
-        print "Given the seed: {}".format(first_seed)
+    def _create_chains(self, seed):
         response_candidates = []
         while len(response_candidates) < 10:
             bad_sentence = False
-            seed = first_seed
             candidate_sentence = [seed]
             while True:
                 word_2 = None
@@ -58,19 +50,33 @@ class Chatbot(Trainbot):
                 if (next_word in self.stop_puncts) or (next_word not in self.bi_lexicon):
                     response_candidates.append(" ".join(candidate_sentence))
                     break
-        return self.o_filter_random(response_candidates)
+        return response_candidates
 
+    def _select_seed(self, input_sent):
+        #words = self.tag_input(input_sent)
+        words = wordpunct_tokenize(input_sent)
+        first_seed = self.i_filter_random(words)
+        print "Given the seed: {}".format(first_seed)
+        if first_seed == "What a funny thing to say!":
+            return first_seed
 
-def full_package(**kwargs):
-    # Select seed based on input filter
-    # Create chains
-    # Apply output filters
-    # Return one passing sentence
-    pass
+    def compose_response(self, input_sent, input_filter, output_filter):
+        # Tokenize input
+        tokenized_input = wordpunct_tokenize(input_sent)
+        # Select seed based on input filter
+        seed = input_filter(tokenized_input)
+        # If seed not in lexicon, return default phrase:
+        if seed == "What a funny thing to say!":
+            return seed
+        # Create chains
+        chains = self._create_chains(seed)
+        # Apply output filters--
+        return output_filter(chains)
+        # Return one passing sentence
 
 
 if __name__ == '__main__':
     bot = Chatbot()
     bot.fill_lexicon()
     print "Filled the lexicon!"
-    print bot._create_chains  ("How are you doing?")
+    print bot.compose_response("How are you doing?", bot.i_filter_random, bot.o_filter_random)

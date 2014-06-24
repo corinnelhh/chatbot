@@ -11,7 +11,7 @@ from trainbot import Trainbot
 class Chatbot(Trainbot):
 
     def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__()
+        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
 
     def i_filter_random(self, words):
@@ -66,6 +66,7 @@ def full_package(**kwargs):
     # Create chains
     # Apply output filters
     # Return one passing sentence
+    pass
 
 
 if __name__ == '__main__':

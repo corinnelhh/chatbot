@@ -56,12 +56,12 @@ class Chatbot(Trainbot):
                     break
         return response_candidates
 
-    def compose_response(self, input_sent, input_filter, output_filter, *lexicon):
+    def compose_response(self, input_sent, input_filter=None, output_filter=None, lexicon=None):
         u"""Return a response sentence based on the input."""
         # Tokenize input
         tokenized_input = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
-        seeds = input_filter(tokenized_input, *lexicon)
+        seeds = input_filter(tokenized_input, lexicon=None)
         #If a default sentence was picked, return it.
         if isinstance(seeds, basestring):
             return seeds

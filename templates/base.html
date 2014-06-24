@@ -43,7 +43,11 @@
             </form>
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">
-                Fill this space with really interesting content.
+                {% if reply %}
+                This is how the {{reply}} sausage was made:
+                {% else %}
+                Talk to Chatbot 5000 to see something here.
+                {% endif %}
 <!--                 <a href="#" class="show_hide">hide</a> -->
             </div>
         </article>

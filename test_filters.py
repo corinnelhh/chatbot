@@ -17,10 +17,8 @@ def test_small_talk_filter():
 
 
 def test_filter_content():
-    bot = chatbot_brain.Chatbot()
-    bot.fill_lexicon()
     tester = wordpunct_tokenize("The young boy ran quickly through the woods.")
-    seeds = input_filters.filter_content(tester, bot.bi_lexicon)
+    seeds = input_filters.filter_content(tester, "lexicon")
     assert "young" in seeds
     assert "boy" in seeds
     assert "woods" in seeds
@@ -30,10 +28,8 @@ def test_filter_content():
 
 
 def test_filter_length_words():
-    bot = chatbot_brain.Chatbot()
-    bot.fill_lexicon()
     tester = wordpunct_tokenize("I am not happy but I am not hungry either.")
-    seeds = input_filters.filter_length_words(tester, bot.bi_lexicon)
+    seeds = input_filters.filter_length_words(tester, "lexicon")
     assert "I" not in seeds
     assert "hungry" in seeds
     assert "happy" in seeds
@@ -41,15 +37,13 @@ def test_filter_length_words():
 
 
 def test_filter_content_priority():
-    bot = chatbot_brain.Chatbot()
-    bot.fill_lexicon()
-    tester = wordpunct_tokenize("Children look happy.")
-    seeds = input_filters.filter_content_priority(tester, bot.bi_lexicon)
-    assert "children" in sorted(seeds)[:3]
+    tester = wordpunct_tokenize("Children look sleepy.")
+    seeds = input_filters.filter_content_priority(tester, "lexicon")
+    assert "Children" in sorted(seeds)[:3]
     assert "look" not in sorted(seeds)[:3]
     assert "look" in sorted(seeds)[3:5]
-    assert "children" not in sorted(seeds)[3:5]
-    assert "happy" in sorted(seeds)[5:]
+    assert "Children" not in sorted(seeds)[3:5]
+    assert "sleepy" in sorted(seeds)[5:]
 
 #output filters start here
 

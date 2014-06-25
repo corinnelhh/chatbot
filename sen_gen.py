@@ -32,8 +32,6 @@ def fillDictionary(trigramfirst):
             else:
                 trigramfirst[twoWords].append(followingWord)
 
-
-###MAIN BODY###
 fillDictionary(trigramfirst)
 firstWord,secondWord=u"too",u"much"
 result = firstWord

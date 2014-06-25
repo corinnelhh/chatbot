@@ -1,8 +1,9 @@
 import nltk
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
+from collections import OrderedDict
 
-funct_dict = {}
+funct_dict = OrderedDict({})
 
 
 def add_func_to_dict(name=None):
@@ -13,6 +14,12 @@ def add_func_to_dict(name=None):
         funct_dict[function_name] = func
         return func
     return wrapper
+
+
+@add_func_to_dict("No Filter Selected")
+def no_o_filter_selected(sentences):
+    return sentences
+
 
 @add_func_to_dict("Length Filter")
 def filter_length(sentences, wordcount=13):

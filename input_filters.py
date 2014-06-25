@@ -38,25 +38,17 @@ def filter_small_talk(input_, lexicon=None):
             return small_talk_dict('weather')
         elif word in feeling_words:
             return small_talk_dict('feelings')
-        # elif word not in lexicon:
-        #    return small_talk_dict('unknown_word')
     else:
         return input_
 
 
 def small_talk_dict(dict_key):
     """
-    Takes in a dictkey and an optional keyword. Sentences are randomly
-    selected from the list of values. If a keyword is present,
-    keyword is added into the output string.
+    Takes in a dictkey. Sentences are randomly
+    selected from the list of values.
     """
 
     dict_ = {
-        'unknown_word': [
-            "What a funny thing to say!",
-            "That's a new one!",
-            "Huh!"
-            ],
         'weather': [
             "Talking about the weather is such a bore.",
             "I'm not the weatherman!"
@@ -69,11 +61,7 @@ def small_talk_dict(dict_key):
             "You're a sports fan!",
             "I've never been much of an athlete..."
             ],
-        'new_word': [
-            'Wow, thanks for explaining that.'
-            ]
         }
-
     return random.choice(dict_[dict_key])
 
 

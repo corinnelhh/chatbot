@@ -30,7 +30,10 @@ class Chatbot(Trainbot):
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentecnces"""
-        return random.choice(sentences)
+        if len(sentences) > 0:
+            return random.choice(sentences)
+        else:
+            return u"I'm not sure what to say about that."
 
     def _create_chains(self, pair, size=10):
         u"""Return list of markov generated strings spawned from the seed."""
@@ -69,18 +72,20 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
-    # def apply_i_filter(self, filter_, seeds):
-    #     lexicon = self.bi_lexicon
-    #     if filter_ == "filter_content":
-    #         return input_filters.filter_content(seeds)
-    #     elif filter_ == "small_talk":
-    #         return input_filters.filter_small_talk(seeds, lexicon)
-    #     elif filter_ == "length":
-    #         return input_filters.filter_length_words(seeds)
-    #     elif filter_ == "content_priority":
-    #         return input_filters.filter_content_priority(seeds)
-    #     else:
-    #         return seeds
+    def _chain_filters(self, strings, filters):
+        u"""Return a list of strings that satisfiy the requirements of all filters.
+
+        Expects: A list of filter functions.
+        Returns: A list of strings.
+        """
+        return self._filter_recursive(strings, filters)
+
+    def _filter_recursive(self, strings, filters):
+        u"""Return list of strings or call the next filter function."""
+        if filters == []:
+            return strings
+        else:
+            return self._filter_recursive(filters[0](strings), filters[1:])
 
     def apply_o_filter(self, filter_, chains):
         if filter_ == u"filter_length":
@@ -121,10 +126,6 @@ class Chatbot(Trainbot):
             output = chains
         if len(filtered) > 0:
             output = self.o_filter_random(filtered)
-        else:
-            output = u"I'm not sure what to say about that."
-
-        print "Here comes my output!"
         return output
 
 if __name__ == u'__main__':

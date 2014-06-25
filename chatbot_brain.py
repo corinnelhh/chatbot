@@ -14,9 +14,9 @@ class Chatbot(Trainbot):
     def __init__(self, training_file="tell_tale_heart.txt"):
         super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
-        self.funct_dict = {"filter_content": input_filters.filter_content,
-                           "filter_length_words": input_filters.filter_length_words,
-                           "filter_content_priority": input_filters.filter_content_priority}
+        # self.funct_dict = {"filter_content": input_filters.filter_content,
+        #                   "filter_length_words": input_filters.filter_length_words,
+        #                   "filter_content_priority": input_filters.filter_content_priority}
 
     def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
@@ -101,8 +101,8 @@ class Chatbot(Trainbot):
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
         if input_key:
-            print input_key
-            seeds = self.funct_dict[input_key](seeds)
+            print input_filters.funct_dict
+            seeds = input_filters.funct_dict[input_key](seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
@@ -125,6 +125,6 @@ if __name__ == '__main__':
     print "Filled the lexicon!"
     print bot.compose_response(
         "My beautiful carriage is red and blue and it hums while I drive it!",
-        "filter_content_priority",
+        "filter_length_words",
         bot.o_filter_random
         )

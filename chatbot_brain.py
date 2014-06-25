@@ -14,9 +14,6 @@ class Chatbot(Trainbot):
     def __init__(self, training_file=u"tell_tale_heart.txt"):
         super(Chatbot, self).__init__(training_file=u"tell_tale_heart.txt")
         self.training_file = training_file
-        # self.funct_dict = {"filter_content": input_filters.filter_content,
-        #                   "filter_length_words": input_filters.filter_length_words,
-        #                   "filter_content_priority": input_filters.filter_content_priority}
 
     def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
@@ -87,7 +84,11 @@ class Chatbot(Trainbot):
             return strings, output_dict
         else:
             output_dict[filters[0].__name__] = filters[0](strings)
-            return self._filter_recursive(filters[0](strings), filters[1:], output_dict)
+            return self._filter_recursive(
+                filters[0](strings),
+                filters[1:],
+                output_dict
+                )
 
     def apply_o_filter(self, filter_, chains):
         if filter_ == u"filter_length":
@@ -139,5 +140,5 @@ if __name__ == u'__main__':
         u"Content Filter",
         u"Noun-Verb Filter"
         )
-    # strings = bot._create_chains(bot._pair_seed("carriage"))
-    # filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]
+    strings = bot._create_chains(bot._pair_seed('car'))
+    filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]

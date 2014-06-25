@@ -128,11 +128,11 @@ class Chatbot(Trainbot):
         return output
 
 if __name__ == u'__main__':
-    bot = Chatbot()
+    bot = Chatbot(training_file="Doctorow.txt")
     bot.fill_lexicon()
     print u"Filled the lexicon!"
     print bot.compose_response(
         u"My beautiful carriage is red and blue and it hums while I drive it!",
-        u"filter_length_words",
-        u"filter_length"
+        u"Content Filter",
+        u"filter_NN_VV"
         )

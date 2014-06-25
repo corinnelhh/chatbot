@@ -2,8 +2,9 @@ import nltk
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 import random
+from collections import OrderedDict
 
-input_funcs = {}
+input_funcs = OrderedDict({})
 
 
 def add_func_to_dict(name=None):
@@ -14,6 +15,11 @@ def add_func_to_dict(name=None):
         input_funcs[function_name] = func
         return func
     return wrapper
+
+
+@add_func_to_dict("No Filter Selected")
+def no_input_filter_selected(input_):
+    return input_
 
 
 @add_func_to_dict("Small Talk Filter")

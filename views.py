@@ -20,8 +20,9 @@ def show_chatbot(reply="1test"):
 @app.route('/submit', methods=['GET','POST'])
 def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
+
     submission = request.form['submission']
-    reply = cbot.generate_response(submission)
+    reply = cbot.compose_response(submission)
     return show_chatbot(reply)
 
 

@@ -86,8 +86,10 @@ class Chatbot(Trainbot):
         pair = self._pair_seed(seed)
         chains = self._create_chains(pair)
         # Return output of filter
-        filtered = output_filter(chains)
-        return filtered
+        if output_filter:
+            chains = output_filter(chains)
+        chains = self.o_filter_random(chains)
+        return chains
 
 if __name__ == '__main__':
     bot = Chatbot()

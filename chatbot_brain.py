@@ -113,6 +113,7 @@ class Chatbot(Trainbot):
         # Create chains
         pair = self._pair_seed(seed)
         chains = self._create_chains(pair)
+        print chains
         # Return output of filter
         if output_filter:
             chains = self.apply_o_filter(output_filter, chains)

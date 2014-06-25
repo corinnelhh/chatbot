@@ -9,7 +9,7 @@ def filter_length(sentences, wordcount=13):
     that contains only sentences with less than <wordcount> words."""
 
     for sentence in sentences[:]:
-        if len(sentence.split())>wordcount:
+        if len(sentence.split()) > wordcount:
             sentences.remove(sentence)
     return sentences
 
@@ -18,7 +18,7 @@ def filter_pos(sentences):
     """Takes in a list of sentences and returns a reduced list,
 
     that contains only sentences that contain the necessarry pos."""
-    content_pos = ['VB','NN','JJ']
+    content_pos = ['VB', 'NN', 'JJ']
     output_sentences = []
     for sentence in sentences:
         words = wordpunct_tokenize(sentence)
@@ -28,6 +28,7 @@ def filter_pos(sentences):
                 output_sentences.append(sentence)
                 break
     return output_sentences
+
 
 def filter_NN_VV(sentences):
     """Takes in a list of sentences and returns a reduced list of
@@ -45,7 +46,3 @@ def filter_NN_VV(sentences):
                 output_sentences.append(sentence)
                 break
     return output_sentences
-
-
-
-

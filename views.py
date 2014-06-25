@@ -23,7 +23,12 @@ def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
     submission = request.form['submission']
     input_ = request.form['input_filter']
-    reply = cbot.compose_response(submission, input_filter=input_)
+    output_ = request.form['output_filter']
+    reply = cbot.compose_response(
+        submission,
+        input_filter=input_,
+        output_filter=output_
+        )
     return show_chatbot(reply)
 
 

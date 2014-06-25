@@ -6,6 +6,7 @@ from nltk.tokenize import wordpunct_tokenize
 
 from trainbot import Trainbot
 import input_filters
+import output_filters
 
 
 class Chatbot(Trainbot):
@@ -65,7 +66,7 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
-    def apply_filter(self, filter_, seeds):
+    def apply_i_filter(self, filter_, seeds):
         lexicon = self.bi_lexicon
         if filter_ == "filter_content":
             return input_filters.filter_content(seeds)
@@ -78,6 +79,14 @@ class Chatbot(Trainbot):
         else:
             return seeds
 
+    def apply_o_filter(self, filter_, chains):
+        if filter_ == "filter_length":
+            return output_filters.filter_length(chains)
+        if filter_ == "filter_pos":
+            return output_filters.filter_pos(chains)
+        else:
+            return chains
+
     def compose_response(
             self,
             input_sent,
@@ -89,7 +98,7 @@ class Chatbot(Trainbot):
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
         if input_filter:
-            seeds = self.apply_filter(input_filter, seeds)
+            seeds = self.apply_i_filter(input_filter, seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
@@ -102,7 +111,7 @@ class Chatbot(Trainbot):
         chains = self._create_chains(pair)
         # Return output of filter
         if output_filter:
-            chains = output_filter(chains)
+            chains = self.apply_o_filter(output_filter, chains)
         chains = self.o_filter_random(chains)
         return chains
 

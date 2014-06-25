@@ -21,10 +21,8 @@ def filter_pos(sentences):
     content_pos = ['VB','NN','JJ']
     output_sentences = []
     for sentence in sentences:
-        print sentence
         words = wordpunct_tokenize(sentence)
         tagged = pos_tag(words)
-        print tagged
         for word, pos in tagged:
             if pos[:2] in content_pos:
                 output_sentences.append(sentence)

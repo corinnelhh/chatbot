@@ -18,12 +18,12 @@ def show_chatbot(reply="Say something to me!",
                  sausage="I haven't said anything yet..."):
 
     """Displays base.html when user goes to main page."""
-    input_filters = []
-    for key in input_funcs:
-        input_filters.append(key)
-    print input_filters
+    # input_filters = []
+    # for key in input_funcs:
+    #     input_filters.append(key)
+    # print input_filters
     return render_template('base.html', reply=reply, sausage=sausage,
-                           input_filters=input_filters)
+                           input_filters=input_funcs)
 
 
 @app.route('/submit', methods=['GET', 'POST'])
@@ -31,10 +31,12 @@ def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
     submission = request.form['submission']
     input_ = request.form['input_filter']
+    print input_
     output_ = request.form['output_filter']
+    # import pdb; pdb.set_trace()
     reply = cbot.compose_response(
         submission,
-        input_filter=input_,
+        input_key=input_,
         output_filter=output_
         )
     sausage = """

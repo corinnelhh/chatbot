@@ -14,8 +14,8 @@
             <form action="{{ url_for('submit') }}" method="POST" class="submit">
         <h4> Input filters:</h4>
             <select name="input_filter" id="input_filter">
-                {% for input_filter in input_filters %}
-                <option value = "default">{{input_filter}}</option>
+                {% for key in input_filters.keys() %}
+                <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
                 <option value = "filter_content">Content Words</option>
                 <option value = "small_talk">Small Talk</option>

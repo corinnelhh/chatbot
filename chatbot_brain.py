@@ -102,7 +102,7 @@ class Chatbot(Trainbot):
         # Select seed based on input filter
         if input_key:
             print u"Input filter: {}".format(input_key)
-            seeds = input_filters.funct_dict[input_key](seeds)
+            seeds = input_filters.input_funcs[input_key](seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
@@ -114,7 +114,7 @@ class Chatbot(Trainbot):
         pair = self._pair_seed(seed)
         chains = self._create_chains(pair)
         # Return output of filter
-        if output_filter:
+        if output_filter != "default":
             print u"Output filter: {}".format(output_filter)
             filtered = output_filters.funct_dict[output_filter](chains)
         else:

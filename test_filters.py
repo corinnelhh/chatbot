@@ -1,6 +1,7 @@
 import input_filters
 import output_filters
 import chatbot_brain
+from nltk.tokenize import wordpunct_tokenize
 
 #input filters start here
 
@@ -8,13 +9,11 @@ import chatbot_brain
 def test_small_talk_filter():
     bot = chatbot_brain.Chatbot()
     bot.fill_lexicon()
-    tester = "raining snowing sunny weather"
+    tester = wordpunct_tokenize("raining snowing sunny weather")
     weather_opts = ["Talking about the weather is such a bore.",
         "I'm not the weatherman!"]
     sentence = input_filters.filter_small_talk(tester, bot.bi_lexicon)
     assert sentence in weather_opts
-
-
 
 
 

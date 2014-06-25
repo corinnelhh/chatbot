@@ -14,7 +14,7 @@ class Chatbot(Trainbot):
         super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
 
-    def i_filter_random(self, words):
+    def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
         count = 0
         while count < len(words):
@@ -56,7 +56,7 @@ class Chatbot(Trainbot):
                     break
         return response_candidates
 
-    def compose_response(self, input_sent, input_filter=None, output_filter=None, lexicon=None):
+    def compose_response(self, input_sent, input_filter, output_filter, lexicon=None):
         u"""Return a response sentence based on the input."""
         # Tokenize input
         seeds = wordpunct_tokenize(input_sent)

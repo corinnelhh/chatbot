@@ -4,14 +4,14 @@ from nltk.tokenize import wordpunct_tokenize
 import random
 
 
-def filter_small_talk(input_, lexicon=None):
+def filter_small_talk(input_, lexicon):
     sports_words = ["basketball", "soccer", "football", "baseball",
             "hockey", "tennis"]
     weather_words = ["weather", "raining", "rain", "snowing", "snows",
             "sunny", "cloudy"]
     feeling_words = ["happy", "sad", "lonely", "excited"]
     if input_[:2] == ["It", "means"]:
-        return i_filter_small_talk('new_word')
+        return small_talk_dict('new_word')
     for word in input_:
         if word in sports_words:
             return small_talk_dict('sports')
@@ -32,7 +32,7 @@ def small_talk_dict(dict_key, keyword=None):
     keyword is added into the output string.
     """
 
-    small_talk_dict_ = {'unknown_word' : ["What a funny thing to say!",
+    dict_ = {'unknown_word' : ["What a funny thing to say!",
         "That's a new one!", "Huh!"],'weather' :
         ["Talking about the weather is such a bore.",
         "I'm not the weatherman!"], 'feelings' :
@@ -43,7 +43,7 @@ def small_talk_dict(dict_key, keyword=None):
         'new_word': ['Wow, thanks for explaining that.']
         }
 
-    return random.choice(small_talk_dict_[dict_key])
+    return random.choice(dict_[dict_key])
 
 
 def token(string_):

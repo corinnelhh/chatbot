@@ -6,12 +6,17 @@ import random
 input_funcs = {}
 
 
-def add_func_to_dict(func):
-    input_funcs[func.__name__] = func
-    return func
+def add_func_to_dict(name=None):
+    def wrapper(func):
+        function_name = name
+        if function_name is None:
+            function_name = func.__name__
+        input_funcs[function_name] = func
+        return func
+    return wrapper
 
 
-@add_func_to_dict
+@add_func_to_dict("Small Talk Filter")
 def filter_small_talk(input_, lexicon=None):
     sports_words = ["basketball", "soccer", "football",
                     "baseball", "hockey", "tennis"]
@@ -70,7 +75,7 @@ def token(string_):
     return wordpunct_tokenize(string_)
 
 
-@add_func_to_dict
+@add_func_to_dict("Content Filter")
 def filter_content(words):
     """Takes in a list of words and returns a list
 
@@ -84,7 +89,7 @@ def filter_content(words):
     return possible_seeds
 
 
-@add_func_to_dict
+@add_func_to_dict("Length Filter")
 def filter_length_words(words):
     "Takes in a list of words and returns all words longer than two letters."
     possible_seeds = []

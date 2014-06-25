@@ -42,7 +42,7 @@ def submit():
         output_filter=output_
         )
     sausage = """
-    Input filter(s): {} \n Output filter(s): {} \n
+    Input filter(s): {} \n Output filter(s): {}
     """.format(input_, output_)
     return show_chatbot(reply, sausage)
 

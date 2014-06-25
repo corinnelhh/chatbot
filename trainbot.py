@@ -14,7 +14,8 @@ class Trainbot(object):
         self.pos_lexicon_word_pos = {}
         self.pos_lexicon_pos_word = {}
         self.stop_puncts = ['.', '!', '?']
-        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."',',"']
+        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."',',"',
+        "Mr", "Mrs", '?"']
 
     def parse_training_input(self, text):
         while True:

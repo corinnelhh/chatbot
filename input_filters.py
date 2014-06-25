@@ -3,8 +3,15 @@ from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 import random
 
+funct_dict = {}
 
-def filter_small_talk(input_, lexicon):
+
+def add_func_to_dict(func):
+    funct_dict[func.__name__] = func
+    return func
+
+@add_func_to_dict
+def filter_small_talk(input_, lexicon=None):
     sports_words = ["basketball", "soccer", "football", "baseball",
             "hockey", "tennis"]
     weather_words = ["weather", "raining", "rain", "snowing", "snows",
@@ -19,13 +26,13 @@ def filter_small_talk(input_, lexicon):
             return small_talk_dict('weather')
         elif word in feeling_words:
             return small_talk_dict('feelings')
-        elif word not in lexicon:
-            return small_talk_dict('unknown_word')
+        # elif word not in lexicon:
+        #    return small_talk_dict('unknown_word')
     else:
         return input_
 
 
-def small_talk_dict(dict_key, keyword=None):
+def small_talk_dict(dict_key):
     """
     Takes in a dictkey and an optional keyword. Sentences are randomly
     selected from the list of values. If a keyword is present,
@@ -49,7 +56,7 @@ def small_talk_dict(dict_key, keyword=None):
 def token(string_):
     return wordpunct_tokenize(string_)
 
-
+@add_func_to_dict
 def filter_content(words):
     """Takes in a list of words and returns a list
 
@@ -63,6 +70,7 @@ def filter_content(words):
     return possible_seeds
 
 
+@add_func_to_dict
 def filter_length_words(words):
     "Takes in a list of words and returns all words longer than two letters."
     possible_seeds = []
@@ -72,6 +80,7 @@ def filter_length_words(words):
     return possible_seeds
 
 
+@add_func_to_dict
 def filter_content_priority(words):
     "Takes in a list of words and returns words with 'weighted' priorities"
     tagged = pos_tag(words)
@@ -87,3 +96,5 @@ def filter_content_priority(words):
         elif pos[:2] == 'JJ':
             possible_seeds.append(word)
     return possible_seeds
+
+print "heloo"

@@ -154,10 +154,10 @@ def move_nginx_files():
 
 
 def _install_flask():
-    sudo('apt-get --yes install python-pip')
-    sudo('pip install flask')
-    sudo('pip install nltk')
-    sudo('pip install numpy')
+    sudo ('apt-get --yes install python-pip')
+    sudo ('pip install flask')
+    sudo ('pip install nltk')
+    # sudo ('pip install numpy')
 
 
 def install_flask():

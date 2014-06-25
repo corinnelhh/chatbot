@@ -69,6 +69,21 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
+    def _chain_filters(self, strings, filters):
+        u"""Return a list of strings that satisfiy the requirements of all filters.
+
+        Expects: A list of filter functions.
+        Returns: A list of strings.
+        """
+        return self._filter_recursive(strings, filters)
+
+    def _filter_recursive(self, strings, filters):
+        u"""Return list of strings or call the next filter function."""
+        if filters == []:
+            return strings
+        else:
+            return self._filter_recursive(filters[0](strings), filters[1:])
+
     # def apply_i_filter(self, filter_, seeds):
     #     lexicon = self.bi_lexicon
     #     if filter_ == "filter_content":

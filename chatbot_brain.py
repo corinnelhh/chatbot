@@ -67,16 +67,18 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
-    def compose_response(self, input_sent, input_filter=None, output_filter=None, lexicon=None):
+    def compose_response(self, input_sent, input_filter, output_filter, lexicon):
         u"""Return a response sentence based on the input."""
         # Tokenize input
-        tokenized_input = wordpunct_tokenize(input_sent)
+        seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
-        seeds = input_filter(tokenized_input, lexicon=None)
-        #If a default sentence was picked, return it.
+        seeds = input_filter(seeds, lexicon)
+            #If a default sentence was picked, return it.
         if isinstance(seeds, basestring):
             return seeds
         # Randomly pick a seed from the returned possibilities.
+        print "seeds are: "
+        print seeds
         seed = self.i_filter_random(seeds)
         # Create chains
         pair = self._pair_seed(seed)
@@ -89,5 +91,7 @@ if __name__ == '__main__':
     bot = Chatbot()
     bot.fill_lexicon()
     print "Filled the lexicon!"
-    print bot.compose_response("I am very happy!", \
-           input_filters.filter_length_words, bot.o_filter_random, bot.bi_lexicon)
+    print bot.compose_response("My beautiful carriage is red and blue and it hums while I drive it!",
+        input_filters.filter_content_priority, bot.o_filter_random, bot.bi_lexicon)
+
+

@@ -43,10 +43,13 @@ def test_filter_length_words():
 def test_filter_content_priority():
     bot = chatbot_brain.Chatbot()
     bot.fill_lexicon()
-    tester = wordpunct_tokenize("I am not happy but I am not hungry either.")
+    tester = wordpunct_tokenize("Children look happy.")
     seeds = input_filters.filter_content_priority(tester, bot.bi_lexicon)
-    assert ""
-
+    assert "children" in sorted(seeds)[:3]
+    assert "look" not in sorted(seeds)[:3]
+    assert "look" in sorted(seeds)[3:5]
+    assert "children" not in sorted(seeds)[3:5]
+    assert "happy" in sorted(seeds)[5:]
 
 #output filters start here
 

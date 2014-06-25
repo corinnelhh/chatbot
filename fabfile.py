@@ -110,12 +110,13 @@ def select_instance(state='running'):
     env.active_instance = env.instances[choice - 1]['instance']
 
 
-def run_command_on_selected_server(command):
+def run_command_on_selected_server(command, *args, **kwargs):
     select_instance()
     selected_hosts = [
         'ubuntu@' + env.active_instance.public_dns_name
     ]
-    execute(command, hosts=selected_hosts)
+    kwargs['hosts'] = selected_hosts
+    execute(command, *args, **kwargs)
 
 
 def _install_nginx():
@@ -173,6 +174,14 @@ def terminate_instance():
     conn.terminate_instances(env.active_instance.id)
 
 
+def update_apt():
+    sudo("apt-get update")
+
+
+def install_numpy():
+    sudo("apt-get install python-numpy")
+
+
 def generate_nginx_config():
     config_file = """
 server {
@@ -199,7 +208,8 @@ def deploy():
             if instance['state'] == u'running':
                 not_running = False
         list_aws_instances()
-
+    run_command_on_selected_server(update_apt)
+    run_command_on_selected_server(install_numpy)
     install_nginx()
     generate_nginx_config()
     run_command_on_selected_server(rsync_project, remote_dir="~/")

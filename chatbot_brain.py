@@ -14,7 +14,9 @@ class Chatbot(Trainbot):
     def __init__(self, training_file="tell_tale_heart.txt"):
         super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
-
+        self.funct_dict = {"filter_content": input_filters.filter_content,
+                           "filter_length_words": input_filters.filter_length_words,
+                           "filter_content_priority": input_filters.filter_content_priority}
     def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
         count = 0
@@ -66,18 +68,18 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
-    def apply_i_filter(self, filter_, seeds):
-        lexicon = self.bi_lexicon
-        if filter_ == "filter_content":
-            return input_filters.filter_content(seeds)
-        elif filter_ == "small_talk":
-            return input_filters.filter_small_talk(seeds, lexicon)
-        elif filter_ == "length":
-            return input_filters.filter_length_words(seeds)
-        elif filter_ == "content_priority":
-            return input_filters.filter_content_priority(seeds)
-        else:
-            return seeds
+    # def apply_i_filter(self, filter_, seeds):
+    #     lexicon = self.bi_lexicon
+    #     if filter_ == "filter_content":
+    #         return input_filters.filter_content(seeds)
+    #     elif filter_ == "small_talk":
+    #         return input_filters.filter_small_talk(seeds, lexicon)
+    #     elif filter_ == "length":
+    #         return input_filters.filter_length_words(seeds)
+    #     elif filter_ == "content_priority":
+    #         return input_filters.filter_content_priority(seeds)
+    #     else:
+    #         return seeds
 
     def apply_o_filter(self, filter_, chains):
         if filter_ == "filter_length":
@@ -98,7 +100,7 @@ class Chatbot(Trainbot):
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
         if input_filter:
-            seeds = self.apply_i_filter(input_filter, seeds)
+            seeds = self.funct_dict[input_filter](seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.

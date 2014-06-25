@@ -65,7 +65,6 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
-<<<<<<< HEAD
     def compose_response(
             self,
             input_sent,
@@ -73,31 +72,19 @@ class Chatbot(Trainbot):
             output_filter=None,
             lexicon=None
             ):
-=======
-    def compose_response(self, input_sent, input_filter=None, output_filter=None, lexicon=None):
->>>>>>> 71d6a327a7c51845820ad5c5569fad6af318b66b
         u"""Return a response sentence based on the input."""
         # Tokenize input
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
         if input_filter:
             seeds = input_filter(seeds, lexicon)
-<<<<<<< HEAD
-            # If a default sentence was picked, return it.
-=======
-            #If a default sentence was picked, return it.
->>>>>>> 71d6a327a7c51845820ad5c5569fad6af318b66b
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
         seed = self.i_filter_random(seeds)
         # Create chains
-<<<<<<< HEAD
-        chains = self._create_chains(seed)
-=======
         pair = self._pair_seed(seed)
         chains = self._create_chains(pair)
->>>>>>> 69d0a2fc0558ffa5c6950de0700b45d431b6aca1
         # Return output of filter
         filtered = output_filter(chains)
         return filtered

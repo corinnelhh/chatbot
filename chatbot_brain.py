@@ -17,6 +17,7 @@ class Chatbot(Trainbot):
         self.funct_dict = {"filter_content": input_filters.filter_content,
                            "filter_length_words": input_filters.filter_length_words,
                            "filter_content_priority": input_filters.filter_content_priority}
+
     def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
         count = 0
@@ -92,15 +93,16 @@ class Chatbot(Trainbot):
     def compose_response(
             self,
             input_sent,
-            input_filter=None,
+            input_key=None,
             output_filter=None,
             ):
         u"""Return a response sentence based on the input."""
         # Tokenize input
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
-        if input_filter:
-            seeds = self.funct_dict[input_filter](seeds)
+        if input_key:
+            print input_key
+            seeds = self.funct_dict[input_key](seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
@@ -123,7 +125,6 @@ if __name__ == '__main__':
     print "Filled the lexicon!"
     print bot.compose_response(
         "My beautiful carriage is red and blue and it hums while I drive it!",
-        input_filters.filter_content_priority,
-        bot.o_filter_random,
-        bot.bi_lexicon
+        "filter_content_priority",
+        bot.o_filter_random
         )

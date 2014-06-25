@@ -13,9 +13,9 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def show_chatbot(reply="1test"):
+def show_chatbot(reply="Say something to me!", sausage="I haven't said anything yet..."):
     """Displays base.html when user goes to main page."""
-    return render_template('base.html', reply=reply)
+    return render_template('base.html', reply=reply, sausage=sausage)
 
 
 @app.route('/submit', methods=['GET', 'POST'])
@@ -32,7 +32,7 @@ def submit():
     sausage = """
     Reply: {} \n Input filter(s): {} \n Output filter(s): {} \n
     """.format(submission, input_, output_)
-    return show_chatbot(reply)
+    return show_chatbot(reply, sausage)
 
 
 if __name__ == '__main__':

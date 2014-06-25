@@ -26,12 +26,11 @@
                 <option value = "filter_length">Length</option>
                 <option value = "filter_pos">Content Words</option>
             </select>
-
     </aside>
         <article>
         <div id="output_box">
         {% if reply %}
-        Chatbot5000 says: {{reply}}.
+        Chatbot5000 says: {{reply}}
         {% endif %}
         </div>
                 <div class="field">
@@ -41,8 +40,9 @@
             <p></p>
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">
-                {% if reply %}
-                This is how the {{reply}} sausage was made:
+                {% if sausage %}
+                <h5>This is how I came up with "{{reply}}:"</h5>
+                {{sausage}}
                 {% else %}
                 Talk to Chatbot 5000 to see something here.
                 {% endif %}

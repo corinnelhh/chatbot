@@ -99,7 +99,7 @@ def filter_length_words(words):
     return possible_seeds
 
 
-@add_func_to_dict
+@add_func_to_dict("Noun > Verb > Adjective Filter")
 def filter_content_priority(words):
     "Takes in a list of words and returns words with 'weighted' priorities"
     tagged = pos_tag(words)

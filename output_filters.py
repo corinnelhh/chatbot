@@ -5,12 +5,16 @@ from nltk.tokenize import wordpunct_tokenize
 funct_dict = {}
 
 
-def add_func_to_dict(func):
-    funct_dict[func.__name__] = func
-    return func
+def add_func_to_dict(name=None):
+    def wrapper(func):
+        function_name = name
+        if function_name is None:
+            function_name = func.__name__
+        funct_dict[function_name] = func
+        return func
+    return wrapper
 
-
-@add_func_to_dict
+@add_func_to_dict("Length Filter")
 def filter_length(sentences, wordcount=13):
     """Takes in a list of sentences and returns a reduced list,
     that contains only sentences with less than <wordcount> words."""
@@ -21,7 +25,7 @@ def filter_length(sentences, wordcount=13):
     return output_sentences
 
 
-@add_func_to_dict
+@add_func_to_dict("Part of Speech Filter")
 def filter_pos(sentences):
     """Takes in a list of sentences and returns a reduced list,
 
@@ -38,7 +42,7 @@ def filter_pos(sentences):
     return output_sentences
 
 
-@add_func_to_dict
+@add_func_to_dict("Noun-Verb Filter")
 def filter_NN_VV(sentences):
     """Takes in a list of sentences and returns a reduced list of
     sentences that have at least one noun followed somewhere by at least

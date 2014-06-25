@@ -154,13 +154,15 @@ def move_nginx_files():
 
 
 def _install_flask():
-    sudo ('apt-get --yes install python-pip')
-    sudo ('pip install flask')
-    sudo ('pip install nltk')
-    sudo ('pip install numpy')
+    sudo('apt-get --yes install python-pip')
+    sudo('pip install flask')
+    sudo('pip install nltk')
+    sudo('pip install numpy')
+
 
 def install_flask():
     run_command_on_selected_server(_install_flask)
+
 
 def stop_instance():
     conn = get_ec2_connection()
@@ -180,6 +182,10 @@ def update_apt():
 
 def install_numpy():
     sudo("apt-get install python-numpy")
+
+
+def move_nltk_file():
+    sudo("mv chatbot/nltk_data/ ~/")
 
 
 def generate_nginx_config():
@@ -213,6 +219,7 @@ def deploy():
     install_nginx()
     generate_nginx_config()
     run_command_on_selected_server(rsync_project, remote_dir="~/")
+    run_command_on_selected_server(move_nltk_file)
     install_flask()
     install_supervisor()
     move_nginx_files()

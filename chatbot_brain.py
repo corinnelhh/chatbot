@@ -65,22 +65,33 @@ class Chatbot(Trainbot):
                 continue
         return pair
 
+    def apply_filter(self, filter_, seeds):
+        lexicon = self.bi_lexicon
+        if filter_ == "filter_content":
+            return input_filters.filter_content(seeds)
+        elif filter_ == "small_talk":
+            return input_filters.filter_small_talk(seeds, lexicon)
+        elif filter_ == "length":
+            return input_filters.filter_length_words(seeds)
+        elif filter_ == "content_priority":
+            return input_filters.filter_content_priority(seeds)
+
     def compose_response(
             self,
             input_sent,
             input_filter=None,
             output_filter=None,
-            lexicon=None
             ):
         u"""Return a response sentence based on the input."""
         # Tokenize input
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
         if input_filter:
-            seeds = input_filter(seeds, lexicon)
+            seeds = self.apply_filter(input_filter, seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
+        print seeds
         seed = self.i_filter_random(seeds)
         # Create chains
         pair = self._pair_seed(seed)

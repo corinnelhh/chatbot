@@ -12,14 +12,6 @@
     </aside>
     <aside id="filters">
         Input filters:
-        <form>
-            <select>
-                <option value = "1"></option>
-                <option value = "2">Orange</option>
-                <option value = "3">Banana</option>
-                <option value = "4">Apple</option>
-            </select>
-        </form>
         Output filters:
         <form>
             <select>
@@ -40,6 +32,14 @@
                 <div class="field">
                 <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
                 </div>
+
+            <select name="input_filter" id="input_filter">
+                <option value = "1">No filter selected</option>
+                <option value = "filter_content">Content Words</option>
+                <option value = "small_talk">Small Talk</option>
+                <option value = "length">Length</option>
+                <option value = "content_priority">Content Priority</option>
+            </select>
             </form>
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">

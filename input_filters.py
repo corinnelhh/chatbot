@@ -50,7 +50,7 @@ def token(string_):
     return wordpunct_tokenize(string_)
 
 
-def filter_content(words, lexicon=None):
+def filter_content(words):
     """Takes in a list of words and returns a list
 
     of the nouns, verbs, and adjectives the orig list contained."""
@@ -63,7 +63,7 @@ def filter_content(words, lexicon=None):
     return possible_seeds
 
 
-def filter_length_words(words, lexicon=None):
+def filter_length_words(words):
     "Takes in a list of words and returns all words longer than two letters."
     possible_seeds = []
     for word in words:
@@ -72,7 +72,7 @@ def filter_length_words(words, lexicon=None):
     return possible_seeds
 
 
-def filter_content_priority(words, lexicon=None):
+def filter_content_priority(words):
     "Takes in a list of words and returns words with 'weighted' priorities"
     tagged = pos_tag(words)
     possible_seeds = []

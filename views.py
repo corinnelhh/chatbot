@@ -11,18 +11,19 @@ import chatbot_brain
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def show_chatbot(reply="1test"):
     """Displays base.html when user goes to main page."""
     return render_template('base.html', reply=reply)
 
 
-@app.route('/submit', methods=['GET','POST'])
+@app.route('/submit', methods=['GET', 'POST'])
 def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
-
     submission = request.form['submission']
-    reply = cbot.compose_response(submission)
+    input_ = request.form['input_filter']
+    reply = cbot.compose_response(submission, input_filter=input_)
     return show_chatbot(reply)
 
 

@@ -56,7 +56,7 @@ def filter_content(words, lexicon=None):
     of the nouns, verbs, and adjectives the orig list contained."""
     tagged = pos_tag(words)
     possible_seeds = []
-    content_pos = ['VV', 'NN', 'JJ']
+    content_pos = ['VB', 'NN', 'JJ']
     for word, pos in tagged:
         if pos[:2] in content_pos:
             possible_seeds.append(word)
@@ -81,7 +81,7 @@ def filter_content_priority(words, lexicon=None):
             possible_seeds.append(word)
             possible_seeds.append(word)
             possible_seeds.append(word)
-        elif pos[:2] == 'VV':
+        elif pos[:2] == 'VB':
             possible_seeds.append(word)
             possible_seeds.append(word)
         elif pos[:2] == 'JJ':

@@ -4,7 +4,7 @@ from nltk.tokenize import wordpunct_tokenize
 import random
 
 
-def filter_small_talk(input_, lexicon):
+def filter_small_talk(input_, lexicon=None):
     sports_words = ["basketball", "soccer", "football", "baseball",
             "hockey", "tennis"]
     weather_words = ["weather", "raining", "rain", "snowing", "snows",
@@ -19,13 +19,13 @@ def filter_small_talk(input_, lexicon):
             return small_talk_dict('weather')
         elif word in feeling_words:
             return small_talk_dict('feelings')
-        elif word not in lexicon:
-            return small_talk_dict('unknown_word')
+        # elif word not in lexicon:
+        #    return small_talk_dict('unknown_word')
     else:
         return input_
 
 
-def small_talk_dict(dict_key, keyword=None):
+def small_talk_dict(dict_key):
     """
     Takes in a dictkey and an optional keyword. Sentences are randomly
     selected from the list of values. If a keyword is present,

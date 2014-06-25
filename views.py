@@ -8,14 +8,22 @@ from flask import redirect
 from flask import session
 
 import chatbot_brain
+from input_filters import input_funcs
 
 app = Flask(__name__)
 
 
 @app.route('/')
-def show_chatbot(reply="Say something to me!", sausage="I haven't said anything yet..."):
+def show_chatbot(reply="Say something to me!",
+                 sausage="I haven't said anything yet..."):
+
     """Displays base.html when user goes to main page."""
-    return render_template('base.html', reply=reply, sausage=sausage)
+    input_filters = []
+    for key in input_funcs:
+        input_filters.append(key)
+    print input_filters
+    return render_template('base.html', reply=reply, sausage=sausage,
+                           input_filters=input_filters)
 
 
 @app.route('/submit', methods=['GET', 'POST'])

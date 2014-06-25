@@ -92,6 +92,12 @@ def test_filter_pos(sentences):
 
 def test_filter_NN_VV(sentences):
     reduced_sentences = output_filters.filter_NN_VV(sentences)
-    assert
-
-
+    for sentence in reduced_sentences:
+        has_NN = False
+        is_valid = False
+        for word, tag in pos_tag(sentence):
+            if tag[:2] == "NN":
+                has_NN = True
+            if has_NN and tag[:2] == "VB":
+                is_valid = True
+        assert is_valid is True

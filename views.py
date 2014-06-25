@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def show_chatbot(reply="Say something to me!",
+def show_chatbot(submission="...crickets...", reply="Say something to me!",
                  sausage="I haven't said anything yet..."):
 
     """Displays base.html when user goes to main page."""
@@ -36,14 +36,11 @@ def submit():
     print input_
     output_ = request.form['output_filter']
     # import pdb; pdb.set_trace()
-    reply = cbot.compose_response(
+    reply, sausage = cbot.compose_response(
         submission,
         input_key=input_,
         output_filter=output_
         )
-    sausage = """
-    Input filter(s): {} \n Output filter(s): {}
-    """.format(input_, output_)
     return show_chatbot(reply, sausage)
 
 

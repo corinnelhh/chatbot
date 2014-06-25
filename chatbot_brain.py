@@ -1,7 +1,7 @@
-import nltk
+#import nltk
 import random
-import os
-from nltk import pos_tag
+#import os
+#from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 
 from trainbot import Trainbot
@@ -103,20 +103,27 @@ class Chatbot(Trainbot):
             ):
         u"""Return a response sentence based on the input."""
         # Tokenize input
+        sausage = {}
+        sausage["submission"] = input_sent
         seeds = wordpunct_tokenize(input_sent)
+        sausage["input_words"] = seeds
         # Select seed based on input filter
         if input_key:
+            sausage["input_filter"] = input_key
             print u"Input filter: {}".format(input_key)
             seeds = input_filters.input_funcs[input_key](seeds)
+            sausage["final_seeds"] = seeds
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
         print seeds
         seed = self.i_filter_random(seeds)
+        sausage["final_seed"] = seed
         if seed == u"What a funny thing to say!":
             return seed
         # Create chains
         pair = self._pair_seed(seed)
+        sausage["first_bigram"] = pair
         chains = self._create_chains(pair)
         # Return output of filter
         if output_filter != "default":
@@ -126,7 +133,7 @@ class Chatbot(Trainbot):
             output = chains
         if len(filtered) > 0:
             output = self.o_filter_random(filtered)
-        return output
+        return output, sausage
 
 if __name__ == u'__main__':
     bot = Chatbot(training_file="Doctorow.txt")

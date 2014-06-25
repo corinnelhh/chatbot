@@ -14,9 +14,6 @@ class Chatbot(Trainbot):
     def __init__(self, training_file=u"tell_tale_heart.txt"):
         super(Chatbot, self).__init__(training_file=u"tell_tale_heart.txt")
         self.training_file = training_file
-        # self.funct_dict = {"filter_content": input_filters.filter_content,
-        #                   "filter_length_words": input_filters.filter_length_words,
-        #                   "filter_content_priority": input_filters.filter_content_priority}
 
     def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
@@ -78,14 +75,20 @@ class Chatbot(Trainbot):
         Expects: A list of filter functions.
         Returns: A list of strings.
         """
-        return self._filter_recursive(strings, filters)
+        strings, output_dict = self._filter_recursive(strings, filters)
+        return strings, output_dict
 
-    def _filter_recursive(self, strings, filters):
+    def _filter_recursive(self, strings, filters, output_dict={}):
         u"""Return list of strings or call the next filter function."""
         if filters == []:
-            return strings
+            return strings, output_dict
         else:
-            return self._filter_recursive(filters[0](strings), filters[1:])
+            output_dict[filters[0].__name__] = filters[0](strings)
+            return self._filter_recursive(
+                filters[0](strings),
+                filters[1:],
+                output_dict
+                )
 
     def apply_o_filter(self, filter_, chains):
         if filter_ == u"filter_length":
@@ -142,5 +145,7 @@ if __name__ == u'__main__':
     print bot.compose_response(
         u"My beautiful carriage is red and blue and it hums while I drive it!",
         u"Content Filter",
-        u"filter_NN_VV"
+        u"Noun-Verb Filter"
         )
+    strings = bot._create_chains(bot._pair_seed('car'))
+    filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]

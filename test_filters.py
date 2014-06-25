@@ -16,6 +16,37 @@ def test_small_talk_filter():
     assert sentence in weather_opts
 
 
+def test_filter_content():
+    bot = chatbot_brain.Chatbot()
+    bot.fill_lexicon()
+    tester = wordpunct_tokenize("The young boy ran quickly through the woods.")
+    seeds = input_filters.filter_content(tester, bot.bi_lexicon)
+    assert "young" in seeds
+    assert "boy" in seeds
+    assert "woods" in seeds
+    assert "ran" in seeds
+    assert "quickly" not in seeds
+    assert "the" not in seeds
+
+
+def test_filter_length_words():
+    bot = chatbot_brain.Chatbot()
+    bot.fill_lexicon()
+    tester = wordpunct_tokenize("I am not happy but I am not hungry either.")
+    seeds = input_filters.filter_length_words(tester, bot.bi_lexicon)
+    assert "I" not in seeds
+    assert "hungry" in seeds
+    assert "happy" in seeds
+    assert "am" not in seeds
+
+
+def test_filter_content_priority():
+    bot = chatbot_brain.Chatbot()
+    bot.fill_lexicon()
+    tester = wordpunct_tokenize("I am not happy but I am not hungry either.")
+    seeds = input_filters.filter_content_priority(tester, bot.bi_lexicon)
+    assert ""
+
 
 #output filters start here
 

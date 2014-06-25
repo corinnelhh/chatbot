@@ -9,6 +9,7 @@ from flask import session
 
 import chatbot_brain
 from input_filters import input_funcs
+from output_filters import funct_dict
 
 app = Flask(__name__)
 
@@ -23,7 +24,8 @@ def show_chatbot(reply="Say something to me!",
     #     input_filters.append(key)
     # print input_filters
     return render_template('base.html', reply=reply, sausage=sausage,
-                           input_filters=input_funcs)
+                           input_filters=input_funcs,
+                           output_filters=funct_dict)
 
 
 @app.route('/submit', methods=['GET', 'POST'])

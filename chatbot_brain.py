@@ -26,35 +26,46 @@ class Chatbot(Trainbot):
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentecnces"""
-        return str(random.choice(sentences))
+        return random.choice(sentences)
 
-    def _create_chains(self, seed, size=10):
+    def _create_chains(self, pair, size=1):
         u"""Return list of markov generated strings spawned from the seed."""
-        response_candidates = []
-        while len(response_candidates) < size:
-            bad_sentence = False
-            candidate_sentence = [seed]
-            while True:
-                word_2 = None
-                next_word = None
-                while (not word_2) and (not next_word):
-                    try:
-                        word_2 = random.choice(self.bi_lexicon[seed])
-                        bigram = "{} {}".format(seed, word_2)
-                        next_word = random.choice(self.tri_lexicon[bigram])
-                    except KeyError:
-                        bad_sentence = True
-                        break
-                if bad_sentence:
-                    break
-                if word_2 not in self.stop_puncts:
-                    candidate_sentence.append(word_2)
-                bigram = "{} {}".format(word_2, next_word)
-                seed = word_2
-                if (next_word in self.stop_puncts) or (next_word not in self.bi_lexicon):
-                    response_candidates.append(" ".join(candidate_sentence))
-                    break
-        return response_candidates
+        candidates = []
+        # import pdb
+        # pdb.set_trace()
+        # while len(candidates) < size:
+        word_1 = pair[0]
+        word_2 = pair[1]
+        candidate = [word_1, word_2]
+        pair = "{} {}".format(word_1, word_2)
+        done = False
+        while not done:
+            try:
+                next_word = random.choice(self.tri_lexicon[pair])
+                candidate.append(next_word)
+                print candidate
+                word_1, word_2 = word_2, next_word
+                pair = "{} {}".format(word_1, word_2)
+            except KeyError:
+                candidate.append(next_word)
+                candidates.append(" ".join(candidate))
+                done = True
+            if next_word in self.stop_puncts:
+                candidate.append(next_word)
+                candidates.append(" ".join(candidate))
+                done = True
+        return candidates
+
+    def _pair_seed(self, seed):
+        word_1 = seed
+        word_2 = None
+        while word_2 is None:
+            try:
+                word_2 = random.choice(self.bi_lexicon[seed])
+                pair = [word_1, word_2]
+            except KeyError:
+                continue
+        return pair
 
     def compose_response(self, input_sent, input_filter, output_filter, lexicon):
         u"""Return a response sentence based on the input."""
@@ -70,12 +81,11 @@ class Chatbot(Trainbot):
         print seeds
         seed = self.i_filter_random(seeds)
         # Create chains
-        print "seed is:"
-        print seed
-        chains = self._create_chains(seed)
+        pair = self._pair_seed(seed)
+        chains = self._create_chains(pair)
         # Return output of filter
-        return output_filter(chains)
-
+        # return output_filter(chains)
+        return chains
 
 if __name__ == '__main__':
     bot = Chatbot()

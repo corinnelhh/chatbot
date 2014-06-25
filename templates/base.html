@@ -11,23 +11,8 @@
         About Chatbot5000:
     </aside>
     <aside id="filters">
-
-        <form>
-
-        </form>
-    </aside>
-        <article>
-        <div id="output_box">
-        {% if reply %}
-        Chatbot5000 says: {{reply}}.
-        {% endif %}
-        </div>
             <form action="{{ url_for('submit') }}" method="POST" class="submit">
-                <div class="field">
-                <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
-                </div>
-        Input filters:
-
+        <h4> Input filters:</h4>
             <select name="input_filter" id="input_filter">
                 <option value = "1">No input filter selected</option>
                 <option value = "filter_content">Content Words</option>
@@ -35,7 +20,7 @@
                 <option value = "length">Length</option>
                 <option value = "content_priority">Content Priority</option>
             </select>
-        Output filters:
+        <h4> Output filters:</h4>
             <select name="output_filter" id="output_filter">
                 <option value = "1">No output filter selected</option>
                 <option value = "filter_length">Length</option>
@@ -43,7 +28,21 @@
                 <option value = "4">Apple</option>
             </select>
 
+    </aside>
+        <article>
+        <div id="output_box">
+        {% if reply %}
+        Chatbot5000 says: {{reply}}.
+        {% endif %}
+        </div>
+
+                <div class="field">
+                <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
+                </div>
+
+
             </form>
+            <p></p>
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">
                 {% if reply %}

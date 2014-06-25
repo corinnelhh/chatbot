@@ -123,6 +123,8 @@ class Chatbot(Trainbot):
             output = self.o_filter_random(filtered)
         else:
             output = u"I'm not sure what to say about that."
+
+        print "Here comes my output!"
         return output
 
 if __name__ == u'__main__':

@@ -14,11 +14,11 @@ class Trainbot(object):
         self.pos_lexicon_word_pos = {}
         self.pos_lexicon_pos_word = {}
         self.stop_puncts = ['.', '!', '?']
-        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."']
+        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."',',"']
 
     def parse_training_input(self, text):
         while True:
-            our_text = text.read(2048)
+            our_text = text.read(20048)
             if not our_text:
                 break
             yield wordpunct_tokenize(our_text)
@@ -64,9 +64,9 @@ class Trainbot(object):
         for words in self.parse_training_input(f):
             words = self.remove_non_final_punctuation(words)
             for idx, word in enumerate(words[2:]):
-                word_pair = "{} {}".format(words[idx - 2], words[idx - 1])
-                first_word = str(words[idx - 2])
-                second_word = str(words[idx - 1])
+                word_pair = "{} {}".format(words[idx], words[idx + 1])
+                first_word = str(words[idx])
+                second_word = str(words[idx + 1])
                 if first_word not in self.bi_lexicon:
                     self.bi_lexicon[first_word] = [second_word]
                 if word_pair not in self.tri_lexicon:

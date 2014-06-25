@@ -104,5 +104,7 @@ header{
 #hidden{
     display: none;
 }
-
+#output_filter2{
+    display: none;
+}
 /*Inspired by https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes*/

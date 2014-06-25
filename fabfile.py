@@ -4,6 +4,7 @@ from fabric.api import prompt
 from fabric.api import execute
 from fabric.api import sudo
 from fabric import contrib
+from fabric.contrib.project import rsync_project
 import boto.ec2
 import time
 import boto
@@ -201,7 +202,7 @@ def deploy():
 
     install_nginx()
     generate_nginx_config()
-    run_command_on_selected_server(contrib.project.upload_project)
+    run_command_on_selected_server(rsync_project, remote_dir="~/")
     install_flask()
     install_supervisor()
     move_nginx_files()

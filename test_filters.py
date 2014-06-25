@@ -101,3 +101,6 @@ def test_filter_NN_VV(sentences):
             if has_NN and tag[:2] == "VB":
                 is_valid = True
         assert is_valid is True
+
+
+

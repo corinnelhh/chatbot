@@ -75,6 +75,8 @@ class Chatbot(Trainbot):
             return input_filters.filter_length_words(seeds)
         elif filter_ == "content_priority":
             return input_filters.filter_content_priority(seeds)
+        else:
+            return seeds
 
     def compose_response(
             self,
@@ -93,6 +95,8 @@ class Chatbot(Trainbot):
         # Randomly pick a seed from the returned possibilities.
         print seeds
         seed = self.i_filter_random(seeds)
+        if seed == "What a funny thing to say!":
+            return seed
         # Create chains
         pair = self._pair_seed(seed)
         chains = self._create_chains(pair)

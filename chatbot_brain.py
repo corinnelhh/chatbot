@@ -11,8 +11,8 @@ import output_filters
 
 class Chatbot(Trainbot):
 
-    def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
+    def __init__(self, training_file=u"tell_tale_heart.txt"):
+        super(Chatbot, self).__init__(training_file=u"tell_tale_heart.txt")
         self.training_file = training_file
         # self.funct_dict = {"filter_content": input_filters.filter_content,
         #                   "filter_length_words": input_filters.filter_length_words,
@@ -26,7 +26,7 @@ class Chatbot(Trainbot):
             if (seed in self.bi_lexicon) and (seed not in self.stop_puncts):
                 return seed
             count += 1
-        return "What a funny thing to say!"
+        return u"What a funny thing to say!"
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentecnces"""
@@ -40,14 +40,14 @@ class Chatbot(Trainbot):
         while len(candidates) < size:
             word_1, word_2 = w_1, w_2
             candidate = [word_1, word_2]
-            pair = "{} {}".format(word_1, word_2)
+            pair = u"{} {}".format(word_1, word_2)
             done = False
             while not done:
                 try:
                     next_word = random.choice(self.tri_lexicon[pair])
                     candidate.append(next_word)
                     word_1, word_2 = word_2, next_word
-                    pair = "{} {}".format(word_1, word_2)
+                    pair = u"{} {}".format(word_1, word_2)
                 except KeyError:
                     candidates.append(" ".join(candidate))
                     done = True
@@ -83,9 +83,9 @@ class Chatbot(Trainbot):
     #         return seeds
 
     def apply_o_filter(self, filter_, chains):
-        if filter_ == "filter_length":
+        if filter_ == u"filter_length":
             return output_filters.filter_length(chains)
-        if filter_ == "filter_pos":
+        if filter_ == u"filter_pos":
             return output_filters.filter_pos(chains)
         else:
             return chains
@@ -101,30 +101,36 @@ class Chatbot(Trainbot):
         seeds = wordpunct_tokenize(input_sent)
         # Select seed based on input filter
         if input_key:
-            print input_filters.funct_dict
+            print u"Input filter: {}".format(input_key)
             seeds = input_filters.funct_dict[input_key](seeds)
             if isinstance(seeds, basestring):
                 return seeds
         # Randomly pick a seed from the returned possibilities.
         print seeds
         seed = self.i_filter_random(seeds)
-        if seed == "What a funny thing to say!":
+        if seed == u"What a funny thing to say!":
             return seed
         # Create chains
         pair = self._pair_seed(seed)
         chains = self._create_chains(pair)
         # Return output of filter
         if output_filter:
-            chains = self.apply_o_filter(output_filter, chains)
-        chains = self.o_filter_random(chains)
-        return chains
+            print u"Output filter: {}".format(output_filter)
+            filtered = output_filters.funct_dict[output_filter](chains)
+        else:
+            output = chains
+        if len(filtered) > 0:
+            output = self.o_filter_random(filtered)
+        else:
+            output = u"I'm not sure what to say about that."
+        return output
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     bot = Chatbot()
     bot.fill_lexicon()
-    print "Filled the lexicon!"
+    print u"Filled the lexicon!"
     print bot.compose_response(
-        "My beautiful carriage is red and blue and it hums while I drive it!",
-        "filter_length_words",
-        bot.o_filter_random
+        u"My beautiful carriage is red and blue and it hums while I drive it!",
+        u"filter_length_words",
+        u"filter_length"
         )

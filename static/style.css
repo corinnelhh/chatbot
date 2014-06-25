@@ -101,7 +101,7 @@ header{
     width: 99%;
 }
 
-#hidden{
+.hidden{
     display: none;
 }
 

@@ -10,12 +10,13 @@ def add_func_to_dict(func):
     input_funcs[func.__name__] = func
     return func
 
+
 @add_func_to_dict
 def filter_small_talk(input_, lexicon=None):
-    sports_words = ["basketball", "soccer", "football", "baseball",
-            "hockey", "tennis"]
-    weather_words = ["weather", "raining", "rain", "snowing", "snows",
-            "sunny", "cloudy"]
+    sports_words = ["basketball", "soccer", "football",
+                    "baseball", "hockey", "tennis"]
+    weather_words = ["weather", "raining", "rain", "snowing",
+                     "snows", "sunny", "cloudy"]
     feeling_words = ["happy", "sad", "lonely", "excited"]
     if input_[:2] == ["It", "means"]:
         return small_talk_dict('new_word')
@@ -39,15 +40,27 @@ def small_talk_dict(dict_key):
     keyword is added into the output string.
     """
 
-    dict_ = {'unknown_word' : ["What a funny thing to say!",
-        "That's a new one!", "Huh!"],'weather' :
-        ["Talking about the weather is such a bore.",
-        "I'm not the weatherman!"], 'feelings' :
-        ["Feelings are so complicated.",
-        "It's good to know how you feel."],
-        'sports' : ["You're a sports fan!",
-        "I've never been much of an athlete..."],
-        'new_word': ['Wow, thanks for explaining that.']
+    dict_ = {
+        'unknown_word': [
+            "What a funny thing to say!",
+            "That's a new one!",
+            "Huh!"
+            ],
+        'weather': [
+            "Talking about the weather is such a bore.",
+            "I'm not the weatherman!"
+            ],
+        'feelings': [
+            "Feelings are so complicated.",
+            "It's good to know how you feel."
+            ],
+        'sports': [
+            "You're a sports fan!",
+            "I've never been much of an athlete..."
+            ],
+        'new_word': [
+            'Wow, thanks for explaining that.'
+            ]
         }
 
     return random.choice(dict_[dict_key])
@@ -55,6 +68,7 @@ def small_talk_dict(dict_key):
 
 def token(string_):
     return wordpunct_tokenize(string_)
+
 
 @add_func_to_dict
 def filter_content(words):

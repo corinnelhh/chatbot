@@ -3,11 +3,11 @@ from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 import random
 
-funct_dict = {}
+input_funcs = {}
 
 
 def add_func_to_dict(func):
-    funct_dict[func.__name__] = func
+    input_funcs[func.__name__] = func
     return func
 
 @add_func_to_dict

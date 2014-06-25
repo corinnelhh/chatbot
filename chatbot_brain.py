@@ -31,9 +31,10 @@ class Chatbot(Trainbot):
     def _create_chains(self, pair, size=10):
         u"""Return list of markov generated strings spawned from the seed."""
         candidates = []
-        word_1 = pair[0]
-        word_2 = pair[1]
+        w_1 = pair[0]
+        w_2 = pair[1]
         while len(candidates) < size:
+            word_1, word_2 = w_1, w_2
             candidate = [word_1, word_2]
             pair = "{} {}".format(word_1, word_2)
             done = False
@@ -56,8 +57,10 @@ class Chatbot(Trainbot):
         word_2 = None
         while word_2 is None:
             try:
-                word_2 = random.choice(self.bi_lexicon[seed])
-                pair = [word_1, word_2]
+                next_ = random.choice(self.bi_lexicon[seed])
+                if next_ not in self.stop_puncts:
+                    word_2 = next_
+                    pair = [word_1, word_2]
             except KeyError:
                 continue
         return pair

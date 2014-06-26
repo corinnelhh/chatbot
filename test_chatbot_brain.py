@@ -52,7 +52,7 @@ def test_i_filter_random_words_not_in_lexicon():
     u"""Assert if all words are not in lexicon the default is returned."""
     bot = chatbot_brain.Chatbot()
     words = ["moose", "bear", "eagle"]
-    bot.bi_lexicon = {"car": "mercedes", "boat": "sail", "train": "track"}
+    bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
     assert bot.i_filter_random(words) == stock
 
 
@@ -60,15 +60,15 @@ def test_i_filter_random_words_in_lexicon():
     u"""Assert if all words are in lexicon, a word is returned."""
     bot = chatbot_brain.Chatbot()
     words = ["car", "boat", "train"]
-    bot.bi_lexicon = {"car": "mercedes", "boat": "sail", "train": "track"}
+    bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
     assert bot.i_filter_random(words) in bot.bi_lexicon
 
 
 def test_i_filter_random_one_word_in_lexicon():
-    u"""Assert if one word is in lexicon that word is returned"""
+    u"""Assert if one word is in lexicon that word is returned."""
     bot = chatbot_brain.Chatbot()
     words = ["car", "bear", "eagle"]
-    bot.bi_lexicon = {"car": "mercedes", "boat": "sail", "train": "track"}
+    bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
     assert bot.i_filter_random(words) == "car"
 
 
@@ -76,6 +76,27 @@ def test_o_filter_random():
     u"""Assert the returned element is in the initial list."""
     bot = chatbot_brain.Chatbot()
     assert bot.o_filter_random(sentences_) in sentences_
+
+
+def test_pair_seeds_one_possible_pair():
+    u"""Assert if only one word is in the lexicon it and its pair returned."""
+    bot = chatbot_brain.Chatbot()
+    words = ["car", "bear", "eagle"]
+    bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
+    assert bot._pair_seed(words[0]) == ["car", "benz"]
+
+        # def _pair_seed(self, seed):
+        # word_1 = seed
+        # word_2 = None
+        # while word_2 is None:
+        #     try:
+        #         next_ = random.choice(self.bi_lexicon[seed])
+        #         if next_ not in self.stop_puncts:
+        #             word_2 = next_
+        #             pair = [word_1, word_2]
+        #     except KeyError:
+        #         continue
+        # return pair
 
 
 # untested methods:

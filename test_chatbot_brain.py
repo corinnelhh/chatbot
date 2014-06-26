@@ -39,12 +39,20 @@ def test_i_filter_random_words_not_in_lexicon():
     assert bot.i_filter_random(words) == stock
 
 
-def test_i_filter_random_words_in_lexcon():
+def test_i_filter_random_words_in_lexicon():
     u"""Assert that if all words are in lexicon, a word is returned."""
     bot = chatbot_brain.Chatbot()
     words = ["car", "boat", "train"]
     bot.bi_lexicon = {"car": "mercedes", "boat": "sail", "train": "track"}
     assert bot.i_filter_random(words) in bot.bi_lexicon
+
+
+def test_i_filter_random_one_word_in_lexicon():
+    u"""Assert that if one word is in lexicon that word is returned"""
+    bot = chatbot_brain.Chatbot()
+    words = ["car", "bear", "eagle"]
+    bot.bi_lexicon = {"car": "mercedes", "boat": "sail", "train": "track"}
+    assert bot.i_filter_random(words) == "car"
 
 
 # untested methods:

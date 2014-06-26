@@ -49,12 +49,14 @@ class Chatbot(Trainbot):
 
     def sanitize_seeds(self, seeds):
         """returns only seeds that are in the lexicons"""
-
+        non_u_seeds = []
         for seed in seeds[:]:
             try:
                 self.bi_lexicon[seed]
+                non_u_seeds.append(str(seed))
             except KeyError:
                 seeds.remove(seed)
+        self.sausage["sanitized_seeds"] = non_u_seeds
         return seeds
 
     def _pair_seed(self, seed):
@@ -108,18 +110,14 @@ class Chatbot(Trainbot):
             <p> With the {input_filter} input filter, <i>{final_seed}</i>\
              was chosen as the 'seed word' for our Markov Chain sentence\
              generator. <p>""".format(**self.sausage)
-        if "first_bigram" in self.sausage:
-            message["first_bigram"] = """<p>Then we used bigram probability\
-             to pick <i>{first_bigram}</i> as the first pair of words to\
-              feed our Markov Chain sentence generator.</p>""".format(**self.sausage)
-        else:
-            message["no_bigram"] = """<p> A lexicon search did not return\
-            a likely next word, so a default response <i>{final_sentence}</i>\
-            was returned. </p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After feeding in \
-            <i>{first_bigram}</i>, the Markov Chain sentence generator\
+            <i>{sanitized_seeds}</i>, the Markov Chain sentence generator\
             returned some sentences.</p>""".format(**self.sausage)
+        else:
+            message["no_chains"] = """<p> A lexicon search did not return\
+            a likely next word, so a default response <i>{final_sentence}</i>\
+            was returned. </p>""".format(**self.sausage)
         #if "o_filter_report" in self.sausage:
             #for item in self.sausage["o_filter_report"]:
 
@@ -140,14 +138,19 @@ class Chatbot(Trainbot):
             brain
             ):
         u"""Return a response sentence and report based on the input."""
+        self.sausage = {}
         seeds = wordpunct_tokenize(input_sent)
-        seeds = input_filters.input_funcs[input_key](seeds)
-        seeds = self.sanitize_seeds(seeds)
+        filt_seeds = input_filters.input_funcs[input_key](seeds)
+        seeds = self.sanitize_seeds(filt_seeds)
         if len(seeds) == 0:
-            return "You speak nothing but nonsense."
-        chains = brains.brain_dict[brain](self, seeds)
-        output = self.output_filtration(output_filter, chains)
-        return output
+            output = "You speak nothing but nonsense."
+        else:
+            chains = brains.brain_dict[brain](self, seeds)
+            self.sausage["unfiltered_chains"] = chains
+            output = self.output_filtration(output_filter, chains)
+        self.sausage["final_sentence"] = output
+        message = self._make_sausage()
+        return output, message
 
 if __name__ == '__main__':
     bot = Chatbot(training_file="Doctorow.txt")

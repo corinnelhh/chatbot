@@ -52,7 +52,14 @@ def test_fill_lexicon():
 def test_compose_response():
     u"""Assert Chatbot is untrained when instantiated."""
     bot = chatbot_brain.Chatbot()
-    output, sausage = bot.compose_response(input_sent="How are you doing?")
+    filters = [
+        output_filters.funct_dict["Length Filter"],
+        output_filters.funct_dict["No Filter Selected"]
+        ]
+    output = bot.compose_response(
+        input_sent="How are you doing?",
+        input_key="No Filter Selected",
+        output_filter=filters)
     assert "," not in output[0]
     for sentence in output:
         assert "." not in sentence[:-1]

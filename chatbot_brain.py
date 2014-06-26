@@ -128,14 +128,14 @@ class Chatbot(Trainbot):
         pair = self._pair_seed(seed)
         sausage["first_bigram"] = pair
         chains = self._create_chains(pair)
+        sausage["unfiltered_chains"] = chains
         # Return output of filter
         if output_filter != "default":
             print u"Output filter: {}".format(output_filter)
             filtered = output_filters.funct_dict[output_filter](chains)
         else:
             output = chains
-        if len(filtered) > 0:
-            output = self.o_filter_random(filtered)
+        output = self.o_filter_random(filtered)
         return output, sausage
 
 if __name__ == u'__main__':

@@ -70,6 +70,30 @@ class Chatbot(Trainbot):
                     done = True
         return candidates
 
+    def _create_bi_chains(self, seeds, size=200):
+
+        u"""Return list of markov generated strings spawned from the seed."""
+        print "the seeds are: " + str(seeds)
+        candidates = []
+
+        while len(candidates) < size:
+            seed = self.i_filter_random(seeds)
+            candidate = [seed]
+            done = False
+            print "one candidate"
+            while not done:
+                try:
+                    next_word = random.choice(self.bi_lexicon[seed])
+                    candidate.append(next_word)
+                    seed = next_word
+                except KeyError:
+                    candidates.append(" ".join(candidate))
+                    done = True
+                if next_word in self.stop_puncts:
+                    candidates.append(" ".join(candidate))
+                    done = True
+        return candidates
+
     def _pair_seed(self, seed):
         word_1 = seed
         word_2 = None
@@ -172,7 +196,7 @@ class Chatbot(Trainbot):
                 pair = self._pair_seed(seed)
                 sausage["first_bigram"] = " ".join(pair)
 
-                chains = self._create_chains(seeds)
+                chains = self._create_bi_chains(seeds)
                 print "I Made the Chains"
                 sausage["unfiltered_chains"] = chains
                 if output_filter != "default":

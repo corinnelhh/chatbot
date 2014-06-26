@@ -7,7 +7,7 @@ funct_dict = OrderedDict({})
 
 grammar1 = nltk.parse_cfg("""
     Sent  -> NP VP | NP VP END
-    NP -> Det Nom | PropN | Det NP | N | PR
+    NP -> Det Nom | PropN | Det NP | N | PR | PR Nom
     Nom -> Adj Nom | N
     VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V | V CC V
     PP -> Prep NP
@@ -122,20 +122,18 @@ def weak_syntactic_filter(sentences):
     noms = ["NN", "PR"]
     print "first we had {} sentences.".format(len(sentences))
     for sentence in sentences:
-        max_length = 20
         has_NN = False
         has_VV = False
         passes = False
-        if len(sentence) < max_length:
-            tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
-            print tagged_tokens
-            for word, tag in tagged_tokens:
-                if tag[:2] in noms:
-                    has_NN = True
-                if has_NN and tag[:2] == "VB":
-                    has_VV = True
-                if has_NN and has_VV and tag[:2] in noms:
-                    passes = True
+        tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
+        print tagged_tokens
+        for word, tag in tagged_tokens:
+            if tag[:2] in noms:
+                has_NN = True
+            if has_NN and tag[:2] == "VB":
+                has_VV = True
+            if has_NN and has_VV and tag[:2] in noms:
+                passes = True
         if passes:
             output_sentences.append(sentence)
             print "*************"

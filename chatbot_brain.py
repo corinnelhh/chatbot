@@ -95,6 +95,10 @@ class Chatbot(Trainbot):
         else:
             return chains
 
+    def _sausage_formatter(self, sausage):
+
+
+
     def compose_response(
             self,
             input_sent,
@@ -113,29 +117,33 @@ class Chatbot(Trainbot):
             print u"Input filter: {}".format(input_key)
             seeds = input_filters.input_funcs[input_key](seeds)
             sausage["final_seeds"] = seeds
-            if isinstance(seeds, basestring):
-                return seeds
-        # Randomly pick a seed from the returned possibilities.
-        print seeds
-        seed = self.i_filter_random(seeds)
-        sausage["final_seed"] = seed
-        if seed == u"What a funny thing to say!":
-            return seed
-        # Create chains
-        pair = self._pair_seed(seed)
-        sausage["first_bigram"] = pair
-        chains = self._create_chains(pair)
-        sausage["unfiltered_chains"] = chains
-        # Return output of filter
-        if output_filter != "default":
-            print u"Output filter: {}".format(output_filter)
-            filtered = output_filters.funct_dict[output_filter](chains)
+        if not isinstance(seeds, basestring):
+            # Randomly pick a seed from the returned possibilities.
+            print seeds
+            seed = self.i_filter_random(seeds)
+            sausage["final_seed"] = seed
+            if seed != u"What a funny thing to say!":
+                # Create chains
+                pair = self._pair_seed(seed)
+                sausage["first_bigram"] = pair
+                chains = self._create_chains(pair)
+                sausage["unfiltered_chains"] = chains
+                # Return output of filter
+                if output_filter != "default":
+                    print u"Output filter: {}".format(output_filter)
+                    filtered = output_filters.funct_dict[output_filter](chains)
+                else:
+                    output = chains
+                if len(sentences) > 0:
+                    output = self.o_filter_random(filtered)
+                else:
+                    output u"I'm not sure what to say about that."
+                sausage["final_sentence"] = output
+            else:
+                output = seed
         else:
-            output = chains
-        if len(sentences) > 0:
-            output = self.o_filter_random(filtered)
-        else:
-            output u"I'm not sure what to say about that."
+            output = seeds
+        sausage = _sausage_formatter(sausage)
         return output, sausage
 
 if __name__ == u'__main__':

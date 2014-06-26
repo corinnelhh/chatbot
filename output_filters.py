@@ -9,7 +9,7 @@ grammar1 = nltk.parse_cfg("""
     Sent  -> NP VP | NP VP END
     NP -> Det Nom | PropN | Det NP | N | PR
     Nom -> Adj Nom | N
-    VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V
+    VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V | V CC V
     PP -> Prep NP
 
     PropN -> 'NNP' | 'NNPS'
@@ -95,21 +95,23 @@ def syntactic_filter(sentences):
     output_sentences = []
     print "Before syntax filter there were " + str(len(sentences)) + " sentences."
     for sentence in sentences:
-        print sentence + "\n"
+        print "=================="
+        print str(sentence) + "\n"
         tokens = nltk.tokenize.wordpunct_tokenize(sentence)
         posTagged = nltk.pos_tag(tokens)
-
         justTags = []
         for word, tag in posTagged:
             justTags.append(tag)
-
+        print str(justTags) + "\n"
         rd_parser = nltk.RecursiveDescentParser(grammar1)
         try:
             if len(rd_parser.nbest_parse(justTags)) > 0:
                 output_sentences.append(sentence)
         except ValueError:
             pass
+
     print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
+    print output_sentences
     return output_sentences
 
 

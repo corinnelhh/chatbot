@@ -101,6 +101,9 @@ class Chatbot(Trainbot):
         <br>
         <h3>You entered "{submission}".</h3>
         <br>
+        <p>With the {input_filter} input filter, {final_seed} was chosen as the 'seed word'
+        for our Markov Chain sentence generator.
+        </p>
         """.format(**sausage)
         return message
 

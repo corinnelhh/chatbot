@@ -57,9 +57,11 @@ class Chatbot(Trainbot):
         return seeds
 
     def _create_chains(self, seeds, size=200):
+
         u"""Return list of markov generated strings spawned from the seed."""
         print "the seeds are: " + str(seeds)
         candidates = []
+
         while len(candidates) < size:
             seed = self.i_filter_random(seeds)
             pair = self._pair_seed(seed)
@@ -75,6 +77,30 @@ class Chatbot(Trainbot):
                     candidate.append(next_word)
                     word_1, word_2 = word_2, next_word
                     pair = "{} {}".format(word_1, word_2)
+                except KeyError:
+                    candidates.append(" ".join(candidate))
+                    done = True
+                if next_word in self.stop_puncts:
+                    candidates.append(" ".join(candidate))
+                    done = True
+        return candidates
+
+    def _create_bi_chains(self, seeds, size=200):
+
+        u"""Return list of markov generated strings spawned from the seed."""
+        print "the seeds are: " + str(seeds)
+        candidates = []
+
+        while len(candidates) < size:
+            seed = self.i_filter_random(seeds)
+            candidate = [seed]
+            done = False
+            print "one candidate"
+            while not done:
+                try:
+                    next_word = random.choice(self.bi_lexicon[seed])
+                    candidate.append(next_word)
+                    seed = next_word
                 except KeyError:
                     candidates.append(" ".join(candidate))
                     done = True

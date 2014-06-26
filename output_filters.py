@@ -7,7 +7,7 @@ funct_dict = OrderedDict({})
 
 grammar1 = nltk.parse_cfg("""
     Sent  -> NP VP | NP VP END
-    NP -> Det Nom | PropN | Det NP | N | PR
+    NP -> Det Nom | PropN | Det NP | N | PR | PR Nom
     Nom -> Adj Nom | N
     VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V | V CC V
     PP -> Prep NP
@@ -42,12 +42,17 @@ def no_o_filter_selected(sentences):
 
 @add_func_to_dict("Length Filter")
 def filter_length(sentences, wordcount=8):
-    """Takes in a list of sentences and returns a reduced list,
-    that contains only sentences with less than <wordcount> words."""
+    u"""Return every sentence that has a length <= wordcount.
+
+    Takes in a list of sentences and returns a reduced list,
+    that contains only sentences with less than or equal to <wordcount>
+    words.
+    """
     output_sentences = []
     for sentence in sentences[:]:
-        sentence = sentence.split()[:wordcount]
-        output_sentences.append(" ".join(sentence))
+        sentence = sentence.split()
+        if len(sentence) <= wordcount:
+            output_sentences.append(" ".join(sentence))
     return output_sentences
 
 
@@ -109,7 +114,6 @@ def syntactic_filter(sentences):
                 output_sentences.append(sentence)
         except ValueError:
             pass
-
     print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
     print output_sentences
     return output_sentences
@@ -120,19 +124,24 @@ def weak_syntactic_filter(sentences):
     """Filters responses through part of speech tagging and chunking: passes sentences
     with at least one NN followed by one VB followed by at least one NN"""
     output_sentences = []
+    noms = ["NN", "PR"]
     print "first we had {} sentences.".format(len(sentences))
     for sentence in sentences:
-        max_length = 13
         has_NN = False
         has_VV = False
-        if len(sentence) < max_length:
-            tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
-            for word, tag in tagged_tokens:
-                if tag[:2] == "NN":
-                    has_NN = True
-                if has_NN and tag[:2] == "VB":
-                    has_VV = True
-                if has_NN and has_VV and tag[:2] == "NN":
-                    output_sentences.append(sentence)
-    print "Then we had {} sentences: {}".format(len(output_sentences), output_sentences)
+        passes = False
+        tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
+        print tagged_tokens
+        for word, tag in tagged_tokens:
+            if tag[:2] in noms:
+                has_NN = True
+            if has_NN and tag[:2] == "VB":
+                has_VV = True
+            if has_NN and has_VV and tag[:2] in noms:
+                passes = True
+        if passes:
+            output_sentences.append(sentence)
+            print "*************"
+            print sentence
+    print "Then we had {} sentences".format(len(output_sentences))
     return output_sentences

@@ -15,6 +15,7 @@ class Chatbot(Trainbot):
     def __init__(self, training_file="tell_tale_heart.txt"):
         super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
+        self.sausage = {}
 
     def i_filter_random(self, words):
         u"""Return randomly selected, non-punctuation word from words."""
@@ -27,8 +28,23 @@ class Chatbot(Trainbot):
         return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
-        u"""Return randomly selected sentence from sentecnces"""
+        u"""Return randomly selected sentence from sentences"""
         return random.choice(sentences)
+
+    def output_filtration(self, output_filter, chains):
+        if u"No Filter Selected" not in output_filter:
+            all_filters = []
+            for _filter in output_filter:
+                all_filters.append(output_filters.funct_dict[_filter])
+            filtered, report = self._chain_filters(chains, all_filters)
+            self.sausage["o_filter_report"] = report
+            if len(filtered) > 0:
+                output = self.o_filter_random(filtered)
+            else:
+                output = "I'm not sure what to say about that."
+        else:
+            output = self.o_filter_random(chains)
+        return output
 
     def sanitize_seeds(self, seeds):
         """returns only seeds that are in the lexicons"""
@@ -53,7 +69,6 @@ class Chatbot(Trainbot):
             candidate = [word_1, word_2]
             pair = "{} {}".format(word_1, word_2)
             done = False
-            print "one candidate"
             while not done:
                 try:
                     next_word = random.choice(self.tri_lexicon[pair])
@@ -102,46 +117,46 @@ class Chatbot(Trainbot):
                 output_dict
                 )
 
-    def _make_sausage(self, sausage):
+    def _make_sausage(self):
         """compiles a report on how the reply was made"""
         message = OrderedDict({})
         message["final_sentence"] = """<h4>This is how the response <i>\
-        '{final_sentence}'</i> was made:</h4>""".format(**sausage)
-        if "input_filter" in sausage:
+        '{final_sentence}'</i> was made:</h4>""".format(**self.sausage)
+        if "input_filter" in self.sausage:
             i_filters = []
-            for _filter in sausage["input_filter"]:
+            for _filter in self.sausage["input_filter"]:
                 if _filter != "No Filter Selected":
                     i_filters.append(_filter)
             if len(i_filters) > 0:
-                sausage["applied_i_filters"] = i_filters
-        if "applied_i_filters" in sausage:
+                self.sausage["applied_i_filters"] = i_filters
+        if "applied_i_filters" in self.sausage:
             message["input_filter"] = """
             <p> With the {input_filter} input filter, <i>{final_seed}</i>\
              was chosen as the 'seed word' for our Markov Chain sentence\
-             generator. <p>""".format(**sausage)
-        if "first_bigram" in sausage:
+             generator. <p>""".format(**self.sausage)
+        if "first_bigram" in self.sausage:
             message["first_bigram"] = """<p>Then we used bigram probability\
              to pick <i>{first_bigram}</i> as the first pair of words to\
-              feed our Markov Chain sentence generator.</p>""".format(**sausage)
+              feed our Markov Chain sentence generator.</p>""".format(**self.sausage)
         else:
             message["no_bigram"] = """<p> A lexicon search did not return\
             a likely next word, so a default response <i>{final_sentence}</i>\
-            was returned. </p>""".format(**sausage)
-        if "unfiltered_chains" in sausage:
+            was returned. </p>""".format(**self.sausage)
+        if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After feeding in \
             <i>{first_bigram}</i>, the Markov Chain sentence generator\
-            returned some sentences.</p>""".format(**sausage)
-        #if "o_filter_report" in sausage:
-            #for item in sausage["o_filter_report"]:
+            returned some sentences.</p>""".format(**self.sausage)
+        #if "o_filter_report" in self.sausage:
+            #for item in self.sausage["o_filter_report"]:
 
             #message["number_filters"] =
 
 
-           # len(sausage["o_filter_report"])
+           # len(self.sausage["o_filter_report"])
 
 
             #message["output_filters"] = """<p>The sentences were fed through\
-            # these filters: {output_filters} </p>""".format(**sausage)
+            # these filters: {output_filters} </p>""".format(**self.sausage)
         return message
 
     def compose_response(
@@ -151,49 +166,14 @@ class Chatbot(Trainbot):
             output_filter=None,
             ):
         u"""Return a response sentence and report based on the input."""
-        # Tokenize input
-        sausage = {}
-        report = ""
         seeds = wordpunct_tokenize(input_sent)
-        # Select seed based on input filter
-        if input_key:
-            sausage["input_filter"] = input_key
-            seeds = input_filters.input_funcs[input_key](seeds)
-            #sausage["final_seeds"] = seeds
-        if not isinstance(seeds, basestring):
-            # Randomly pick a seed from the returned possibilities.
-            seeds = self.sanitize_seeds(seeds)
-            seed = self.i_filter_random(seeds)
-            sausage["final_seed"] = seed
-            if seed != "What a funny thing to say!":
-                # Create chains
-                pair = self._pair_seed(seed)
-                sausage["first_bigram"] = " ".join(pair)
-
-                chains = self._create_chains(seeds)
-                print "I Made the Chains"
-                sausage["unfiltered_chains"] = chains
-                if output_filter != "default":
-                    #import pdb; pdb.set_trace()
-                    all_filters = []
-                    for _filter in output_filter:
-                        all_filters.append(output_filters.funct_dict[_filter])
-                    filtered, report = self._chain_filters(chains, all_filters)
-                    sausage["o_filter_report"] = report
-                    # print report
-                else:
-                    output = chains
-                if len(filtered) > 0:
-                    output = self.o_filter_random(filtered)
-                else:
-                    output = "I'm not sure what to say about that."
-            else:
-                output = seed
-        else:
-            output = seeds
-        sausage["final_sentence"] = output
-        sausage = self._make_sausage(sausage)
-        return output, sausage
+        seeds = input_filters.input_funcs[input_key](seeds)
+        seeds = self.sanitize_seeds(seeds)
+        if len(seeds) == 0:
+            return "You speak nothing but nonsense."
+        chains = self._create_chains(seeds)
+        output = self.output_filtration(output_filter, chains)
+        return output
 
 if __name__ == '__main__':
     bot = Chatbot(training_file="Doctorow.txt")
@@ -206,3 +186,4 @@ if __name__ == '__main__':
         )
     strings = bot._create_chains(bot._pair_seed('car'))
     filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]
+    

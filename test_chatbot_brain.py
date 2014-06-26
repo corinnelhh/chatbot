@@ -23,12 +23,20 @@ sentences_ = [
 
 
 def test_initialize_bot():
+    u"""Assert instantiated chatbot is a Chatbot."""
+    bot = chatbot_brain.Chatbot()
+    assert isinstance(bot, chatbot_brain.Chatbot)
+
+
+def test_initialize_bot_is_untrained():
+    u"""Assert Chatbot is untrained when instantiated."""
     bot = chatbot_brain.Chatbot()
     assert len(bot.tri_lexicon) == 0
     assert len(bot.bi_lexicon) == 0
 
 
 def test_fill_lexicon():
+    u"""Assert training adds key, value pairs to both lexicons."""
     bot = chatbot_brain.Chatbot()
     bot.fill_lexicon()
     assert len(bot.tri_lexicon) > 0
@@ -36,8 +44,9 @@ def test_fill_lexicon():
 
 
 def test_compose_response():
+    u"""Assert Chatbot is untrained when instantiated."""
     bot = chatbot_brain.Chatbot()
-    output = bot.compose_response(input_sent="How are you doing?")
+    output, sausage = bot.compose_response(input_sent="How are you doing?")
     assert "," not in output[0]
     for sentence in output:
         assert "." not in sentence[:-1]

@@ -30,7 +30,7 @@ class Chatbot(Trainbot):
         u"""Return randomly selected sentence from sentecnces"""
         return random.choice(sentences)
 
-    def _create_chains(self, seeds, size=10):
+    def _create_chains(self, seeds, size=200):
         u"""Return list of markov generated strings spawned from the seed."""
         print "the seeds are: " + str(seeds)
 
@@ -162,6 +162,7 @@ class Chatbot(Trainbot):
                         all_filters.append(output_filters.funct_dict[_filter])
                     filtered, report = self._chain_filters(chains, all_filters)
                     sausage["o_filter_report"] = report
+                    # print report
                 else:
                     output = chains
                 if len(filtered) > 0:

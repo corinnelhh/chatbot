@@ -109,5 +109,3 @@ def filter_content_priority(words):
         elif pos[:2] == 'JJ':
             possible_seeds.append(word)
     return possible_seeds
-
-print "heloo"

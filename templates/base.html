@@ -11,25 +11,24 @@
         About Super Cool Chatbot:
     </aside>
     <aside id="filters">
-            <form action="{{ url_for('submit') }}" method="POST" class="submit">
         <h4> Input filters:</h4>
-            <select name="input_filter" id="input_filter">
+            <select form="input_form" name="input_filter" id="input_filter">
                 {% for key in input_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
         <h4> Output filters:</h4>
-            <select name="output_filter" id="output_filter">
+            <select form="input_form" name="output_filter" id="output_filter">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select name="output_filter" class="hidden" id="output_filter2">
+            <select form="input_form" name="output_filter2" class="hidden" id="output_filter2">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select name="output_filter" class="hidden" id="output_filter3">
+            <select form="input_form" name="output_filter3" class="hidden" id="output_filter3">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
@@ -41,6 +40,7 @@
         Chatbot5000 says: {{reply}}
         {% endif %}
         </div>
+            <form id="input_form" action="{{ url_for('submit') }}" method="POST" class="submit">
                 <div class="field">
                 <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
                 </div>
@@ -50,11 +50,11 @@
             <div class="slidingDiv">
                 {% if sausage %}
                 <h5>This is how I came up with "{{reply}}"</h5>
+                <p> You entered "{{submission}}"
                 {{sausage}}
                 {% else %}
                 Talk to Chatbot 5000 to see something here.
                 {% endif %}
-<!--                 <a href="#" class="show_hide">hide</a> -->
             </div>
         </article>
     </main>

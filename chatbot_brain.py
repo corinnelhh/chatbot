@@ -1,7 +1,7 @@
-import nltk
+#import nltk
 import random
-import os
-from nltk import pos_tag
+#import os
+#from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 
 from trainbot import Trainbot
@@ -14,9 +14,6 @@ class Chatbot(Trainbot):
     def __init__(self, training_file=u"tell_tale_heart.txt"):
         super(Chatbot, self).__init__(training_file=u"tell_tale_heart.txt")
         self.training_file = training_file
-        # self.funct_dict = {"filter_content": input_filters.filter_content,
-        #                   "filter_length_words": input_filters.filter_length_words,
-        #                   "filter_content_priority": input_filters.filter_content_priority}
 
     def i_filter_random(self, words, lexicon=None):
         u"""Return randomly selected, non-punctuation word from words."""
@@ -30,10 +27,7 @@ class Chatbot(Trainbot):
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentecnces"""
-        if len(sentences) > 0:
-            return random.choice(sentences)
-        else:
-            return u"I'm not sure what to say about that."
+        return random.choice(sentences)
 
     def _create_chains(self, pair, size=10):
         u"""Return list of markov generated strings spawned from the seed."""
@@ -78,14 +72,20 @@ class Chatbot(Trainbot):
         Expects: A list of filter functions.
         Returns: A list of strings.
         """
-        return self._filter_recursive(strings, filters)
+        strings, output_dict = self._filter_recursive(strings, filters)
+        return strings, output_dict
 
-    def _filter_recursive(self, strings, filters):
+    def _filter_recursive(self, strings, filters, output_dict={}):
         u"""Return list of strings or call the next filter function."""
         if filters == []:
-            return strings
+            return strings, output_dict
         else:
-            return self._filter_recursive(filters[0](strings), filters[1:])
+            output_dict[filters[0].__name__] = filters[0](strings)
+            return self._filter_recursive(
+                filters[0](strings),
+                filters[1:],
+                output_dict
+                )
 
     def apply_o_filter(self, filter_, chains):
         if filter_ == u"filter_length":
@@ -95,6 +95,21 @@ class Chatbot(Trainbot):
         else:
             return chains
 
+    def _sausage_formatter(self, sausage):
+        message = """
+        <html>
+        <h3>This is how the response {final_sentence} was made:</h3>
+        <br>
+        <h3>You entered "{submission}".</h3>
+        <br>
+        <p>With the {input_filter} input filter, {final_seed} was chosen as the 'seed word'
+        for our Markov Chain sentence generator.
+        </p>
+        </html>
+        """.format(**sausage)
+        return message
+
+
     def compose_response(
             self,
             input_sent,
@@ -103,30 +118,56 @@ class Chatbot(Trainbot):
             ):
         u"""Return a response sentence based on the input."""
         # Tokenize input
+        sausage = {}
+        sausage["submission"] = input_sent
         seeds = wordpunct_tokenize(input_sent)
+        sausage["input_words"] = seeds
         # Select seed based on input filter
         if input_key:
+            sausage["input_filter"] = input_key
             print u"Input filter: {}".format(input_key)
             seeds = input_filters.input_funcs[input_key](seeds)
-            if isinstance(seeds, basestring):
-                return seeds
-        # Randomly pick a seed from the returned possibilities.
-        print seeds
-        seed = self.i_filter_random(seeds)
-        if seed == u"What a funny thing to say!":
-            return seed
-        # Create chains
-        pair = self._pair_seed(seed)
-        chains = self._create_chains(pair)
-        # Return output of filter
-        if output_filter != "default":
-            print u"Output filter: {}".format(output_filter)
-            filtered = output_filters.funct_dict[output_filter](chains)
+            sausage["final_seeds"] = seeds
+        if not isinstance(seeds, basestring):
+            # Randomly pick a seed from the returned possibilities.
+            print seeds
+            seed = self.i_filter_random(seeds)
+            print "made it through the random seed picker."
+            sausage["final_seed"] = seed
+            if seed != u"What a funny thing to say!":
+                # Create chains
+                print "now making chains"
+                pair = self._pair_seed(seed)
+                sausage["first_bigram"] = pair
+                chains = self._create_chains(pair)
+                print "made chains!"
+                sausage["unfiltered_chains"] = chains
+                # Return output of filter
+                if output_filter != "default":
+                    print u"Output filter: {}".format(output_filter)
+                    #import pdb; pdb.set_trace()
+                    all_filters = []
+                    for _filter in output_filter:
+                        all_filters.append(output_filters.funct_dict[_filter])
+                    filtered, report = self._chain_filters(chains, all_filters)
+                    print "made it through the output filters"
+                else:
+                    output = chains
+                    report = "no output filters"
+                if len(filtered) > 0:
+                    print "filtering sentences"
+                    output = self.o_filter_random(filtered)
+                    print "filtered them"
+                else:
+                    output = u"I'm not sure what to say about that."
+            else:
+                output = seed
         else:
-            output = chains
-        if len(filtered) > 0:
-            output = self.o_filter_random(filtered)
-        return output
+            output = seeds
+        sausage["final_sentence"] = output
+        sausage["o_filter_report"] = report
+        sausage = self._sausage_formatter(sausage)
+        return output, sausage
 
 if __name__ == u'__main__':
     bot = Chatbot(training_file="Doctorow.txt")
@@ -135,5 +176,7 @@ if __name__ == u'__main__':
     print bot.compose_response(
         u"My beautiful carriage is red and blue and it hums while I drive it!",
         u"Content Filter",
-        u"filter_NN_VV"
+        u"Noun-Verb Filter"
         )
+    strings = bot._create_chains(bot._pair_seed('car'))
+    filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]

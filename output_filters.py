@@ -42,7 +42,7 @@ def no_o_filter_selected(sentences):
 
 @add_func_to_dict("Length Filter")
 def filter_length(sentences, wordcount=8):
-    """Return every sentence that has a length wordcount.
+    u"""Return every sentence that has a length <= wordcount.
 
     Takes in a list of sentences and returns a reduced list,
     that contains only sentences with less than or equal to <wordcount>

@@ -74,14 +74,11 @@ def test_i_filter_random_one_word_in_lexicon():
 
 def test_o_filter_random():
     u"""Assert the returned element is in the initial list."""
+    bot = chatbot_brain.Chatbot()
+    assert bot.o_filter_random(sentences_) in sentences_
 
-
-        def o_filter_random(self, sentences):
-        u"""Return randomly selected sentence from sentecnces"""
-        return random.choice(sentences)
 
 # untested methods:
-# o_filter_random
 # _create_chains
 # _pair_seed
 # _chain_filters

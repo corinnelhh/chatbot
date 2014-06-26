@@ -1,4 +1,6 @@
 import chatbot_brain
+import random
+random.seed(0)
 
 stock = u"What a funny thing to say!"
 
@@ -107,22 +109,8 @@ def test_pair_seeds_one_possible_pair_due_to_punct():
     assert bot._pair_seed(words[0]) == ["car", "benz"]
 
 
-        # def _pair_seed(self, seed):
-        # word_1 = seed
-        # word_2 = None
-        # while word_2 is None:
-        #     try:
-        #         next_ = random.choice(self.bi_lexicon[seed])
-        #         if next_ not in self.stop_puncts:
-        #             word_2 = next_
-        #             pair = [word_1, word_2]
-        #     except KeyError:
-        #         continue
-        # return pair
-
 
 # untested methods:
 # _create_chains
-# _pair_seed
 # _chain_filters
 # _filter_recursive

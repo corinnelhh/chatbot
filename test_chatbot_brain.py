@@ -1,4 +1,6 @@
 import chatbot_brain
+import random
+random.seed(0)
 
 stock = u"What a funny thing to say!"
 
@@ -21,12 +23,20 @@ sentences_ = [
 
 
 def test_initialize_bot():
+    u"""Assert instantiated chatbot is a Chatbot."""
+    bot = chatbot_brain.Chatbot()
+    assert isinstance(bot, chatbot_brain.Chatbot)
+
+
+def test_initialize_bot_is_untrained():
+    u"""Assert Chatbot is untrained when instantiated."""
     bot = chatbot_brain.Chatbot()
     assert len(bot.tri_lexicon) == 0
     assert len(bot.bi_lexicon) == 0
 
 
 def test_fill_lexicon():
+    u"""Assert training adds key, value pairs to both lexicons."""
     bot = chatbot_brain.Chatbot()
     bot.fill_lexicon()
     assert len(bot.tri_lexicon) > 0
@@ -34,8 +44,9 @@ def test_fill_lexicon():
 
 
 def test_compose_response():
+    u"""Assert Chatbot is untrained when instantiated."""
     bot = chatbot_brain.Chatbot()
-    output = bot.compose_response(input_sent="How are you doing?")
+    output, sausage = bot.compose_response(input_sent="How are you doing?")
     assert "," not in output[0]
     for sentence in output:
         assert "." not in sentence[:-1]
@@ -85,22 +96,53 @@ def test_pair_seeds_one_possible_pair():
     bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
     assert bot._pair_seed(words[0]) == ["car", "benz"]
 
-        # def _pair_seed(self, seed):
-        # word_1 = seed
-        # word_2 = None
-        # while word_2 is None:
-        #     try:
-        #         next_ = random.choice(self.bi_lexicon[seed])
-        #         if next_ not in self.stop_puncts:
-        #             word_2 = next_
-        #             pair = [word_1, word_2]
-        #     except KeyError:
-        #         continue
-        # return pair
+
+def test_pair_seeds_all_possible_pairs():
+    u"""Assert if all words are in the lexicon the seed's pair is returned."""
+    bot = chatbot_brain.Chatbot()
+    words = ["car", "boat", "train"]
+    bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
+    for word in words:
+        assert bot._pair_seed(word) == [word, bot.bi_lexicon[word][0]]
+
+
+def test_pair_seeds_one_possible_pair_due_to_punct():
+    u"""Assert only strings without stop characters are returned."""
+    bot = chatbot_brain.Chatbot()
+    words = ["car", "bear", "eagle"]
+    bot.bi_lexicon = {
+        "car": [".", "!", "benz"],
+        "boat": ["sail"],
+        "train": ["track"]
+        }
+    assert bot._pair_seed(words[0]) == ["car", "benz"]
+
+
+def test_filter_recursive_stops():
+    u"""Assert recursion stops when base case is reached."""
+    filters = []
+    bot = chatbot_brain.Chatbot()
+    strings, output_dict = bot._filter_recursive(sentences_, filters)
+    assert strings == sentences_
+    assert output_dict == {}
+
+
+
+    # def _filter_recursive(self, strings, filters, output_dict={}):
+    #     u"""Return list of strings or call the next filter function."""
+    #     if filters == []:
+    #         return strings, output_dict
+    #     else:
+    #         output_dict[filters[0].__name__] = filters[0](strings)
+    #         return self._filter_recursive(
+    #             filters[0](strings),
+    #             filters[1:],
+    #             output_dict
+    #             )
 
 
 # untested methods:
 # _create_chains
-# _pair_seed
 # _chain_filters
 # _filter_recursive
+# _make_sausage

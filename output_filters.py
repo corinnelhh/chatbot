@@ -7,9 +7,9 @@ funct_dict = OrderedDict({})
 
 grammar1 = nltk.parse_cfg("""
     Sent  -> NP VP | NP VP END
-    NP -> Det Nom | PropN | Det NP | N | PR
+    NP -> Det Nom | PropN | Det NP | N | PR | PR Nom
     Nom -> Adj Nom | N
-    VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V
+    VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V | V CC V
     PP -> Prep NP
 
     PropN -> 'NNP' | 'NNPS'
@@ -100,14 +100,14 @@ def syntactic_filter(sentences):
     output_sentences = []
     print "Before syntax filter there were " + str(len(sentences)) + " sentences."
     for sentence in sentences:
-        print sentence + "\n"
+        print "=================="
+        print str(sentence) + "\n"
         tokens = nltk.tokenize.wordpunct_tokenize(sentence)
         posTagged = nltk.pos_tag(tokens)
-
         justTags = []
         for word, tag in posTagged:
             justTags.append(tag)
-
+        print str(justTags) + "\n"
         rd_parser = nltk.RecursiveDescentParser(grammar1)
         try:
             if len(rd_parser.nbest_parse(justTags)) > 0:
@@ -115,4 +115,33 @@ def syntactic_filter(sentences):
         except ValueError:
             pass
     print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
+    print output_sentences
+    return output_sentences
+
+
+@add_func_to_dict("Liberal Syntactic Filter")
+def weak_syntactic_filter(sentences):
+    """Filters responses through part of speech tagging and chunking: passes sentences
+    with at least one NN followed by one VB followed by at least one NN"""
+    output_sentences = []
+    noms = ["NN", "PR"]
+    print "first we had {} sentences.".format(len(sentences))
+    for sentence in sentences:
+        has_NN = False
+        has_VV = False
+        passes = False
+        tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
+        print tagged_tokens
+        for word, tag in tagged_tokens:
+            if tag[:2] in noms:
+                has_NN = True
+            if has_NN and tag[:2] == "VB":
+                has_VV = True
+            if has_NN and has_VV and tag[:2] in noms:
+                passes = True
+        if passes:
+            output_sentences.append(sentence)
+            print "*************"
+            print sentence
+    print "Then we had {} sentences".format(len(output_sentences))
     return output_sentences

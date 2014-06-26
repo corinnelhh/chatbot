@@ -94,6 +94,19 @@ def test_pair_seeds_all_possible_pairs():
     for word in words:
         assert bot._pair_seed(word) == [word, bot.bi_lexicon[word][0]]
 
+
+def test_pair_seeds_one_possible_pair_due_to_punct():
+    u"""Assert only strings without stop characters are returned."""
+    bot = chatbot_brain.Chatbot()
+    words = ["car", "bear", "eagle"]
+    bot.bi_lexicon = {
+        "car": [".", "!", "benz"],
+        "boat": ["sail"],
+        "train": ["track"]
+        }
+    assert bot._pair_seed(words[0]) == ["car", "benz"]
+
+
         # def _pair_seed(self, seed):
         # word_1 = seed
         # word_2 = None

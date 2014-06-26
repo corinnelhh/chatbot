@@ -117,6 +117,17 @@ class Chatbot(Trainbot):
             message["unfiltered_chains"] = """<p> After feeding in \
             <i>{first_bigram}</i>, the Markov Chain sentence generator\
             returned {chain_length} sentences.</p>""".format(**sausage)
+        if "output_filters" in sausage:
+
+                filled_filters = []
+                for _filter in output_filter:
+                    if _filter != "No Filter Selected":
+                        filled_filters.append(_filter)
+                sausage["output_filters"] = ",".join(filled_filters)
+
+                
+            message["output_filters"] = """<p>The sentences were fed through\
+             these filters: {{output_filters}} </p>""".format(**sausage)
         return message
 
     def compose_response(
@@ -145,12 +156,6 @@ class Chatbot(Trainbot):
                 sausage["first_bigram"] = " ".join(pair)
                 chains = self._create_chains(pair)
                 sausage["unfiltered_chains"] = chains
-                sausage["chain_length"] = len(chains)
-                filled_filters = []
-                for _filter in output_filter:
-                    if _filter != "No Filter Selected":
-                        filled_filters.append(_filter)
-                sausage["output_filters"] = ",".join(filled_filters)
                 if output_filter != "default":
                     #import pdb; pdb.set_trace()
                     all_filters = []

@@ -30,10 +30,11 @@ class Chatbot(Trainbot):
         u"""Return randomly selected sentence from sentecnces"""
         return random.choice(sentences)
 
-    def _create_chains(self, seeds, size=200):
+    def _create_chains(self, seeds, size=10):
         u"""Return list of markov generated strings spawned from the seed."""
         print "the seeds are: " + str(seeds)
         candidates = []
+
         while len(candidates) < size:
             seed = self.i_filter_random(seeds)
             pair = self._pair_seed(seed)

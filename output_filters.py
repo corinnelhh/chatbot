@@ -109,7 +109,6 @@ def syntactic_filter(sentences):
                 output_sentences.append(sentence)
         except ValueError:
             pass
-
     print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
     print output_sentences
     return output_sentences
@@ -120,19 +119,26 @@ def weak_syntactic_filter(sentences):
     """Filters responses through part of speech tagging and chunking: passes sentences
     with at least one NN followed by one VB followed by at least one NN"""
     output_sentences = []
+    noms = ["NN", "PR"]
     print "first we had {} sentences.".format(len(sentences))
     for sentence in sentences:
-        max_length = 13
+        max_length = 20
         has_NN = False
         has_VV = False
+        passes = False
         if len(sentence) < max_length:
             tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
+            print tagged_tokens
             for word, tag in tagged_tokens:
-                if tag[:2] == "NN":
+                if tag[:2] in noms:
                     has_NN = True
                 if has_NN and tag[:2] == "VB":
                     has_VV = True
-                if has_NN and has_VV and tag[:2] == "NN":
-                    output_sentences.append(sentence)
-    print "Then we had {} sentences: {}".format(len(output_sentences), output_sentences)
+                if has_NN and has_VV and tag[:2] in noms:
+                    passes = True
+        if passes:
+            output_sentences.append(sentence)
+            print "*************"
+            print sentence
+    print "Then we had {} sentences".format(len(output_sentences))
     return output_sentences

@@ -1,5 +1,7 @@
 import chatbot_brain
 
+stock = u"What a funny thing to say!"
+
 
 def test_initialize_bot():
     bot = chatbot_brain.Chatbot()
@@ -23,10 +25,18 @@ def test_compose_response():
 
 
 def test_i_filter_random_empty_words():
-    u"""Assert the returned word is in the lexicon and is not a stop char."""
+    u"""Assert an empty string is not found in the default lexicon."""
     bot = chatbot_brain.Chatbot()
     words = [""]
-    assert bot.i_filter_random(words) == u"What a funny thing to say!"
+    assert bot.i_filter_random(words) == stock
+
+
+def test_i_filter_random_words_not_in_lexicon():
+    u"""Assert that if all words are not in lexicon the default is returned."""
+    bot = chatbot_brain.Chatbot()
+    words = ["moose", "bear", "eagle"]
+    lexicon = {"car": "mercedes", "boat": "sail", "train": "track"}
+    assert bot.i_filter_random(words, lexicon) == stock
 
 # untested methods:
 # i_filter_random

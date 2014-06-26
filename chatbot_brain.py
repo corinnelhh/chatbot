@@ -127,28 +127,40 @@ class Chatbot(Trainbot):
             # Randomly pick a seed from the returned possibilities.
             print seeds
             seed = self.i_filter_random(seeds)
+            print "made it through the random seed picker."
             sausage["final_seed"] = seed
             if seed != u"What a funny thing to say!":
                 # Create chains
+                print "now making chains"
                 pair = self._pair_seed(seed)
                 sausage["first_bigram"] = pair
                 chains = self._create_chains(pair)
+                print "made chains!"
                 sausage["unfiltered_chains"] = chains
                 # Return output of filter
                 if output_filter != "default":
                     print u"Output filter: {}".format(output_filter)
-                    filtered = output_filters.funct_dict[output_filter](chains)
+                    #import pdb; pdb.set_trace()
+                    all_filters = []
+                    for _filter in output_filter:
+                        all_filters.append(output_filters.funct_dict[_filter])
+                    filtered, report = self._chain_filters(chains, all_filters)
+                    print "made it through the output filters"
                 else:
                     output = chains
-                if len(sentences) > 0:
+                    report = "no output filters"
+                if len(filtered) > 0:
+                    print "filtering sentences"
                     output = self.o_filter_random(filtered)
+                    print "filtered them"
                 else:
-                    output u"I'm not sure what to say about that."
+                    output = u"I'm not sure what to say about that."
             else:
                 output = seed
         else:
             output = seeds
         sausage["final_sentence"] = output
+        sausage["o_filter_report"] = report
         sausage = self._sausage_formatter(sausage)
         return output, sausage
 

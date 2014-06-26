@@ -30,10 +30,19 @@ class Chatbot(Trainbot):
         u"""Return randomly selected sentence from sentecnces"""
         return random.choice(sentences)
 
+    def sanitize_seeds(self, seeds):
+        """returns only seeds that are in the lexicons"""
+
+        for seed in seeds[:]:
+            try:
+                self.bi_lexicon[seed]
+            except KeyError:
+                seeds.remove(seed)
+        return seeds
+
     def _create_chains(self, seeds, size=200):
         u"""Return list of markov generated strings spawned from the seed."""
         print "the seeds are: " + str(seeds)
-
         candidates = []
 
         while len(candidates) < size:
@@ -45,6 +54,7 @@ class Chatbot(Trainbot):
             candidate = [word_1, word_2]
             pair = "{} {}".format(word_1, word_2)
             done = False
+            print "one candidate"
             while not done:
                 try:
                     next_word = random.choice(self.tri_lexicon[pair])
@@ -69,7 +79,7 @@ class Chatbot(Trainbot):
                     word_2 = next_
                     pair = [word_1, word_2]
             except KeyError:
-                continue
+                print "seed not in lexicon"
         return pair
 
     def _chain_filters(self, strings, filters):
@@ -146,6 +156,7 @@ class Chatbot(Trainbot):
             #sausage["final_seeds"] = seeds
         if not isinstance(seeds, basestring):
             # Randomly pick a seed from the returned possibilities.
+            seeds = self.sanitize_seeds(seeds)
             seed = self.i_filter_random(seeds)
             sausage["final_seed"] = seed
             if seed != "What a funny thing to say!":
@@ -154,6 +165,7 @@ class Chatbot(Trainbot):
                 sausage["first_bigram"] = " ".join(pair)
 
                 chains = self._create_chains(seeds)
+                print "I Made the Chains"
                 sausage["unfiltered_chains"] = chains
                 if output_filter != "default":
                     #import pdb; pdb.set_trace()

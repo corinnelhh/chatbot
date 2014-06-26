@@ -93,7 +93,7 @@ class Chatbot(Trainbot):
             input_key=None,
             output_filter=None,
             ):
-        u"""Return a response sentence based on the input."""
+        u"""Return a response sentence and report based on the input."""
         # Tokenize input
         sausage = {}
         report = ""
@@ -123,8 +123,11 @@ class Chatbot(Trainbot):
                 print "made chains!"
                 sausage["unfiltered_chains"] = chains
                 sausage["chain_length"] = len(chains)
-                # Return output of filter
-                sausage["output_filters"] = ",".join(output_filter)
+                filled_filters = []
+                for _filter in output_filter:
+                    if _filter != "No Filter Selected":
+                        filled_filters.append(_filter)
+                sausage["output_filters"] = ",".join(filled_filters)
                 if output_filter != "default":
                     print "Output filter: {}".format(output_filter)
                     #import pdb; pdb.set_trace()
@@ -133,6 +136,7 @@ class Chatbot(Trainbot):
                         all_filters.append(output_filters.funct_dict[_filter])
                     filtered, report = self._chain_filters(chains, all_filters)
                     print "made it through the output filters"
+
                 else:
                     output = chains
                     report = "no output filters"

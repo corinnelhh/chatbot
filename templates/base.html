@@ -49,9 +49,9 @@
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">
                 {% if sausage %}
-                {% for key, value in sausage.items() %}
+                    {% for key, value in sausage.items() %}
                         {{value|safe}}
-                {% endfor %}
+                    {% endfor %}
                 {% endif %}
             </div>
         </article>

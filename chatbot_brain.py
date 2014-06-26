@@ -103,24 +103,17 @@ class Chatbot(Trainbot):
         # Select seed based on input filter
         if input_key:
             sausage["input_filter"] = input_key
-            print "Input filter: {}".format(input_key)
             seeds = input_filters.input_funcs[input_key](seeds)
             sausage["final_seeds"] = seeds
         if not isinstance(seeds, basestring):
             # Randomly pick a seed from the returned possibilities.
-            print seeds
             seed = self.i_filter_random(seeds)
-            print "made it through the random seed picker."
             sausage["final_seed"] = seed
             if seed != "What a funny thing to say!":
                 # Create chains
-                print "now making chains"
                 pair = self._pair_seed(seed)
-                print "made our pair"
                 sausage["first_bigram"] = " ".join(pair)
-                print "now making chains!"
                 chains = self._create_chains(pair)
-                print "made chains!"
                 sausage["unfiltered_chains"] = chains
                 sausage["chain_length"] = len(chains)
                 filled_filters = []
@@ -129,21 +122,16 @@ class Chatbot(Trainbot):
                         filled_filters.append(_filter)
                 sausage["output_filters"] = ",".join(filled_filters)
                 if output_filter != "default":
-                    print "Output filter: {}".format(output_filter)
                     #import pdb; pdb.set_trace()
                     all_filters = []
                     for _filter in output_filter:
                         all_filters.append(output_filters.funct_dict[_filter])
                     filtered, report = self._chain_filters(chains, all_filters)
-                    print "made it through the output filters"
-
                 else:
                     output = chains
                     report = "no output filters"
                 if len(filtered) > 0:
-                    print "filtering sentences"
                     output = self.o_filter_random(filtered)
-                    print "filtered them"
                 else:
                     output = "I'm not sure what to say about that."
             else:

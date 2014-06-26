@@ -27,10 +27,7 @@ class Chatbot(Trainbot):
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentecnces"""
-        if len(sentences) > 0:
-            return random.choice(sentences)
-        else:
-            return u"I'm not sure what to say about that."
+        return random.choice(sentences)
 
     def _create_chains(self, pair, size=10):
         u"""Return list of markov generated strings spawned from the seed."""
@@ -135,7 +132,10 @@ class Chatbot(Trainbot):
             filtered = output_filters.funct_dict[output_filter](chains)
         else:
             output = chains
-        output = self.o_filter_random(filtered)
+        if len(sentences) > 0:
+            output = self.o_filter_random(filtered)
+        else:
+            output u"I'm not sure what to say about that."
         return output, sausage
 
 if __name__ == u'__main__':

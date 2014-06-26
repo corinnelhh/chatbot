@@ -195,7 +195,7 @@ class Chatbot(Trainbot):
                 # Create chains
                 pair = self._pair_seed(seed)
                 sausage["first_bigram"] = " ".join(pair)
-
+                print "about to make the chains"
                 chains = self._create_bi_chains(seeds)
                 print "I Made the Chains"
                 sausage["unfiltered_chains"] = chains

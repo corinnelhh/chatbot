@@ -87,14 +87,6 @@ class Chatbot(Trainbot):
                 output_dict
                 )
 
-    def apply_o_filter(self, filter_, chains):
-        if filter_ == u"filter_length":
-            return output_filters.filter_length(chains)
-        if filter_ == u"filter_pos":
-            return output_filters.filter_pos(chains)
-        else:
-            return chains
-
     def _sausage_formatter(self, sausage):
         message = """
         <html>
@@ -108,7 +100,6 @@ class Chatbot(Trainbot):
         </html>
         """.format(**sausage)
         return message
-
 
     def compose_response(
             self,

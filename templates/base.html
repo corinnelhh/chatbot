@@ -8,8 +8,9 @@
     <main id="main">
     <body>
     <aside id="about">
-        <h4>About Koanbot:</h4>
-        <p> Our bot is built with a Markov Chain 'brain'. To approximate
+        <h3>About Koanbot:</h3>
+        <p> Our bot is built with a Markov Chain 'brain', and was trained
+        with texts by Cory Doctorow and Jane Austen. To approximate
         the back-and-forth of a natural conversation, the bot uses
         the words in each input sentence as its base for the following response.
         If any input filters are selected, the 'seed' words are
@@ -22,24 +23,30 @@
         </p>
     </aside>
     <aside id="filters">
-        <h4> Input filters:</h4>
-            <select form="input_form" name="input_filter" id="input_filter">
+        <h5> Brain N-gram Type:</h5>
+            <select class="filters" form="input_form" name="brain_types" id="brain_types">
+                {% for key in brain_types.keys() %}
+                <option value = "{{key}}">{{key}}</option>
+                {% endfor %}
+            </select>
+        <h5> Input filters:</h5>
+            <select class="filters" form="input_form" name="input_filter" id="input_filter">
                 {% for key in input_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-        <h4> Output filters:</h4>
-            <select form="input_form" name="output_filter" id="output_filter">
+        <h5> Output filters:</h5>
+            <select class="filters" form="input_form" name="output_filter" id="output_filter">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select form="input_form" name="output_filter2" class="hidden" id="output_filter2">
+            <select class="filters" form="input_form" name="output_filter2" class="hidden" id="output_filter2">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select form="input_form" name="output_filter3" class="hidden" id="output_filter3">
+            <select class="filters" form="input_form" name="output_filter3" class="hidden" id="output_filter3">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
@@ -48,7 +55,7 @@
         <article>
         <div id="output_box">
         {% if reply %}
-        Chatbot5000 says: {{reply}}
+        Koanbot says: {{reply}}
         {% endif %}
         </div>
             <form id="input_form" action="{{ url_for('submit') }}" method="POST" class="submit">

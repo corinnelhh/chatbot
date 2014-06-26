@@ -10,6 +10,7 @@ from flask import session
 import chatbot_brain
 from input_filters import input_funcs
 from output_filters import funct_dict
+from brains import brain_dict
 
 app = Flask(__name__)
 
@@ -20,7 +21,8 @@ def show_chatbot(submission="...crickets...", reply="Say something to me!",
     """Displays base.html when user goes to main page."""
     return render_template('base.html', reply=reply, sausage=sausage,
                            input_filters=input_funcs,
-                           output_filters=funct_dict)
+                           output_filters=funct_dict,
+                           brain_types=brain_dict)
 
 
 @app.route('/submit', methods=['GET', 'POST'])
@@ -28,18 +30,20 @@ def submit():
     """Accepts user submission, creates reply, redirects to homepage."""
     submission = request.form['submission']
     input_ = request.form['input_filter']
+    brain_ = request.form['brain_types']
     print input_
     output_ = []
     output_.append(request.form['output_filter'])
     output_.append(request.form['output_filter2'])
     output_.append(request.form['output_filter3'])
-    reply = cbot.compose_response(
+    reply, sausage = cbot.compose_response(
         submission,
         input_key=input_,
-        output_filter=output_
+        output_filter=output_,
+        brain=brain_
         )
     print "Reply: " + str(reply)
-    return show_chatbot(submission, reply)
+    return show_chatbot(submission, reply, sausage)
 
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ from collections import OrderedDict
 from trainbot import Trainbot
 import input_filters
 import output_filters
+import brains
 
 
 class Chatbot(Trainbot):
@@ -32,7 +33,9 @@ class Chatbot(Trainbot):
         return random.choice(sentences)
 
     def output_filtration(self, output_filter, chains):
-        if u"No Filter Selected" not in output_filter:
+        if u"No Filter Selected" in output_filter[0]:
+            output = self.o_filter_random(chains)
+        else:
             all_filters = []
             for _filter in output_filter:
                 all_filters.append(output_filters.funct_dict[_filter])
@@ -42,72 +45,19 @@ class Chatbot(Trainbot):
                 output = self.o_filter_random(filtered)
             else:
                 output = "I'm not sure what to say about that."
-        else:
-            output = self.o_filter_random(chains)
         return output
 
     def sanitize_seeds(self, seeds):
         """returns only seeds that are in the lexicons"""
-
+        non_u_seeds = []
         for seed in seeds[:]:
             try:
                 self.bi_lexicon[seed]
+                non_u_seeds.append(str(seed))
             except KeyError:
                 seeds.remove(seed)
+        self.sausage["sanitized_seeds"] = non_u_seeds
         return seeds
-
-    def _create_chains(self, seeds, size=200):
-
-        u"""Return list of markov generated strings spawned from the seed."""
-        print "the seeds are: " + str(seeds)
-        candidates = []
-
-        while len(candidates) < size:
-            seed = self.i_filter_random(seeds)
-            pair = self._pair_seed(seed)
-            w_1 = pair[0]
-            w_2 = pair[1]
-            word_1, word_2 = w_1, w_2
-            candidate = [word_1, word_2]
-            pair = "{} {}".format(word_1, word_2)
-            done = False
-            while not done:
-                try:
-                    next_word = random.choice(self.tri_lexicon[pair])
-                    candidate.append(next_word)
-                    word_1, word_2 = word_2, next_word
-                    pair = "{} {}".format(word_1, word_2)
-                except KeyError:
-                    candidates.append(" ".join(candidate))
-                    done = True
-                if next_word in self.stop_puncts:
-                    candidates.append(" ".join(candidate))
-                    done = True
-        return candidates
-
-    def _create_bi_chains(self, seeds, size=200):
-
-        u"""Return list of markov generated strings spawned from the seed."""
-        print "the seeds are: " + str(seeds)
-        candidates = []
-
-        while len(candidates) < size:
-            seed = self.i_filter_random(seeds)
-            candidate = [seed]
-            done = False
-            print "one candidate"
-            while not done:
-                try:
-                    next_word = random.choice(self.bi_lexicon[seed])
-                    candidate.append(next_word)
-                    seed = next_word
-                except KeyError:
-                    candidates.append(" ".join(candidate))
-                    done = True
-                if next_word in self.stop_puncts:
-                    candidates.append(" ".join(candidate))
-                    done = True
-        return candidates
 
     def _pair_seed(self, seed):
         word_1 = seed
@@ -160,18 +110,14 @@ class Chatbot(Trainbot):
             <p> With the {input_filter} input filter, <i>{final_seed}</i>\
              was chosen as the 'seed word' for our Markov Chain sentence\
              generator. <p>""".format(**self.sausage)
-        if "first_bigram" in self.sausage:
-            message["first_bigram"] = """<p>Then we used bigram probability\
-             to pick <i>{first_bigram}</i> as the first pair of words to\
-              feed our Markov Chain sentence generator.</p>""".format(**self.sausage)
-        else:
-            message["no_bigram"] = """<p> A lexicon search did not return\
-            a likely next word, so a default response <i>{final_sentence}</i>\
-            was returned. </p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After feeding in \
-            <i>{first_bigram}</i>, the Markov Chain sentence generator\
+            <i>{sanitized_seeds}</i>, the Markov Chain sentence generator\
             returned some sentences.</p>""".format(**self.sausage)
+        else:
+            message["no_chains"] = """<p> A lexicon search did not return\
+            a likely next word, so a default response <i>{final_sentence}</i>\
+            was returned. </p>""".format(**self.sausage)
         #if "o_filter_report" in self.sausage:
             #for item in self.sausage["o_filter_report"]:
 
@@ -187,18 +133,24 @@ class Chatbot(Trainbot):
     def compose_response(
             self,
             input_sent,
-            input_key=None,
-            output_filter=None,
+            input_key,
+            output_filter,
+            brain
             ):
         u"""Return a response sentence and report based on the input."""
+        self.sausage = {}
         seeds = wordpunct_tokenize(input_sent)
-        seeds = input_filters.input_funcs[input_key](seeds)
-        seeds = self.sanitize_seeds(seeds)
+        filt_seeds = input_filters.input_funcs[input_key](seeds)
+        seeds = self.sanitize_seeds(filt_seeds)
         if len(seeds) == 0:
-            return "You speak nothing but nonsense."
-        chains = self._create_chains(seeds)
-        output = self.output_filtration(output_filter, chains)
-        return output
+            output = "You speak nothing but nonsense."
+        else:
+            chains = brains.brain_dict[brain](self, seeds)
+            self.sausage["unfiltered_chains"] = chains
+            output = self.output_filtration(output_filter, chains)
+        self.sausage["final_sentence"] = output
+        message = self._make_sausage()
+        return output, message
 
 if __name__ == '__main__':
     bot = Chatbot(training_file="Doctorow.txt")

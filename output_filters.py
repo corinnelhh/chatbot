@@ -5,6 +5,24 @@ from collections import OrderedDict
 
 funct_dict = OrderedDict({})
 
+grammar1 = nltk.parse_cfg("""
+    Sent  -> NP VP | NP VP END
+    NP -> Det Nom | PropN | Det NP | N | PR
+    Nom -> Adj Nom | N
+    VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V
+    PP -> Prep NP
+    PropN -> 'NNP' | 'NNPS'
+    Det -> 'DT' | 'a'
+    N -> 'NN' | 'NNS'
+    Adj  -> 'JJ' | 'JJR' |  'JJS'
+    V ->  'VB'  | 'VBD' | 'VBG' | 'VBN' | 'VBP' | 'VBZ'
+    Prep -> 'TO' | 'IN'
+    CC -> 'CC'
+    PR -> 'PRP' | 'PRP$'
+    RB -> 'RB' | 'RBR' | 'RBS'
+    END -> '.' | '?' | '!'
+    """)
+
 
 def add_func_to_dict(name=None):
     def wrapper(func):
@@ -66,4 +84,27 @@ def filter_NN_VV(sentences):
             if has_noun and tag[:2] == "VB":
                 output_sentences.append(sentence)
                 break
+    return output_sentences
+
+
+@add_func_to_dict("Syntactic Filter")
+def syntactic_filter(sentences):
+    """Filters responses through part of speech tagging and
+    recursive structure lookup."""
+    output_sentences = []
+    for sentence in sentences:
+        tokens = nltk.tokenize.wordpunct_tokenize(sentence)
+        posTagged = nltk.pos_tag(tokens)
+
+        justTags = []
+        for word, tag in posTagged:
+            justTags.append(tag)
+        print justTags
+
+        rd_parser = nltk.RecursiveDescentParser(grammar1)
+        try:
+            if len(rd_parser.nbest_parse(justTags)) > 0:
+                output_sentences.append(sentence)
+        except ValueError:
+            pass
     return output_sentences

@@ -11,11 +11,11 @@ import output_filters
 
 class Chatbot(Trainbot):
 
-    def __init__(self, training_file=u"tell_tale_heart.txt"):
-        super(Chatbot, self).__init__(training_file=u"tell_tale_heart.txt")
+    def __init__(self, training_file="tell_tale_heart.txt"):
+        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
         self.training_file = training_file
 
-    def i_filter_random(self, words, lexicon=None):
+    def i_filter_random(self, words):
         u"""Return randomly selected, non-punctuation word from words."""
         count = 0
         while count < len(words):
@@ -23,7 +23,7 @@ class Chatbot(Trainbot):
             if (seed in self.bi_lexicon) and (seed not in self.stop_puncts):
                 return seed
             count += 1
-        return u"What a funny thing to say!"
+        return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentecnces"""
@@ -37,14 +37,14 @@ class Chatbot(Trainbot):
         while len(candidates) < size:
             word_1, word_2 = w_1, w_2
             candidate = [word_1, word_2]
-            pair = u"{} {}".format(word_1, word_2)
+            pair = "{} {}".format(word_1, word_2)
             done = False
             while not done:
                 try:
                     next_word = random.choice(self.tri_lexicon[pair])
                     candidate.append(next_word)
                     word_1, word_2 = word_2, next_word
-                    pair = u"{} {}".format(word_1, word_2)
+                    pair = "{} {}".format(word_1, word_2)
                 except KeyError:
                     candidates.append(" ".join(candidate))
                     done = True
@@ -93,7 +93,7 @@ class Chatbot(Trainbot):
             input_key=None,
             output_filter=None,
             ):
-        u"""Return a response sentence based on the input."""
+        u"""Return a response sentence and report based on the input."""
         # Tokenize input
         sausage = {}
         report = ""
@@ -103,43 +103,37 @@ class Chatbot(Trainbot):
         # Select seed based on input filter
         if input_key:
             sausage["input_filter"] = input_key
-            print u"Input filter: {}".format(input_key)
             seeds = input_filters.input_funcs[input_key](seeds)
             sausage["final_seeds"] = seeds
         if not isinstance(seeds, basestring):
             # Randomly pick a seed from the returned possibilities.
-            print seeds
             seed = self.i_filter_random(seeds)
-            print "made it through the random seed picker."
             sausage["final_seed"] = seed
-            if seed != u"What a funny thing to say!":
+            if seed != "What a funny thing to say!":
                 # Create chains
-                print "now making chains"
                 pair = self._pair_seed(seed)
-                print "made our pair"
-                sausage["first_bigram"] = pair
-                print "now making chains!"
+                sausage["first_bigram"] = " ".join(pair)
                 chains = self._create_chains(pair)
-                print "made chains!"
                 sausage["unfiltered_chains"] = chains
-                # Return output of filter
+                sausage["chain_length"] = len(chains)
+                filled_filters = []
+                for _filter in output_filter:
+                    if _filter != "No Filter Selected":
+                        filled_filters.append(_filter)
+                sausage["output_filters"] = ",".join(filled_filters)
                 if output_filter != "default":
-                    print u"Output filter: {}".format(output_filter)
                     #import pdb; pdb.set_trace()
                     all_filters = []
                     for _filter in output_filter:
                         all_filters.append(output_filters.funct_dict[_filter])
                     filtered, report = self._chain_filters(chains, all_filters)
-                    print "made it through the output filters"
                 else:
                     output = chains
                     report = "no output filters"
                 if len(filtered) > 0:
-                    print "filtering sentences"
                     output = self.o_filter_random(filtered)
-                    print "filtered them"
                 else:
-                    output = u"I'm not sure what to say about that."
+                    output = "I'm not sure what to say about that."
             else:
                 output = seed
         else:
@@ -148,14 +142,14 @@ class Chatbot(Trainbot):
         sausage["o_filter_report"] = report
         return output, sausage
 
-if __name__ == u'__main__':
+if __name__ == '__main__':
     bot = Chatbot(training_file="Doctorow.txt")
     bot.fill_lexicon()
-    print u"Filled the lexicon!"
+    print "Filled the lexicon!"
     print bot.compose_response(
-        u"My beautiful carriage is red and blue and it hums while I drive it!",
-        u"Content Filter",
-        u"Noun-Verb Filter"
+        "My beautiful carriage is red and blue and it hums while I drive it!",
+        "Content Filter",
+        "Noun-Verb Filter"
         )
     strings = bot._create_chains(bot._pair_seed('car'))
     filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]

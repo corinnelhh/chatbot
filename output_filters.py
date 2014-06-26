@@ -11,8 +11,9 @@ grammar1 = nltk.parse_cfg("""
     Nom -> Adj Nom | N
     VP -> V Adj | V NP | V S | V NP PP | V Prep NP | V
     PP -> Prep NP
+
     PropN -> 'NNP' | 'NNPS'
-    Det -> 'DT' | 'a'
+    Det -> 'DT'
     N -> 'NN' | 'NNS'
     Adj  -> 'JJ' | 'JJR' |  'JJS'
     V ->  'VB'  | 'VBD' | 'VBG' | 'VBN' | 'VBP' | 'VBZ'
@@ -40,7 +41,7 @@ def no_o_filter_selected(sentences):
 
 
 @add_func_to_dict("Length Filter")
-def filter_length(sentences, wordcount=13):
+def filter_length(sentences, wordcount=8):
     """Takes in a list of sentences and returns a reduced list,
     that contains only sentences with less than <wordcount> words."""
     output_sentences = []
@@ -92,14 +93,15 @@ def syntactic_filter(sentences):
     """Filters responses through part of speech tagging and
     recursive structure lookup."""
     output_sentences = []
+    print "Before syntax filter there were " + str(len(sentences)) + " sentences."
     for sentence in sentences:
+        print sentence + "\n"
         tokens = nltk.tokenize.wordpunct_tokenize(sentence)
         posTagged = nltk.pos_tag(tokens)
 
         justTags = []
         for word, tag in posTagged:
             justTags.append(tag)
-        print justTags
 
         rd_parser = nltk.RecursiveDescentParser(grammar1)
         try:
@@ -107,4 +109,5 @@ def syntactic_filter(sentences):
                 output_sentences.append(sentence)
         except ValueError:
             pass
+    print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
     return output_sentences

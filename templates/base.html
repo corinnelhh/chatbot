@@ -49,15 +49,17 @@
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">
                 {% if sausage %}
-                <h5>This is how the response {{sausage.final_sentence}} was made:</h5>
-                <br>
-                <h5>You entered "{{sausage.submission}}".</h5>
-                <br>
-                <p>With the {{sausage.input_filter}} input filter, {{sausage.final_seed}} was chosen as the 'seed word'
+                <h5>This is how the response <i>{{sausage.final_sentence}}</i> was made:</h5>
+                <h5>You entered <i>"{{sausage.submission}}"</i>.</h5>
+                <p>With the {{sausage.input_filter}} input filter, <i>{{sausage.final_seed}}</i> was chosen as the 'seed word'
                 for our Markov Chain sentence generator.
                 </p>
-
-                {{sausage}}
+                {% if sausage.first_bigram %}
+                <p>Then we used bigram probabilities to pick {{sausage.first_bigram}} as
+                the first pair of words to feed out Markov Chain sentence generator.</p>
+                {%%}
+                {%endif%}
+                {% endif %}
                 {% else %}
                 Talk to Chatbot 5000 to see something here.
                 {% endif %}

@@ -118,6 +118,7 @@ class Chatbot(Trainbot):
                 pair = self._pair_seed(seed)
                 print "made our pair"
                 sausage["first_bigram"] = pair
+                print "now making chains!"
                 chains = self._create_chains(pair)
                 print "made chains!"
                 sausage["unfiltered_chains"] = chains

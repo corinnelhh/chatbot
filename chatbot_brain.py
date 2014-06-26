@@ -96,7 +96,13 @@ class Chatbot(Trainbot):
             return chains
 
     def _sausage_formatter(self, sausage):
-
+        message = """
+        <h3>This is how the response {final_sentence} was made:</h3>
+        <br>
+        <h3>You entered "{submission}".</h3>
+        <br>
+        """.format(**sausage)
+        return message
 
 
     def compose_response(
@@ -138,12 +144,12 @@ class Chatbot(Trainbot):
                     output = self.o_filter_random(filtered)
                 else:
                     output u"I'm not sure what to say about that."
-                sausage["final_sentence"] = output
             else:
                 output = seed
         else:
             output = seeds
-        sausage = _sausage_formatter(sausage)
+        sausage["final_sentence"] = output
+        sausage = self._sausage_formatter(sausage)
         return output, sausage
 
 if __name__ == u'__main__':

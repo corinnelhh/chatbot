@@ -3,12 +3,23 @@
     <head>
     <meta charset="utf-8">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
-    <title>Chatbot 5000</title>
-    <header id="title">Super Cool Chatbot Name</header>
+    <title>Koanbot</title>
+    <header id="title" align="center">Koanbot</header>
     <main id="main">
     <body>
     <aside id="about">
-        About Super Cool Chatbot:
+        <h4>About Koanbot:</h4>
+        <p> Our bot is built with a Markov Chain 'brain'. To approximate
+        the back-and-forth of a natural conversation, the bot uses
+        the words in each input sentence as its base for the following response.
+        If any input filters are selected, the 'seed' words are
+        filtered, then passed along to the 'brain'. The brain generates a set
+        of possible response sentences, using n-gram probability to build
+        the sentence word-by-word. Once a set of candidate sentences have
+        been generated, the candidate sentences are passed through any
+        output filters that have been selected. If more than one candidate
+        sentence remains after the filtering, one is chosen at random.
+        </p>
     </aside>
     <aside id="filters">
         <h4> Input filters:</h4>
@@ -59,7 +70,7 @@
         <footer>
             <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey<br>
             View the source code on <a href="https://github.com/corinnelhh/chatbot">github</a>.<br>
-            <a href="mailto:chatbot5000@gmail.com"> Email us.</a></p>
+            <a href="mailto:koanbot@gmail.com"> Email us.</a></p>
         </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='application.js') }}"></script>

@@ -180,7 +180,6 @@ class Chatbot(Trainbot):
 
            # len(self.sausage["o_filter_report"])
 
-
             #message["output_filters"] = """<p>The sentences were fed through\
             # these filters: {output_filters} </p>""".format(**self.sausage)
         return message
@@ -212,4 +211,3 @@ if __name__ == '__main__':
         )
     strings = bot._create_chains(bot._pair_seed('car'))
     filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]
-    

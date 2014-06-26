@@ -34,8 +34,10 @@ def submit():
     submission = request.form['submission']
     input_ = request.form['input_filter']
     print input_
-    output_ = request.form['output_filter']
-    # import pdb; pdb.set_trace()
+    output_ = []
+    output_.append(request.form['output_filter'])
+    output_.append(request.form['output_filter2'])
+    output_.append(request.form['output_filter3'])
     reply = cbot.compose_response(
         submission,
         input_key=input_,

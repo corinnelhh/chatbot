@@ -17,12 +17,7 @@ app = Flask(__name__)
 @app.route('/')
 def show_chatbot(submission="...crickets...", reply="Say something to me!",
                  sausage="I haven't said anything yet..."):
-
     """Displays base.html when user goes to main page."""
-    # input_filters = []
-    # for key in input_funcs:
-    #     input_filters.append(key)
-    # print input_filters
     return render_template('base.html', reply=reply, sausage=sausage,
                            input_filters=input_funcs,
                            output_filters=funct_dict)
@@ -43,7 +38,7 @@ def submit():
         input_key=input_,
         output_filter=output_
         )
-    return show_chatbot(reply, sausage)
+    return show_chatbot(submission, reply, sausage)
 
 
 if __name__ == '__main__':

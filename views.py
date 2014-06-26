@@ -44,7 +44,7 @@ def submit():
 if __name__ == '__main__':
     cbot = chatbot_brain.Chatbot()
     cbot.fill_lexicon()
-    app.run(debug=True)
+    #app.run(debug=True)
     from wsgiref.simple_server import make_server
     srv = make_server('localhost', 8000, app)
     srv.serve_forever()

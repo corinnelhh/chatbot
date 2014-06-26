@@ -24,7 +24,7 @@ sentences_ = [
     ]
 
 short_sentences = [
-    "".join(sent) for sent in sentences_ if len(sent.split()) < 8
+    "".join(sent) for sent in sentences_ if len(sent.split()) <= 8
     ]
 
 

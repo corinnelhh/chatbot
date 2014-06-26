@@ -8,7 +8,7 @@
     <main id="main">
     <body>
     <aside id="about">
-        <h4>About Koanbot:</h4>
+        <h3>About Koanbot:</h3>
         <p> Our bot is built with a Markov Chain 'brain'. To approximate
         the back-and-forth of a natural conversation, the bot uses
         the words in each input sentence as its base for the following response.
@@ -22,6 +22,12 @@
         </p>
     </aside>
     <aside id="filters">
+        <h4> Brain N-gram Type:</h4>
+            <select form="input_form" name="brain_types" id="brain_types">
+                {% for key in brain_types.keys() %}
+                <option value = "{{key}}">{{key}}</option>
+                {% endfor %}
+            </select>
         <h4> Input filters:</h4>
             <select form="input_form" name="input_filter" id="input_filter">
                 {% for key in input_filters.keys() %}
@@ -48,7 +54,7 @@
         <article>
         <div id="output_box">
         {% if reply %}
-        Chatbot5000 says: {{reply}}
+        Koanbot says: {{reply}}
         {% endif %}
         </div>
             <form id="input_form" action="{{ url_for('submit') }}" method="POST" class="submit">

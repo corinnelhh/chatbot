@@ -52,7 +52,7 @@ body {
     border: 1px solid #8888bb;
     border-radius: 7pt;
     background: #ccccff;
-    font-size: 16 px;
+    font-size: 15px;
     -webkit-flex: 1 6 20%;
     flex: 1 6 20%;
     -webkit-order: 3;

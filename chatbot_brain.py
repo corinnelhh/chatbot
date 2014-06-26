@@ -8,6 +8,7 @@ from collections import OrderedDict
 from trainbot import Trainbot
 import input_filters
 import output_filters
+import brains
 
 
 class Chatbot(Trainbot):
@@ -55,59 +56,6 @@ class Chatbot(Trainbot):
             except KeyError:
                 seeds.remove(seed)
         return seeds
-
-    def _create_chains(self, seeds, size=200):
-
-        u"""Return list of markov generated strings spawned from the seed."""
-        print "the seeds are: " + str(seeds)
-        candidates = []
-
-        while len(candidates) < size:
-            seed = self.i_filter_random(seeds)
-            pair = self._pair_seed(seed)
-            w_1 = pair[0]
-            w_2 = pair[1]
-            word_1, word_2 = w_1, w_2
-            candidate = [word_1, word_2]
-            pair = "{} {}".format(word_1, word_2)
-            done = False
-            while not done:
-                try:
-                    next_word = random.choice(self.tri_lexicon[pair])
-                    candidate.append(next_word)
-                    word_1, word_2 = word_2, next_word
-                    pair = "{} {}".format(word_1, word_2)
-                except KeyError:
-                    candidates.append(" ".join(candidate))
-                    done = True
-                if next_word in self.stop_puncts:
-                    candidates.append(" ".join(candidate))
-                    done = True
-        return candidates
-
-    def _create_bi_chains(self, seeds, size=200):
-
-        u"""Return list of markov generated strings spawned from the seed."""
-        print "the seeds are: " + str(seeds)
-        candidates = []
-
-        while len(candidates) < size:
-            seed = self.i_filter_random(seeds)
-            candidate = [seed]
-            done = False
-            print "one candidate"
-            while not done:
-                try:
-                    next_word = random.choice(self.bi_lexicon[seed])
-                    candidate.append(next_word)
-                    seed = next_word
-                except KeyError:
-                    candidates.append(" ".join(candidate))
-                    done = True
-                if next_word in self.stop_puncts:
-                    candidates.append(" ".join(candidate))
-                    done = True
-        return candidates
 
     def _pair_seed(self, seed):
         word_1 = seed
@@ -187,8 +135,9 @@ class Chatbot(Trainbot):
     def compose_response(
             self,
             input_sent,
-            input_key=None,
-            output_filter=None,
+            input_key,
+            output_filter,
+            brain
             ):
         u"""Return a response sentence and report based on the input."""
         seeds = wordpunct_tokenize(input_sent)
@@ -196,7 +145,7 @@ class Chatbot(Trainbot):
         seeds = self.sanitize_seeds(seeds)
         if len(seeds) == 0:
             return "You speak nothing but nonsense."
-        chains = self._create_chains(seeds)
+        chains = brains.brain_dict[brain](self, seeds)
         output = self.output_filtration(output_filter, chains)
         return output
 

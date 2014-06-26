@@ -103,4 +103,7 @@ def test_filter_NN_VV(sentences):
         assert is_valid is True
 
 
-
+def test_filter_NP_VP(sentences):
+    reduced_sentences = output_filters.filter_NP_VP(sentences)
+    for sentence in reduced_sentences:
+        

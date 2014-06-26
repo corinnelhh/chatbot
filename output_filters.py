@@ -113,3 +113,26 @@ def syntactic_filter(sentences):
     print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
     print output_sentences
     return output_sentences
+
+
+@add_func_to_dict("Liberal Syntactic Filter")
+def weak_syntactic_filter(sentences):
+    """Filters responses through part of speech tagging and chunking: passes sentences
+    with at least one NN followed by one VB followed by at least one NN"""
+    output_sentences = []
+    print "first we had {} sentences.".format(len(sentences))
+    for sentence in sentences:
+        max_length = 13
+        has_NN = False
+        has_VV = False
+        if len(sentence) < max_length:
+            tagged_tokens = pos_tag(wordpunct_tokenize(sentence))
+            for word, tag in tagged_tokens:
+                if tag[:2] == "NN":
+                    has_NN = True
+                if has_NN and tag[:2] == "VB":
+                    has_VV = True
+                if has_NN and has_VV and tag[:2] == "NN":
+                    output_sentences.append(sentence)
+    print "Then we had {} sentences: {}".format(len(output_sentences), output_sentences)
+    return output_sentences

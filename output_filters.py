@@ -2,6 +2,7 @@ import nltk
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 from collections import OrderedDict
+import random
 
 funct_dict = OrderedDict({})
 
@@ -36,18 +37,19 @@ def add_func_to_dict(name=None):
 
 
 @add_func_to_dict("No Filter Selected")
-def no_o_filter_selected(sentences):
+def no_o_filter_selected(sentences, self):
     return sentences
 
 
 @add_func_to_dict("Length Filter")
-def filter_length(sentences, wordcount=8):
+def filter_length(sentences, self):
     u"""Return every sentence that has a length <= wordcount.
 
     Takes in a list of sentences and returns a reduced list,
     that contains only sentences with less than or equal to <wordcount>
     words.
     """
+    wordcount = 8
     output_sentences = []
     for sentence in sentences[:]:
         sentence = sentence.split()
@@ -57,7 +59,7 @@ def filter_length(sentences, wordcount=8):
 
 
 @add_func_to_dict("Part of Speech Filter")
-def filter_pos(sentences):
+def filter_pos(sentences, self):
     """Takes in a list of sentences and returns a reduced list,
 
     that contains only sentences that contain the necessarry pos."""
@@ -74,7 +76,7 @@ def filter_pos(sentences):
 
 
 @add_func_to_dict("Noun-Verb Filter")
-def filter_NN_VV(sentences):
+def filter_NN_VV(sentences, self):
     """Takes in a list of sentences and returns a reduced list of
     sentences that have at least one noun followed somewhere by at least
     one verb.
@@ -94,7 +96,7 @@ def filter_NN_VV(sentences):
 
 
 @add_func_to_dict("Syntactic Filter")
-def syntactic_filter(sentences):
+def syntactic_filter(sentences, self):
     """Filters responses through part of speech tagging and
     recursive structure lookup."""
     output_sentences = []
@@ -119,8 +121,36 @@ def syntactic_filter(sentences):
     return output_sentences
 
 
+@add_func_to_dict("Syntactic Filter Fast")
+def syntactic_filter_fast(sentences, self):
+    """Filters responses through part of speech tagging and
+    recursive structure lookup."""
+    output_sentences = []
+    print "Before syntax filter there were " + str(len(sentences)) + " sentences."
+    for sentence in sentences:
+        print "=================="
+        print str(sentence) + "\n"
+        tokens = random.choice(nltk.tokenize.wordpunct_tokenize(sentence))
+        justTags = []
+        print self.pos_lexicon_word_pos
+        for word in tokens[:-1]:
+            tag = self.pos_lexicon_word_pos[word]
+            justTags.append(tag)
+        justTags.append(tokens[-1])
+        print str(justTags) + "\n"
+        rd_parser = nltk.RecursiveDescentParser(grammar1)
+        try:
+            if len(rd_parser.nbest_parse(justTags)) > 0:
+                output_sentences.append(sentence)
+        except ValueError:
+            pass
+    print "After the syntax filter there were " + str(len(output_sentences)) + " sentences."
+    print output_sentences
+    return output_sentences
+
+
 @add_func_to_dict("Liberal Syntactic Filter")
-def weak_syntactic_filter(sentences):
+def weak_syntactic_filter(sentences, self):
     """Filters responses through part of speech tagging and chunking: passes sentences
     with at least one NN followed by one VB followed by at least one NN"""
     output_sentences = []

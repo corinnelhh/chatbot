@@ -33,7 +33,9 @@ class Chatbot(Trainbot):
         return random.choice(sentences)
 
     def output_filtration(self, output_filter, chains):
-        if u"No Filter Selected" not in output_filter:
+        if u"No Filter Selected" in output_filter[0]:
+            output = self.o_filter_random(chains)
+        else:
             all_filters = []
             for _filter in output_filter:
                 all_filters.append(output_filters.funct_dict[_filter])
@@ -43,8 +45,6 @@ class Chatbot(Trainbot):
                 output = self.o_filter_random(filtered)
             else:
                 output = "I'm not sure what to say about that."
-        else:
-            output = self.o_filter_random(chains)
         return output
 
     def sanitize_seeds(self, seeds):

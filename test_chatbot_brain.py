@@ -144,6 +144,24 @@ def test_filter_recursive_one_recursive_call():
     assert output_dict == {filters[0].__name__: short_sentences}
 
 
+def test_filter_recursive_two_recursive_calls():
+    u"""Assert expected filtering occurs after two recursive calls."""
+    filters = [
+        output_filters.funct_dict["Length Filter"],
+        output_filters.funct_dict["No Filter Selected"]
+        ]
+    bot = chatbot_brain.Chatbot()
+    strings, output_dict = bot._filter_recursive(sentences_, filters)
+    print "Strings: {}".format(strings)
+    print "Short_sentences: {}".format(short_sentences)
+    assert strings == short_sentences
+    assert output_dict == {
+        filters[0].__name__: short_sentences,
+        filters[1].__name__: short_sentences
+        }
+    pass
+
+
     # def _filter_recursive(self, strings, filters, output_dict={}):
     #     u"""Return list of strings or call the next filter function."""
     #     if filters == []:

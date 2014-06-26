@@ -87,29 +87,6 @@ class Chatbot(Trainbot):
                 output_dict
                 )
 
-    def apply_o_filter(self, filter_, chains):
-        if filter_ == u"filter_length":
-            return output_filters.filter_length(chains)
-        if filter_ == u"filter_pos":
-            return output_filters.filter_pos(chains)
-        else:
-            return chains
-
-    def _sausage_formatter(self, sausage):
-        message = """
-        <html>
-        <h3>This is how the response {final_sentence} was made:</h3>
-        <br>
-        <h3>You entered "{submission}".</h3>
-        <br>
-        <p>With the {input_filter} input filter, {final_seed} was chosen as the 'seed word'
-        for our Markov Chain sentence generator.
-        </p>
-        </html>
-        """.format(**sausage)
-        return message
-
-
     def compose_response(
             self,
             input_sent,
@@ -119,6 +96,7 @@ class Chatbot(Trainbot):
         u"""Return a response sentence based on the input."""
         # Tokenize input
         sausage = {}
+        report = ""
         sausage["submission"] = input_sent
         seeds = wordpunct_tokenize(input_sent)
         sausage["input_words"] = seeds
@@ -138,6 +116,7 @@ class Chatbot(Trainbot):
                 # Create chains
                 print "now making chains"
                 pair = self._pair_seed(seed)
+                print "made our pair"
                 sausage["first_bigram"] = pair
                 chains = self._create_chains(pair)
                 print "made chains!"
@@ -166,7 +145,6 @@ class Chatbot(Trainbot):
             output = seeds
         sausage["final_sentence"] = output
         sausage["o_filter_report"] = report
-        sausage = self._sausage_formatter(sausage)
         return output, sausage
 
 if __name__ == u'__main__':

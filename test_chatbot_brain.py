@@ -118,8 +118,31 @@ def test_pair_seeds_one_possible_pair_due_to_punct():
     assert bot._pair_seed(words[0]) == ["car", "benz"]
 
 
+def test_filter_recursive_stops():
+    u"""Assert recursion stops when base case is reached."""
+    filters = []
+    bot = chatbot_brain.Chatbot()
+    strings, output_dict = bot._filter_recursive(sentences_, filters)
+    assert strings == sentences_
+    assert output_dict == {}
+
+
+
+    # def _filter_recursive(self, strings, filters, output_dict={}):
+    #     u"""Return list of strings or call the next filter function."""
+    #     if filters == []:
+    #         return strings, output_dict
+    #     else:
+    #         output_dict[filters[0].__name__] = filters[0](strings)
+    #         return self._filter_recursive(
+    #             filters[0](strings),
+    #             filters[1:],
+    #             output_dict
+    #             )
+
 
 # untested methods:
 # _create_chains
 # _chain_filters
 # _filter_recursive
+# _make_sausage

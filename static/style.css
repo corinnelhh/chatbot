@@ -52,6 +52,7 @@ body {
     border: 1px solid #8888bb;
     border-radius: 7pt;
     background: #ccccff;
+    font-size: 15px;
     -webkit-flex: 1 6 20%;
     flex: 1 6 20%;
     -webkit-order: 3;
@@ -103,6 +104,12 @@ header{
 
 .hidden{
     display: none;
+}
+
+.filters{
+    width: 60%;
+    position: relative;
+
 }
 
 /*Inspired by https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes*/

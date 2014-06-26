@@ -34,7 +34,6 @@ class Trainbot(object):
         our_string = wordpunct_tokenize(our_string)
         return pos_tag(our_string)
 
-
     def pos_lexicons(self):
         """Creates two pos dictionaries.
 
@@ -43,22 +42,24 @@ class Trainbot(object):
         is a noun more often than a verb. The second is the same, but inverted."""
 
         f = open(self.training_file)
-        print "opened"
+        print "opened PART OF SPEECH DICT"
+        counter = 0
         for words in self.parse_training_input(f):
             tagged = pos_tag(words)
             for word, pos in tagged:
+                counter += 1
                 if word in self.pos_lexicon_word_pos:
                     self.pos_lexicon_word_pos[word].append(pos)
                 else:
                     self.pos_lexicon_word_pos[word] = [pos]
+                if counter%200:
+                    print "Building dict..." + str(counter)
 
-                if pos in self.pos_lexicon_pos_word:
-                    self.pos_lexicon_pos_word[pos].append(word)
-                else:
-                    self.pos_lexicon_pos_word[pos] = [word]
-                if len(self.pos_lexicon_word_pos)>20:
-                    return len(self.pos_lexicon_word_pos), self.pos_lexicon_pos_word
-
+                # if pos in self.pos_lexicon_pos_word:
+                #     self.pos_lexicon_pos_word[pos].append(word)
+                # else:
+                #     self.pos_lexicon_pos_word[pos] = [word]
+        # return len(self.pos_lexicon_word_pos), self.pos_lexicon_pos_word
 
     def fill_lexicon(self):
         f = open(self.training_file)

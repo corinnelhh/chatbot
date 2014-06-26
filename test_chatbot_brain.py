@@ -85,6 +85,15 @@ def test_pair_seeds_one_possible_pair():
     bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
     assert bot._pair_seed(words[0]) == ["car", "benz"]
 
+
+def test_pair_seeds_all_possible_pairs():
+    u"""Assert if all words are in the lexicon the seed's pair is returned."""
+    bot = chatbot_brain.Chatbot()
+    words = ["car", "boat", "train"]
+    bot.bi_lexicon = {"car": ["benz"], "boat": ["sail"], "train": ["track"]}
+    for word in words:
+        assert bot._pair_seed(word) == [word, bot.bi_lexicon[word][0]]
+
         # def _pair_seed(self, seed):
         # word_1 = seed
         # word_2 = None

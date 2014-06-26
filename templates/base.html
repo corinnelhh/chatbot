@@ -22,30 +22,30 @@
         </p>
     </aside>
     <aside id="filters">
-        <h4> Brain N-gram Type:</h4>
-            <select form="input_form" name="brain_types" id="brain_types">
+        <h5> Brain N-gram Type:</h5>
+            <select class="filters" form="input_form" name="brain_types" id="brain_types">
                 {% for key in brain_types.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-        <h4> Input filters:</h4>
-            <select form="input_form" name="input_filter" id="input_filter">
+        <h5> Input filters:</h5>
+            <select class="filters" form="input_form" name="input_filter" id="input_filter">
                 {% for key in input_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-        <h4> Output filters:</h4>
-            <select form="input_form" name="output_filter" id="output_filter">
+        <h5> Output filters:</h5>
+            <select class="filters" form="input_form" name="output_filter" id="output_filter">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select form="input_form" name="output_filter2" class="hidden" id="output_filter2">
+            <select class="filters" form="input_form" name="output_filter2" class="hidden" id="output_filter2">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select form="input_form" name="output_filter3" class="hidden" id="output_filter3">
+            <select class="filters" form="input_form" name="output_filter3" class="hidden" id="output_filter3">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}

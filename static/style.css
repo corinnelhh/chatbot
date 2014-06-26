@@ -106,4 +106,10 @@ header{
     display: none;
 }
 
+.filters{
+    width: 60%;
+    position: relative;
+
+}
+
 /*Inspired by https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes*/

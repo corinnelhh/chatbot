@@ -219,7 +219,7 @@ def deploy():
     install_nginx()
     generate_nginx_config()
     run_command_on_selected_server(rsync_project, remote_dir="~/")
-    run_command_on_selected_server(move_nltk_file)
+    #run_command_on_selected_server(move_nltk_file)
     install_flask()
     install_supervisor()
     move_nginx_files()

@@ -3,6 +3,7 @@ import random
 #import os
 #from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
+from collections import OrderedDict
 
 from trainbot import Trainbot
 import input_filters
@@ -87,59 +88,80 @@ class Chatbot(Trainbot):
                 output_dict
                 )
 
+    def _make_sausage(self, sausage):
+        """compiles a report on how the reply was made"""
+        message = OrderedDict({})
+        message["final_sentence"] = """<h5>This is how the response <i>\
+        '{final_sentence}'</i> was made:</h5>""".format(**sausage)
+        if "input_filter" in sausage:
+            i_filters = []
+            for _filter in sausage["input_filter"]:
+                if _filter != "No Filter Selected":
+                    i_filters.append(_filter)
+            if len(i_filters) > 0:
+                sausage["applied_i_filters"] = i_filters
+        if "applied_i_filters" in sausage:
+            message["input_filter"] = """
+            <p> With the {input_filter} input filter, <i>{final_seed}</i>\
+             was chosen as the 'seed word' for our Markov Chain sentence\
+             generator. <p>""".format(**sausage)
+        if "first_bigram" in sausage:
+            message["first_bigram"] = """<p>Then we used bigram probability\
+             to pick <i>{first_bigram}</i> as the first pair of words to\
+              feed our Markov Chain sentence generator.</p>""".format(**sausage)
+        else:
+            message["no_bigram"] = """<p> A lexicon search did not return\
+            a likely next word, so a default response <i>{final_sentence}</i>\
+            was returned. </p>""".format(**sausage)
+        if "unfiltered_chains" in sausage:
+            message["unfiltered_chains"] = """<p> After feeding in \
+            <i>{first_bigram}</i>, the Markov Chain sentence generator\
+            returned {chain_length} sentences.</p>""".format(**sausage)
+        return message
+
     def compose_response(
             self,
             input_sent,
             input_key=None,
             output_filter=None,
             ):
-        u"""Return a response sentence based on the input."""
+        u"""Return a response sentence and report based on the input."""
         # Tokenize input
         sausage = {}
         report = ""
-        sausage["submission"] = input_sent
         seeds = wordpunct_tokenize(input_sent)
-        sausage["input_words"] = seeds
         # Select seed based on input filter
         if input_key:
             sausage["input_filter"] = input_key
-            print "Input filter: {}".format(input_key)
             seeds = input_filters.input_funcs[input_key](seeds)
-            sausage["final_seeds"] = seeds
+            #sausage["final_seeds"] = seeds
         if not isinstance(seeds, basestring):
             # Randomly pick a seed from the returned possibilities.
-            print seeds
             seed = self.i_filter_random(seeds)
-            print "made it through the random seed picker."
             sausage["final_seed"] = seed
             if seed != "What a funny thing to say!":
                 # Create chains
-                print "now making chains"
                 pair = self._pair_seed(seed)
-                print "made our pair"
                 sausage["first_bigram"] = " ".join(pair)
-                print "now making chains!"
                 chains = self._create_chains(pair)
-                print "made chains!"
                 sausage["unfiltered_chains"] = chains
                 sausage["chain_length"] = len(chains)
-                # Return output of filter
-                sausage["output_filters"] = ",".join(output_filter)
+                filled_filters = []
+                for _filter in output_filter:
+                    if _filter != "No Filter Selected":
+                        filled_filters.append(_filter)
+                sausage["output_filters"] = ",".join(filled_filters)
                 if output_filter != "default":
-                    print "Output filter: {}".format(output_filter)
                     #import pdb; pdb.set_trace()
                     all_filters = []
                     for _filter in output_filter:
                         all_filters.append(output_filters.funct_dict[_filter])
                     filtered, report = self._chain_filters(chains, all_filters)
-                    print "made it through the output filters"
+                    sausage["o_filter_report"] = report
                 else:
                     output = chains
-                    report = "no output filters"
                 if len(filtered) > 0:
-                    print "filtering sentences"
                     output = self.o_filter_random(filtered)
-                    print "filtered them"
                 else:
                     output = "I'm not sure what to say about that."
             else:
@@ -147,7 +169,7 @@ class Chatbot(Trainbot):
         else:
             output = seeds
         sausage["final_sentence"] = output
-        sausage["o_filter_report"] = report
+        sausage = self._make_sausage(sausage)
         return output, sausage
 
 if __name__ == '__main__':

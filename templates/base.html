@@ -49,34 +49,10 @@
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
             <div class="slidingDiv">
                 {% if sausage %}
-                <h5>This is how the response <i>{{sausage.final_sentence}}</i> was made:</h5>
-                <h5>You entered <i>"{{sausage.submission}}"</i>.</h5>
-                <p>With the {{sausage.input_filter}} input filter, <i>{{sausage.final_seed}}</i> was chosen as the 'seed word'
-                for our Markov Chain sentence generator.
-                </p>
+                {% for key, value in sausage.items() %}
+                        {{value|safe}}
+                {% endfor %}
                 {% endif %}
-                {% if sausage.first_bigram %}
-                <p>Then we used bigram probability to pick <i>{{sausage.first_bigram}}</i> as
-                the first pair of words to feed out Markov Chain sentence generator.</p>
-                {% endif %}
-                {% if not sausage.first_bigram %}
-                <p> A lexicon search did not return a likely next word,
-                so a default response <i>{{sausage.final_sentence}}</i> was returned.
-                </p>
-                {% endif %}
-                {% if sausage.unfiltered_chains %}
-                <p> After feeding in <i>{{sausage.first_bigram}}</i>, the Markov
-                Chain sentence generator returned {{sausage.chain_length}}
-                sentences.</p>
-                {%endif%}
-                {% if "No Filter Selected" not in sausage.output_filters %}
-                <p>The sentences were fed through these filters: {{sausage.output_filters}}
-                </p>
-                {% endif %}
-                {% if sausage.unfiltered_chains%}
-                <p> One sentence was randomly chosen from the final candidates. </p>
-                {% endif %}
-                <p>And that's how the <i>"{{sausage.final_sentence}}"</i> sausage was made!</p>
             </div>
         </article>
     </main>

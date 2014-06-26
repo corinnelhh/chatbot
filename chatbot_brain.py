@@ -30,7 +30,7 @@ class Chatbot(Trainbot):
         u"""Return randomly selected sentence from sentecnces"""
         return random.choice(sentences)
 
-    def _create_chains(self, pair, size=10):
+    def _create_chains(self, pair, size=500):
         u"""Return list of markov generated strings spawned from the seed."""
         candidates = []
         w_1 = pair[0]
@@ -91,8 +91,8 @@ class Chatbot(Trainbot):
     def _make_sausage(self, sausage):
         """compiles a report on how the reply was made"""
         message = OrderedDict({})
-        message["final_sentence"] = """<h5>This is how the response <i>\
-        '{final_sentence}'</i> was made:</h5>""".format(**sausage)
+        message["final_sentence"] = """<h4>This is how the response <i>\
+        '{final_sentence}'</i> was made:</h4>""".format(**sausage)
         if "input_filter" in sausage:
             i_filters = []
             for _filter in sausage["input_filter"]:
@@ -117,10 +117,17 @@ class Chatbot(Trainbot):
             message["unfiltered_chains"] = """<p> After feeding in \
             <i>{first_bigram}</i>, the Markov Chain sentence generator\
             returned some sentences.</p>""".format(**sausage)
-        if "o_filter_report" in sausage:
+        #if "o_filter_report" in sausage:
+            #for item in sausage["o_filter_report"]:
+
+            #message["number_filters"] =
+
+
+           # len(sausage["o_filter_report"])
+
+
             #message["output_filters"] = """<p>The sentences were fed through\
             # these filters: {output_filters} </p>""".format(**sausage)
-            message["yes"] = "hello"
         return message
 
     def compose_response(

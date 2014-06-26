@@ -97,6 +97,7 @@ class Chatbot(Trainbot):
 
     def _sausage_formatter(self, sausage):
         message = """
+        <html>
         <h3>This is how the response {final_sentence} was made:</h3>
         <br>
         <h3>You entered "{submission}".</h3>
@@ -104,6 +105,7 @@ class Chatbot(Trainbot):
         <p>With the {input_filter} input filter, {final_seed} was chosen as the 'seed word'
         for our Markov Chain sentence generator.
         </p>
+        </html>
         """.format(**sausage)
         return message
 

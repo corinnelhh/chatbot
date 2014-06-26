@@ -1,5 +1,7 @@
 import chatbot_brain
 import random
+import output_filters
+
 random.seed(0)
 
 stock = u"What a funny thing to say!"
@@ -19,6 +21,10 @@ sentences_ = [
     "red coat myself very well that.",
     "red coat myself very unwell this morning that if he comes\
     into the regulars and among his former indolence."
+    ]
+
+short_sentences = [
+    "".join(sent) for sent in sentences_ if len(sent.split()) <= 8
     ]
 
 
@@ -126,6 +132,34 @@ def test_filter_recursive_stops():
     assert strings == sentences_
     assert output_dict == {}
 
+
+def test_filter_recursive_one_recursive_call():
+    u"""Assert expected filtering occurs after one recursive call."""
+    filters = [output_filters.funct_dict["Length Filter"]]
+    bot = chatbot_brain.Chatbot()
+    strings, output_dict = bot._filter_recursive(sentences_, filters)
+    print "Strings: {}".format(strings)
+    print "Short_sentences: {}".format(short_sentences)
+    assert strings == short_sentences
+    assert output_dict == {filters[0].__name__: short_sentences}
+
+
+def test_filter_recursive_two_recursive_calls():
+    u"""Assert expected filtering occurs after two recursive calls."""
+    filters = [
+        output_filters.funct_dict["Length Filter"],
+        output_filters.funct_dict["No Filter Selected"]
+        ]
+    bot = chatbot_brain.Chatbot()
+    strings, output_dict = bot._filter_recursive(sentences_, filters)
+    print "Strings: {}".format(strings)
+    print "Short_sentences: {}".format(short_sentences)
+    assert strings == short_sentences
+    assert output_dict == {
+        filters[0].__name__: short_sentences,
+        filters[1].__name__: short_sentences
+        }
+    pass
 
 
     # def _filter_recursive(self, strings, filters, output_dict={}):

@@ -109,6 +109,14 @@ class Chatbot(Trainbot):
             message["first_bigram"] = """<p>Then we used bigram probability\
              to pick <i>{first_bigram}</i> as the first pair of words to\
               feed our Markov Chain sentence generator.</p>""".format(**sausage)
+        else:
+            message["no_bigram"] = """<p> A lexicon search did not return\
+            a likely next word, so a default response <i>{final_sentence}</i>\
+            was returned. </p>""".format(**sausage)
+        if "unfiltered_chains" in sausage:
+            message["unfiltered_chains"] = """<p> After feeding in \
+            <i>{first_bigram}</i>, the Markov Chain sentence generator\
+            returned {chain_length} sentences.</p>""".format(**sausage)
         return message
 
     def compose_response(

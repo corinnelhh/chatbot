@@ -61,7 +61,7 @@ class Chatbot(Trainbot):
             seeds.append(str(seed))
         if input_key != "No Filter Selected":
             self.sausage["input_filter"] = input_key
-        filt_seeds = input_filters.input_funcs[input_key](seeds)
+        filt_seeds = input_filters.input_funcs[input_key][0](seeds)
         self.sausage["i_filtered_seeds"] = filt_seeds
         return self.sanitize_seeds(filt_seeds)
 
@@ -108,9 +108,9 @@ class Chatbot(Trainbot):
         if filters == []:
             return strings, output_dict
         else:
-            output_dict[filters[0].__name__] = filters[0](strings, self.word_pos)
+            output_dict[filters[0][0].__name__] = filters[0][0](strings, self.word_pos)
             return self._filter_recursive(
-                output_dict[filters[0].__name__],
+                output_dict[filters[0][0].__name__],
                 filters[1:],
                 output_dict
                 )
@@ -160,7 +160,7 @@ class Chatbot(Trainbot):
         if len(seeds) == 0:
             output = "You speak nothing but nonsense."
         else:
-            chains = brains.brain_dict[brain](self, seeds)
+            chains = brains.brain_dict[brain][0](self, seeds)
             self.sausage["unfiltered_chains"] = chains
             output = self.output_filtration(output_filter, chains)
         self.sausage["final_sentence"] = output

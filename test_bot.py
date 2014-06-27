@@ -69,6 +69,18 @@ def test_compose_response(_bot_brain):
         assert "." not in sentence[:-1]
 
 
+def test_sausage_making(_bot_brain):
+    u"""Assert the report matches the input parameters"""
+    bot, pos, lex = _bot_brain
+    bot.sausage = {"input_filter": "Content Filter", "unfiltered_chains":
+                ["Hello, how are you?", "That is nice.", "How did that happen?"],
+                "final_sentence" : "That is nice.", "i_filtered_seeds": "I am happy.",
+                "sanitized_seeds" : "I, am, happy"}
+    message = bot._make_sausage()
+    assert "input_filter" in message
+    assert "final_report" in message
+
+
 def test_i_filter_random_empty_words(_bot_brain):
     u"""Assert an empty string is not found in the default lexicon."""
     bot, pos, lex = _bot_brain
@@ -152,7 +164,7 @@ def test_filter_recursive_one_recursive_call(_bot_brain):
     print "Strings: {}".format(strings)
     print "Short_sentences: {}".format(short_sentences)
     assert strings == short_sentences
-    assert output_dict == {filters[0].__name__: short_sentences}
+    assert output_dict == {filters[0][0].__name__: short_sentences}
 
 
 def test_filter_recursive_two_recursive_calls(_bot_brain):
@@ -167,10 +179,12 @@ def test_filter_recursive_two_recursive_calls(_bot_brain):
     print "Short_sentences: {}".format(short_sentences)
     assert strings == short_sentences
     assert output_dict == {
-        filters[0].__name__: short_sentences,
-        filters[1].__name__: short_sentences
+        filters[0][0].__name__: short_sentences,
+        filters[1][0].__name__: short_sentences
         }
     pass
+
+
 
 
 

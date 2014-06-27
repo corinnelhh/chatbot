@@ -129,13 +129,13 @@ class Chatbot(Trainbot):
              known words, so a default response <i>{final_sentence}</i>\
             was returned. </p>""".format(**self.sausage)
         if "o_filter_report" in self.sausage:
-            for key, value in self.sausage["o_filter_report"].items()[::]:
-                if (len(value)) > 0:
-                    message[key] = """<p> Next, the sentences were passed \
+            for s_key, s_value in self.sausage["o_filter_report"].items()[::]:
+                if (len(s_value)) > 0:
+                    message[s_key] = """<p> Next, the sentences were passed \
                     through the {}, after which there were {} sentences \
                     remaining. </p><p> A sample sentence of what remained\
                     after this filter is: <i>{}</i>.</p>\
-                    """.format(key, len(value), value[0])
+                    """.format(s_key, len(s_value), s_value[0])
         message["final_report"] = """One sentence was selected at random.\
         </p><p>And that's how the <i>{final_sentence}</i> response was\
          made!""".format(**self.sausage)

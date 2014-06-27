@@ -38,7 +38,8 @@ class Chatbot(Trainbot):
         else:
             all_filters = []
             for _filter in output_filter:
-                all_filters.append(output_filters.funct_dict[_filter])
+                if output_filter != "No Filter Selected":
+                    all_filters.append(output_filters.funct_dict[_filter])
             filtered, report = self._chain_filters(chains, all_filters)
             self.sausage["o_filter_report"] = report
             if len(filtered) > 0:
@@ -47,16 +48,25 @@ class Chatbot(Trainbot):
                 output = "I'm not sure what to say about that."
         return output
 
+    def _input_filtration(self, input_sent, input_key):
+        u_seeds = wordpunct_tokenize(input_sent)
+        seeds = []
+        for seed in u_seeds:
+            seeds.append(str(seed))
+        if input_key != "No Filter Selected":
+            self.sausage["input_filter"] = input_key
+        filt_seeds = input_filters.input_funcs[input_key](seeds)
+        self.sausage["i_filtered_seeds"] = filt_seeds
+        return self.sanitize_seeds(filt_seeds)
+
     def sanitize_seeds(self, seeds):
         """returns only seeds that are in the lexicons"""
-        non_u_seeds = []
         for seed in seeds[:]:
             try:
                 self.bi_lexicon[seed]
-                non_u_seeds.append(str(seed))
             except KeyError:
                 seeds.remove(seed)
-        self.sausage["sanitized_seeds"] = non_u_seeds
+        self.sausage["sanitized_seeds"] = seeds
         return seeds
 
     def _pair_seed(self, seed):
@@ -81,14 +91,14 @@ class Chatbot(Trainbot):
         strings, output_dict = self._filter_recursive(strings, filters)
         return strings, output_dict
 
-    def _filter_recursive(self, strings, filters, output_dict={}):
+    def _filter_recursive(self, strings, filters, output_dict=OrderedDict({})):
         u"""Return list of strings or call the next filter function."""
         if filters == []:
             return strings, output_dict
         else:
-            output_dict[filters[0].__name__] = filters[0](strings)
+            output_dict[filters[0].__name__] = filters[0](strings, self.pos_lexicon_word_pos)
             return self._filter_recursive(
-                filters[0](strings),
+                filters[0](strings, self.pos_lexicon_word_pos),
                 filters[1:],
                 output_dict
                 )
@@ -99,35 +109,30 @@ class Chatbot(Trainbot):
         message["final_sentence"] = """<h4>This is how the response <i>\
         '{final_sentence}'</i> was made:</h4>""".format(**self.sausage)
         if "input_filter" in self.sausage:
-            i_filters = []
-            for _filter in self.sausage["input_filter"]:
-                if _filter != "No Filter Selected":
-                    i_filters.append(_filter)
-            if len(i_filters) > 0:
-                self.sausage["applied_i_filters"] = i_filters
-        if "applied_i_filters" in self.sausage:
             message["input_filter"] = """
-            <p> With the {input_filter} input filter, <i>{final_seed}</i>\
-             was chosen as the 'seed word' for our Markov Chain sentence\
-             generator. <p>""".format(**self.sausage)
+            <p> With the {input_filter} input filter, <i>{i_filtered_seeds}</i>\
+            were selected. <p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
-            message["unfiltered_chains"] = """<p> After feeding in \
-            <i>{sanitized_seeds}</i>, the Markov Chain sentence generator\
-            returned some sentences.</p>""".format(**self.sausage)
+            message["unfiltered_chains"] = """<p> After eliminating the \
+            seed words not in the bot's'lexicon', <i>{sanitized_seeds}</i>\
+            were passed to the Markov Chain sentence generator, yielding \
+            200 sentences.</p>""".format(**self.sausage)
         else:
-            message["no_chains"] = """<p> A lexicon search did not return\
-            a likely next word, so a default response <i>{final_sentence}</i>\
+            message["no_chains"] = """<p> The seeds were next checked \
+            against the bot's lexicon. The search did not return any\
+             known words, so a default response <i>{final_sentence}</i>\
             was returned. </p>""".format(**self.sausage)
-        #if "o_filter_report" in self.sausage:
-            #for item in self.sausage["o_filter_report"]:
-
-            #message["number_filters"] =
-
-
-           # len(self.sausage["o_filter_report"])
-
-            #message["output_filters"] = """<p>The sentences were fed through\
-            # these filters: {output_filters} </p>""".format(**self.sausage)
+        if "o_filter_report" in self.sausage:
+            count = 1
+            for key, value in reversed(self.sausage["o_filter_report"].items()):
+                message[str(count)] = """<p> The sentences were passed \
+                through the {}, after which there were {} sentences \
+                remaining. A sample sentence of what remained after this\
+                filter is: <i>{}</i>. </p>""".format(key, len(value), value[0])
+                count += 1
+        message["final_report"] = """One sentence was selected at random.\
+        </p><p>And that's how the <i>{final_sentence}</i> response was\
+         made!""".format(**self.sausage)
         return message
 
     def compose_response(
@@ -139,9 +144,7 @@ class Chatbot(Trainbot):
             ):
         u"""Return a response sentence and report based on the input."""
         self.sausage = {}
-        seeds = wordpunct_tokenize(input_sent)
-        filt_seeds = input_filters.input_funcs[input_key](seeds)
-        seeds = self.sanitize_seeds(filt_seeds)
+        seeds = self._input_filtration(input_sent, input_key)
         if len(seeds) == 0:
             output = "You speak nothing but nonsense."
         else:

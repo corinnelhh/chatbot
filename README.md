@@ -35,11 +35,13 @@ Again, the process for creating and decorating output filters is quite similar. 
 
 If more than one sentence remains after the output filter, one is chosen at random from the remainder and printed to the website. In the event that no sentences remain, the koanbot will let you know that it doesn't know what to say.
 
-#NLTK
+#Extra Info
+
+##NLTK
 
 The Natural Language Tool Kit is an immense python package that we really only brushed the surface of here. We used it to tag our training data with parts of speech, and to analyze the syntax of the output sentences. One large area for imporovment in our project is finding more ways to utilize this valuable resource.
 
-#Training the Koanbot
+##Training the Koanbot
 
 Training the koanbot involves constructing four dictionaries that the koanbot can access as it processes user input.
 ####Word to POS Dictionary

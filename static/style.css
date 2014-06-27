@@ -100,6 +100,8 @@ header{
 
 #submission{
     width: 99%;
+    background: BDD0FF;
+    border:1px solid #32657F;
 }
 
 .hidden{

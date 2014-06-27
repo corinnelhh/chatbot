@@ -4,7 +4,7 @@ import os
 from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
 import pdb
-
+import sys
 
 class Trainbot(object):
     def __init__(self, training_file='Doctorow.txt'):
@@ -81,7 +81,7 @@ class Trainbot(object):
                     self.tri_lexicon[word_pair].append(word)
 
     def generate_pos_dict(self, prefix):
-        self._pos_lexicons(self.training_file)
+        self._pos_lexicons()
 
         training_dict_file = "%s/%s_word_pos_dict.txt" % (prefix, prefix)
         dict_text = open(training_dict_file, 'w')
@@ -92,7 +92,7 @@ class Trainbot(object):
         dict_text.write(str(tb.pos_word))
 
     def generate_gram_dict(self, prefix):
-        self._fill_lexicon(self.training_file)
+        self._fill_lexicon()
 
         training_dict_file = "%s/%s_bi_gram_dict.txt" % (prefix, prefix)
         dict_text = open(training_dict_file, 'w')
@@ -106,8 +106,8 @@ class Trainbot(object):
         prefix = str(self.training_file)[:-4]
         if not os.path.exists(prefix):
             os.makedirs(prefix)
-        self.generate_gram_dict(self.training_file, prefix)
-        self.generate_pos_dict(self.training_file, prefix)
+        self.generate_gram_dict(prefix)
+        self.generate_pos_dict(prefix)
         os.rename(self.training_file, "%s/%s" % (prefix, self.training_file))
 
     def reformat_dict(self, dict_):
@@ -153,6 +153,6 @@ class Trainbot(object):
             return False
 
 if __name__ == '__main__':
-    tb = Trainbot('<enter text fil here>')
+    tb = Trainbot(sys.argv[1])
     tb.load_lexicons()
     print "Done!"

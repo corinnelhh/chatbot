@@ -17,8 +17,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def show_chatbot(submission="...crickets...", reply="Say something to me!",
-                 sausage={'default': "I haven't said anything yet..."}):
+                 sausage=None):
     """Displays base.html when user goes to main page."""
+    if sausage is None:
+        sausage = {'default': "I haven't said anything yet..."}
     return render_template('base.html', reply=reply, sausage=sausage,
                            input_filters=input_funcs,
                            output_filters=funct_dict,

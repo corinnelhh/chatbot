@@ -44,15 +44,12 @@ class Chatbot(Trainbot):
             for _filter in output_filter:
                 if _filter != u"No Filter Selected":
                     all_filters.append(output_filters.funct_dict[_filter])
-            # import pdb
-            # pdb.set_trace()
             filtered, report = self._chain_filters(chains, all_filters)
             self.sausage["o_filter_report"] = report
             if len(filtered) > 0:
                 output = self.o_filter_random(filtered)
             else:
                 output = "I'm not sure what to say about that."
-        print self.recursion
         return output
 
     def _input_filtration(self, input_sent, input_key):
@@ -100,20 +97,20 @@ class Chatbot(Trainbot):
         Expects: A list of filter functions.
         Returns: A list of strings.
         """
-        self.recursion = 0
         strings, output_dict = self._filter_recursive(strings, filters)
         return strings, output_dict
 
-    def _filter_recursive(self, strings, filters, output_dict=OrderedDict({})):
+    def _filter_recursive(self, strings, filters, output_dict=None):
         u"""Return list of strings or call the next filter function."""
         print "Inside filter recursive"
+        if output_dict is None:
+            output_dict = OrderedDict({})
         if filters == []:
             return strings, output_dict
         else:
-            self.recursion += 1
             output_dict[filters[0].__name__] = filters[0](strings, self.word_pos)
             return self._filter_recursive(
-                filters[0](strings, self.word_pos),
+                output_dict[filters[0].__name__],
                 filters[1:],
                 output_dict
                 )

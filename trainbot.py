@@ -7,12 +7,12 @@ import pdb
 
 
 class Trainbot(object):
-    def __init__(self, training_file='doctorow.txt'):
+    def __init__(self, training_file='Doctorow.txt'):
         self.training_file = training_file
         self.tri_lexicon = {}
         self.bi_lexicon = {}
-        self.pos_lexicon_word_pos = {}
-        self.pos_lexicon_pos_word = {}
+        self.word_pos = {}
+        self.pos_word = {}
         self.stop_puncts = ['.', '!', '?']
         self.puncts = [
             ',', ';', ':', '"', "'",
@@ -51,18 +51,18 @@ class Trainbot(object):
             tagged = pos_tag(words)
             for word, pos in tagged:
                 counter += 1
-                if word in self.pos_lexicon_word_pos:
-                    self.pos_lexicon_word_pos[word].append(pos)
+                if word in self.word_pos:
+                    self.word_pos[word].append(pos)
                 else:
-                    self.pos_lexicon_word_pos[word] = [pos]
-                if pos in self.pos_lexicon_pos_word:
-                    self.pos_lexicon_pos_word[pos].append(word)
+                    self.word_pos[word] = [pos]
+                if pos in self.pos_word:
+                    self.pos_word[pos].append(word)
                 else:
-                    self.pos_lexicon_pos_word[pos] = [word]
+                    self.pos_word[pos] = [word]
             print "Building dict..." + str(counter)
         print "Done with POS DICT"
 
-        # return len(self.pos_lexicon_word_pos), self.pos_lexicon_pos_word
+        # return len(self.word_pos), self.pos_word
 
     def _fill_lexicon(self):
         f = open(self.training_file)
@@ -85,11 +85,11 @@ class Trainbot(object):
 
         training_dict_file = "%s/%s_word_pos_dict.txt" % (prefix, prefix)
         dict_text = open(training_dict_file, 'w')
-        dict_text.write(str(tb.pos_lexicon_word_pos))
+        dict_text.write(str(tb.word_pos))
 
         training_dict_file = "%s/%s_pos_word_dict.txt" % (prefix, prefix)
         dict_text = open(training_dict_file, 'w')
-        dict_text.write(str(tb.pos_lexicon_pos_word))
+        dict_text.write(str(tb.pos_word))
 
     def generate_gram_dict(self, prefix):
         self._fill_lexicon(self.training_file)
@@ -128,6 +128,30 @@ class Trainbot(object):
             dict_[k] = list_
         return dict_
 
+    def load_lexicons(self):
+        prefix = str(self.training_file)[:-4]
+        print prefix
+        if os.path.exists(prefix):
+            training_dict_file = "%s/%s_bi_gram_dict.txt" % (prefix, prefix)
+            dict_text = open(training_dict_file, 'r').read()
+            self.bi_lexicon = eval(dict_text)
+
+            training_dict_file = "%s/%s_tri_gram_dict.txt" % (prefix, prefix)
+            dict_text = open(training_dict_file, 'r').read()
+            self.tri_lexicon = eval(dict_text)
+
+            training_dict_file = "%s/%s_word_pos_dict.txt" % (prefix, prefix)
+            dict_text = open(training_dict_file, 'r').read()
+            self.word_pos = eval(dict_text)
+
+            training_dict_file = "%s/%s_pos_word_dict.txt" % (prefix, prefix)
+            dict_text = open(training_dict_file, 'r').read()
+            self.pos_word = eval(dict_text)
+            return True
+        else:
+            return False
+
 if __name__ == '__main__':
     tb = Trainbot()
-    tb.generate_all_dicts('quickTest.txt')
+    print tb.load_lexicons()
+    print tb.word_pos['and'][0]

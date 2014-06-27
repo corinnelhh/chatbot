@@ -18,7 +18,8 @@ def add_func_to_dict(name=None):
 
 @add_func_to_dict("Bigram Brain")
 def _create_bi_chains(chatbot_brain, seeds, size=200):
-    u"""Return list of markov generated strings spawned from the seed."""
+    u"""Return list of markov generated strings where each word
+    is based entirely on the word before it."""
     print "the seeds are: " + str(seeds)
     candidates = []
     while len(candidates) < size:
@@ -47,7 +48,8 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
 
 @add_func_to_dict("Trigram Brain")
 def _create_chains(chatbot_brain, seeds, size=200):
-    u"""Return list of markov generated strings spawned from the seed."""
+    u"""Return list of markov generated strings where each word
+    is based on the two words before it."""
     print "the seeds are: " + str(seeds)
     candidates = []
     while len(candidates) < size:

@@ -149,9 +149,10 @@ class Trainbot(object):
             self.pos_word = eval(dict_text)
             return True
         else:
+            self.generate_all_dicts()
             return False
 
 if __name__ == '__main__':
-    tb = Trainbot()
-    print tb.load_lexicons()
-    print tb.word_pos['and'][0]
+    tb = Trainbot('<enter text fil here>')
+    tb.load_lexicons()
+    print "Done!"

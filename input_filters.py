@@ -19,11 +19,17 @@ def add_func_to_dict(name=None):
 
 @add_func_to_dict("No Filter Selected")
 def no_input_filter_selected(input_):
+    u"""All words in the input are passed
+    through to be checked against the lexicon."""
     return input_
 
 
 @add_func_to_dict("Small Talk Filter")
 def filter_small_talk(input_, lexicon=None):
+    u"""Sentences containing certain keywords
+    (such as 'raining' or 'football') return a
+    hard-coded response rather than a response
+    generated in the 'brain'."""
     sports_words = ["basketball", "soccer", "football",
                     "baseball", "hockey", "tennis"]
     weather_words = ["weather", "raining", "rain", "snowing",
@@ -71,9 +77,9 @@ def token(string_):
 
 @add_func_to_dict("Content Filter")
 def filter_content(words):
-    """Takes in a list of words and returns a list
-
-    of the nouns, verbs, and adjectives the orig list contained."""
+    u"""Only 'content words' (here, nouns, verbs,
+    and adjectives) are passed along as seed words
+    for the brain to generate sentences."""
     tagged = pos_tag(words)
     possible_seeds = []
     content_pos = ['VB', 'NN', 'JJ']
@@ -85,7 +91,8 @@ def filter_content(words):
 
 @add_func_to_dict("Length Filter")
 def filter_length_words(words):
-    "Takes in a list of words and returns all words longer than two letters."
+    u"""Only words longer than 2 characters are passed
+    along as seed words for the brain to generate sentences."""
     possible_seeds = []
     for word in words:
         if len(word) > 2:
@@ -95,7 +102,10 @@ def filter_length_words(words):
 
 @add_func_to_dict("Noun > Verb > Adjective Filter")
 def filter_content_priority(words):
-    "Takes in a list of words and returns words with 'weighted' priorities"
+    u"""Only 'content words' (here, nouns, verbs,
+    and adjectives) are passed along as seed words
+    for the brain to generate sentences; words are
+    given weighted priorities with nouns > verbs > adjectives."""
     tagged = pos_tag(words)
     possible_seeds = []
     for word, pos in tagged:

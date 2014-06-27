@@ -18,8 +18,9 @@ def add_func_to_dict(name=None):
 
 @add_func_to_dict("Bigram Brain")
 def _create_bi_chains(chatbot_brain, seeds, size=200):
-    u"""Return list of markov generated strings where each word
-    is based entirely on the word before it."""
+    u"""Return list of Markov-Chain generated strings where each word
+    added onto the sentence is selected solely from the probability
+    of it following the given last word in the training data."""
     print "the seeds are: " + str(seeds)
     candidates = []
     while len(candidates) < size:
@@ -33,7 +34,6 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
                 next_word = random.choice(chatbot_brain.bi_lexicon[seed])
                 candidate.append(next_word)
                 seed = next_word
-                print "Try"
             except KeyError:
                 candidates.append(" ".join(candidate))
                 done = True
@@ -42,14 +42,14 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
                 done = True
             if count > 75:
                 done = True
-        print "Post while"
     return candidates
 
 
 @add_func_to_dict("Trigram Brain")
 def _create_chains(chatbot_brain, seeds, size=200):
-    u"""Return list of markov generated strings where each word
-    is based on the two words before it."""
+    u"""Return list of Markov-Chain generated strings where each word
+    added onto the sentence is selected solely from the probability
+    of it following the given last two words in the training data."""
     print "the seeds are: " + str(seeds)
     candidates = []
     while len(candidates) < size:

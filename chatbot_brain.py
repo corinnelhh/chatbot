@@ -32,7 +32,6 @@ class Chatbot(Trainbot):
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentences"""
         sentence = random.choice(sentences)
-        sentence = sentence[0].upper() + sentence[1:-2] + sentence[-1:]
         return sentence
 
     def output_filtration(self, output_filter, chains):
@@ -48,6 +47,7 @@ class Chatbot(Trainbot):
             self.sausage["o_filter_report"] = report
             if len(filtered) > 0:
                 output = self.o_filter_random(filtered)
+                output = output[0].upper() + output[1:-2] + output[-1:]
             else:
                 output = "I'm not sure what to say about that."
         return output
@@ -61,7 +61,7 @@ class Chatbot(Trainbot):
             seeds.append(str(seed))
         if input_key != "No Filter Selected":
             self.sausage["input_filter"] = input_key
-        filt_seeds = input_filters.input_funcs[input_key](seeds)
+        filt_seeds = input_filters.input_funcs[input_key][0](seeds)
         self.sausage["i_filtered_seeds"] = filt_seeds
         return self.sanitize_seeds(filt_seeds)
 
@@ -108,9 +108,9 @@ class Chatbot(Trainbot):
         if filters == []:
             return strings, output_dict
         else:
-            output_dict[filters[0].__name__] = filters[0](strings, self.word_pos)
+            output_dict[filters[0][0].__name__] = filters[0][0](strings, self.word_pos)
             return self._filter_recursive(
-                output_dict[filters[0].__name__],
+                output_dict[filters[0][0].__name__],
                 filters[1:],
                 output_dict
                 )
@@ -160,7 +160,7 @@ class Chatbot(Trainbot):
         if len(seeds) == 0:
             output = "You speak nothing but nonsense."
         else:
-            chains = brains.brain_dict[brain](self, seeds)
+            chains = brains.brain_dict[brain][0](self, seeds)
             self.sausage["unfiltered_chains"] = chains
             output = self.output_filtration(output_filter, chains)
         self.sausage["final_sentence"] = output

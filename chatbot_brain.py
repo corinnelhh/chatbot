@@ -100,9 +100,9 @@ class Chatbot(Trainbot):
         if filters == []:
             return strings, output_dict
         else:
-            output_dict[filters[0].__name__] = filters[0](strings, self.pos_lexicon_word_pos)
+            output_dict[filters[0].__name__] = filters[0](strings, self.word_pos)
             return self._filter_recursive(
-                filters[0](strings, self.pos_lexicon_word_pos),
+                filters[0](strings, self.word_pos),
                 filters[1:],
                 output_dict
                 )

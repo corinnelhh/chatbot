@@ -104,6 +104,7 @@ header{
 
 .hidden{
     display: none;
+    font-size: 14px;
 }
 
 .filters{

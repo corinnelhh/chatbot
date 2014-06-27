@@ -14,7 +14,7 @@ import brains
 class Chatbot(Trainbot):
 
     def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
+        super(Chatbot, self).__init__()
         self.training_file = training_file
         self.sausage = {}
 
@@ -49,6 +49,8 @@ class Chatbot(Trainbot):
         return output
 
     def _input_filtration(self, input_sent, input_key):
+        """takens an input string, passes it through any input
+        filters"""
         u_seeds = wordpunct_tokenize(input_sent)
         seeds = []
         for seed in u_seeds:
@@ -70,6 +72,7 @@ class Chatbot(Trainbot):
         return seeds
 
     def _pair_seed(self, seed):
+        """identifies a pair of words to start a trigram chain"""
         word_1 = seed
         word_2 = None
         while word_2 is None:
@@ -105,7 +108,7 @@ class Chatbot(Trainbot):
                 )
 
     def _make_sausage(self):
-        """compiles a report on how the reply was made"""
+        u"""compiles a report on how the reply was made"""
         message = OrderedDict({})
         message["final_sentence"] = """<h4>This is how the response <i>\
         '{final_sentence}'</i> was made:</h4>""".format(**self.sausage)

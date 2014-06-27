@@ -42,7 +42,7 @@ def no_o_filter_selected(sentences, self):
 
 
 @add_func_to_dict("Length Filter")
-def filter_length(sentences, self):
+def filter_length(sentences, bot_dict):
     u"""Return every sentence that has a length <= wordcount.
 
     Takes in a list of sentences and returns a reduced list,
@@ -59,7 +59,7 @@ def filter_length(sentences, self):
 
 
 @add_func_to_dict("Part of Speech Filter")
-def filter_pos(sentences, self):
+def filter_pos(sentences, bot_dict):
     """Takes in a list of sentences and returns a reduced list,
 
     that contains only sentences that contain the necessarry pos."""
@@ -76,7 +76,7 @@ def filter_pos(sentences, self):
 
 
 @add_func_to_dict("Noun-Verb Filter")
-def filter_NN_VV(sentences, self):
+def filter_NN_VV(sentences, bot_dict):
     """Takes in a list of sentences and returns a reduced list of
     sentences that have at least one noun followed somewhere by at least
     one verb.
@@ -96,7 +96,7 @@ def filter_NN_VV(sentences, self):
 
 
 @add_func_to_dict("Syntactic Filter")
-def syntactic_filter(sentences, self):
+def syntactic_filter(sentences, bot_dict):
     """Filters responses through part of speech tagging and
     recursive structure lookup."""
     output_sentences = []
@@ -122,7 +122,7 @@ def syntactic_filter(sentences, self):
 
 
 @add_func_to_dict("Syntactic Filter Fast")
-def syntactic_filter_fast(sentences, self):
+def syntactic_filter_fast(sentences, bot_dict):
     """Filters responses through part of speech tagging and
     recursive structure lookup."""
     output_sentences = []
@@ -150,7 +150,7 @@ def syntactic_filter_fast(sentences, self):
 
 
 @add_func_to_dict("Liberal Syntactic Filter")
-def weak_syntactic_filter(sentences, self):
+def weak_syntactic_filter(sentences, bot_dict):
     """Filters responses through part of speech tagging and chunking: passes sentences
     with at least one NN followed by one VB followed by at least one NN"""
     output_sentences = []

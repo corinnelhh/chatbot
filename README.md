@@ -90,9 +90,9 @@ We are trying to create a *simple* chatbot with a basic *sense of self*. It will
 
 
 
-[here](http://ec2-54-186-154-203.us-west-2.compute.amazonaws.com/) is the bot!
+[here](http://ec2-54-213-221-186.us-west-2.compute.amazonaws.com/) is the bot!
 
-
+[UPENN TagSet](http://www.americannationalcorpus.org/OANC/penn.html)
 
 
 

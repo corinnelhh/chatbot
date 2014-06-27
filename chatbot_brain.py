@@ -14,7 +14,7 @@ import brains
 class Chatbot(Trainbot):
 
     def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
+        super(Chatbot, self).__init__()
         self.training_file = training_file
         self.sausage = {}
 
@@ -38,7 +38,7 @@ class Chatbot(Trainbot):
         else:
             all_filters = []
             for _filter in output_filter:
-                if output_filter != "No Filter Selected":
+                if _filter != u"No Filter Selected":
                     all_filters.append(output_filters.funct_dict[_filter])
             filtered, report = self._chain_filters(chains, all_filters)
             self.sausage["o_filter_report"] = report
@@ -49,6 +49,8 @@ class Chatbot(Trainbot):
         return output
 
     def _input_filtration(self, input_sent, input_key):
+        """takens an input string, passes it through any input
+        filters"""
         u_seeds = wordpunct_tokenize(input_sent)
         seeds = []
         for seed in u_seeds:
@@ -70,6 +72,7 @@ class Chatbot(Trainbot):
         return seeds
 
     def _pair_seed(self, seed):
+        """identifies a pair of words to start a trigram chain"""
         word_1 = seed
         word_2 = None
         while word_2 is None:
@@ -83,7 +86,8 @@ class Chatbot(Trainbot):
         return pair
 
     def _chain_filters(self, strings, filters):
-        u"""Return a list of strings that satisfiy the requirements of all filters.
+        u"""Return a list of strings that satisfiy the requirements
+        of all filters.
 
         Expects: A list of filter functions.
         Returns: A list of strings.
@@ -104,14 +108,14 @@ class Chatbot(Trainbot):
                 )
 
     def _make_sausage(self):
-        """compiles a report on how the reply was made"""
+        u"""compiles a report on how the reply was made"""
         message = OrderedDict({})
         message["final_sentence"] = """<h4>This is how the response <i>\
         '{final_sentence}'</i> was made:</h4>""".format(**self.sausage)
         if "input_filter" in self.sausage:
             message["input_filter"] = """
-            <p> With the {input_filter} input filter, <i>{i_filtered_seeds}</i>\
-            were selected. <p>""".format(**self.sausage)
+            <p> With the {input_filter} input filter, <i>{i_filtered_seeds}\
+            </i> were selected. <p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After eliminating the \
             seed words not in the bot's'lexicon', <i>{sanitized_seeds}</i>\
@@ -123,13 +127,13 @@ class Chatbot(Trainbot):
              known words, so a default response <i>{final_sentence}</i>\
             was returned. </p>""".format(**self.sausage)
         if "o_filter_report" in self.sausage:
-            count = 1
-            for key, value in reversed(self.sausage["o_filter_report"].items()):
-                message[str(count)] = """<p> The sentences were passed \
-                through the {}, after which there were {} sentences \
-                remaining. A sample sentence of what remained after this\
-                filter is: <i>{}</i>. </p>""".format(key, len(value), value[0])
-                count += 1
+            for key, value in self.sausage["o_filter_report"].items()[::]:
+                if (len(value)) > 0:
+                    message[key] = """<p> Next, the sentences were passed \
+                    through the {}, after which there were {} sentences \
+                    remaining. </p><p> A sample sentence of what remained\
+                    after this filter is: <i>{}</i>.</p>\
+                    """.format(key, len(value), value[0])
         message["final_report"] = """One sentence was selected at random.\
         </p><p>And that's how the <i>{final_sentence}</i> response was\
          made!""".format(**self.sausage)

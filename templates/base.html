@@ -10,7 +10,7 @@
     <aside id="about">
         <h3>About Koanbot:</h3>
         <p> Our bot is built with a Markov Chain 'brain', and was trained
-        with texts by Cory Doctorow and Jane Austen. To approximate
+        with texts written by Cory Doctorow. To approximate
         the back-and-forth of a natural conversation, the bot uses
         the words in each input sentence as its base for the following response.
         If any input filters are selected, the 'seed' words are
@@ -65,7 +65,7 @@
             </form>
             <p></p>
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
-            <div class="slidingDiv">
+            <div class="slidingDiv sausage">
                 {% if sausage %}
                     {% for key, value in sausage.items() %}
                         {{value|safe}}

@@ -1,7 +1,7 @@
-koanbot
+Koanbot
 =======
 
-The koanbot project is a sandbox environment for learning about natural language processing, python programming, and the nltk python package.
+The Koanbot project is a sandbox environment for learning about natural language processing, python programming, and the nltk python package.
 
 Users who wish to interact with it on a surface level, may view the running koanbot live, located [here](http://ec2-54-213-221-186.us-west-2.compute.amazonaws.com/). For those who wish to dig deeper, read on!
 
@@ -42,11 +42,11 @@ The Natural Language Tool Kit is an immense python package that we really only b
 #Training the Koanbot
 
 Training the koanbot involves constructing four dictionaries that the koanbot can access as it processes user input.
-##Word to POS Dictionary
+####Word to POS Dictionary
 This dictionary contains every word in the training text as a key, with a list of all the parts of speech that the word was tagged as throughout the text.
-##POS to Word Dictionary
+####POS to Word Dictionary
 This dictionary is the inverse of the previous one. It contains all the parts of speech that occur in the training text as a key, with a list of all the words that were tagged as that part of speech as a value.
-##Bigram Dictionary
+####Bigram Dictionary
 This dictionary contains every word as a key, with a list of every word that ever followed the key as a value.
-##Trigram Dictionary
+####Trigram Dictionary
 This dictionary contains every pair of words as a key, with a list of every word that ever followed the pair of words as a value.

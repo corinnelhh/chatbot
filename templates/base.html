@@ -37,26 +37,32 @@
             </select>
         <h5> Input filters:</h5>
             <select class="filters" form="input_form" name="input_filter" id="input_filter">
-                {% for key in input_filters.keys() %}
-                <option value = "{{key}}">{{key}}</option>
+                {% for key, val in input_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
                 {% endfor %}
             </select>
         <h5> Output filters:</h5>
             <select class="filters" form="input_form" name="output_filter" id="output_filter">
-                {% for key in output_filters.keys() %}
-                <option value = "{{key}}">{{key}}</option>
+                {% for key, val in output_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select class="filters hidden" form="input_form" name="output_filter2" class="hidden" id="output_filter2">
-                {% for key in output_filters.keys() %}
-                <option value = "{{key}}">{{key}}</option>
+            <select class="filters hidden" form="input_form" name="output_filter2" id="output_filter2">
+                {% for key, val in output_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select class="filters hidden" form="input_form" name="output_filter3" class="hidden" id="output_filter3">
-                {% for key in output_filters.keys() %}
-                <option value = "{{key}}">{{key}}</option>
+            <select class="filters hidden" form="input_form" name="output_filter3" id="output_filter3">
+                {% for key, val in output_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
                 {% endfor %}
             </select>
+        <h5> Input Filter Description: </h5>
+            <p class="hidden" id="in_descrip"> Input filter description </p>
+        <h5> Output Filter Description: </h5>
+            <p class="hidden" id="out_descrip_1"> Out 1 description </p>
+            <p class="hidden" id="out_descrip_2"> Out 2 description </p>
+            <p class="hidden" id="out_descrip_3"> Out 3 description </p>
     </aside>
         <article>
         <div id="output_box">

@@ -3,59 +3,96 @@
     <head>
     <meta charset="utf-8">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
-    <title>Chatbot 5000</title>
-    <header id="title">Super Cool Chatbot Name</header>
+    <title>Koanbot</title>
+    <header id="title" align="center">Koanbot</header>
     <main id="main">
     <body>
     <aside id="about">
-        About Super Cool Chatbot:
+        <h3>About Koanbot:</h3>
+        <p> Our <a href="http://en.wikipedia.org/wiki/Chatterbot">chatbot</a> is built with a <a href="http://en.wikipedia.org/wiki/Markov_chain">Markov Chain</a> 'brain', and was trained
+        with texts written by <a href="http://en.wikipedia.org/wiki/Cory_Doctorow">Cory Doctorow</a>. To approximate
+        the back-and-forth of a natural conversation, the bot uses
+        the words in each input sentence as its base for the following response.
+        If any input filters are selected, the 'seed' words are
+        filtered, then passed along to the 'brain'. The brain generates a set
+        of possible response sentences, using <a href="http://en.wikipedia.org/wiki/N-gram">n-gram</a> probability to build
+        the sentence word-by-word. Once a set of candidate sentences have
+        been generated, the candidate sentences are passed through any
+        output filters that have been selected. If more than one candidate
+        sentence remains after the filtering, one is chosen at random.<br><br>Thanks for chatting!
+        </p>
+        {% if reply %}
+
+        <a href="https://twitter.com/share" class="twitter-share-button"
+       data-text = "Koanbot says: {{reply}}"
+       data-lang="en">Tweet'dat Shit</a>
+        {% endif %}
     </aside>
     <aside id="filters">
-            <form action="{{ url_for('submit') }}" method="POST" class="submit">
-        <h4> Input filters:</h4>
-            <select name="input_filter" id="input_filter">
-                <option value = "default">No input filter selected</option>
-                <option value = "filter_content">Content Words</option>
-                <option value = "small_talk">Small Talk</option>
-                <option value = "length">Length</option>
-                <option value = "content_priority">Content Priority</option>
+        <h5> Brain N-gram Type:</h5>
+            <select class="filters" form="input_form" name="brain_types" id="brain_types">
+                {% for key in brain_types.keys() %}
+                <option value = "{{key}}">{{key}}</option>
+                {% endfor %}
             </select>
-        <h4> Output filters:</h4>
-            <select name="output_filter" id="output_filter">
-                <option value = "default">No output filter selected</option>
-                <option value = "filter_length">Length</option>
-                <option value = "filter_pos">Content Words</option>
+        <h5> Input filters:</h5>
+            <select class="filters" form="input_form" name="input_filter" id="input_filter">
+                {% for key, val in input_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
+                {% endfor %}
             </select>
+        <h5> Output filters:</h5>
+            <select class="filters" form="input_form" name="output_filter" id="output_filter">
+                {% for key, val in output_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
+                {% endfor %}
+            </select>
+            <select class="filters hidden" form="input_form" name="output_filter2" id="output_filter2">
+                {% for key, val in output_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
+                {% endfor %}
+            </select>
+            <select class="filters hidden" form="input_form" name="output_filter3" id="output_filter3">
+                {% for key, val in output_filters.items() %}
+                <option value="{{key}}" data-description="{{val[1]}}">{{key}}</option>
+                {% endfor %}
+            </select>
+        <h5 class="desc"> Input Filter Description: </h5>
+            <p class="desc hidden" id="in_descrip"> Input filter description </p>
+        <h5 class="desc"> Output Filter Description: </h5>
+            <p class="desc hidden" id="out_descrip_1"> Out 1 description </p>
+            <p class="desc hidden" id="out_descrip_2"> Out 2 description </p>
+            <p class="desc hidden" id="out_descrip_3"> Out 3 description </p>
     </aside>
         <article>
         <div id="output_box">
         {% if reply %}
-        Chatbot5000 says: {{reply}}
+        Koanbot says: {{reply}}
         {% endif %}
         </div>
+            <form id="input_form" action="{{ url_for('submit') }}" method="POST" class="submit">
                 <div class="field">
-                <input type="text" size="auto" name="submission" id="submission" placeholder="Type here to chat with Chatbot5000"/>
+                <input type="text" size="auto" name="submission" id="submission" placeholder="   Type here to chat with Koanbot"/>
                 </div>
             </form>
             <p></p>
             <a href="#" class="show_hide">Click here to see how this sentence was generated</a>
-            <div class="slidingDiv">
+            <div class="slidingDiv sausage">
                 {% if sausage %}
-                <h5>This is how I came up with "{{reply}}"</h5>
-                {{sausage}}
-                {% else %}
-                Talk to Chatbot 5000 to see something here.
+                    {% for key, value in sausage.items() %}
+                        {{value|safe}}
+                    {% endfor %}
                 {% endif %}
-<!--                 <a href="#" class="show_hide">hide</a> -->
             </div>
         </article>
     </main>
         <footer>
             <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey<br>
-            View the source code on <a href="https://github.com/corinnelhh/chatbot">github</a>.<br>
-            <a href="mailto:chatbot5000@gmail.com"> Email us.</a></p>
+            View the python source code on <a href="https://github.com/corinnelhh/chatbot">github</a>.<br>
+            <a href="mailto:koanbot@gmail.com"> Email us.</a></p>
         </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='application.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='twitter.js') }}"> </script>
     </body>
 </html>

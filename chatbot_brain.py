@@ -1,21 +1,25 @@
-import nltk
+#import nltk
 import random
-import os
-from nltk import pos_tag
+#import os
+#from nltk import pos_tag
 from nltk.tokenize import wordpunct_tokenize
+from collections import OrderedDict
 
 from trainbot import Trainbot
 import input_filters
 import output_filters
+import brains
 
 
 class Chatbot(Trainbot):
 
-    def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
+    def __init__(self, training_file="Doctorow.txt"):
+        super(Chatbot, self).__init__(training_file="Doctorow.txt")
         self.training_file = training_file
+        self.sausage = {}
+        self.recursion = 0
 
-    def i_filter_random(self, words, lexicon=None):
+    def i_filter_random(self, words):
         u"""Return randomly selected, non-punctuation word from words."""
         count = 0
         while count < len(words):
@@ -26,34 +30,54 @@ class Chatbot(Trainbot):
         return "What a funny thing to say!"
 
     def o_filter_random(self, sentences):
-        u"""Return randomly selected sentence from sentecnces"""
-        return random.choice(sentences)
+        u"""Return randomly selected sentence from sentences"""
+        sentence = random.choice(sentences)
+        return sentence
 
-    def _create_chains(self, pair, size=10):
-        u"""Return list of markov generated strings spawned from the seed."""
-        candidates = []
-        w_1 = pair[0]
-        w_2 = pair[1]
-        while len(candidates) < size:
-            word_1, word_2 = w_1, w_2
-            candidate = [word_1, word_2]
-            pair = "{} {}".format(word_1, word_2)
-            done = False
-            while not done:
-                try:
-                    next_word = random.choice(self.tri_lexicon[pair])
-                    candidate.append(next_word)
-                    word_1, word_2 = word_2, next_word
-                    pair = "{} {}".format(word_1, word_2)
-                except KeyError:
-                    candidates.append(" ".join(candidate))
-                    done = True
-                if next_word in self.stop_puncts:
-                    candidates.append(" ".join(candidate))
-                    done = True
-        return candidates
+    def output_filtration(self, output_filter, chains):
+        print "inside output_filtration"
+        if u"No Filter Selected" in output_filter[0]:
+            output = self.o_filter_random(chains)
+        else:
+            all_filters = []
+            for _filter in output_filter:
+                if _filter != u"No Filter Selected":
+                    all_filters.append(output_filters.funct_dict[_filter])
+            filtered, report = self._chain_filters(chains, all_filters)
+            self.sausage["o_filter_report"] = report
+            if len(filtered) > 0:
+                output = self.o_filter_random(filtered)
+                output = output[0].upper() + output[1:-2] + output[-1:]
+            else:
+                output = "I'm not sure what to say about that."
+        return output
+
+    def _input_filtration(self, input_sent, input_key):
+        """takens an input string, passes it through any input
+        filters"""
+        u_seeds = wordpunct_tokenize(input_sent)
+        seeds = []
+        for seed in u_seeds:
+            seeds.append(str(seed))
+        if input_key != "No Filter Selected":
+            self.sausage["input_filter"] = input_key
+        filt_seeds = input_filters.input_funcs[input_key][0](seeds)
+        self.sausage["i_filtered_seeds"] = filt_seeds
+        return self.sanitize_seeds(filt_seeds)
+
+    def sanitize_seeds(self, seeds):
+        """returns only seeds that are in the lexicons"""
+        for seed in seeds[:]:
+            try:
+                self.bi_lexicon[seed]
+            except KeyError:
+                seeds.remove(seed)
+        seed_string = ", ".join(seeds)
+        self.sausage["sanitized_seeds"] = seed_string
+        return seeds
 
     def _pair_seed(self, seed):
+        """identifies a pair of words to start a trigram chain"""
         word_1 = seed
         word_2 = None
         while word_2 is None:
@@ -63,65 +87,94 @@ class Chatbot(Trainbot):
                     word_2 = next_
                     pair = [word_1, word_2]
             except KeyError:
-                continue
+                print "seed not in lexicon"
         return pair
 
-    def apply_i_filter(self, filter_, seeds):
-        lexicon = self.bi_lexicon
-        if filter_ == "filter_content":
-            return input_filters.filter_content(seeds)
-        elif filter_ == "small_talk":
-            return input_filters.filter_small_talk(seeds, lexicon)
-        elif filter_ == "length":
-            return input_filters.filter_length_words(seeds)
-        elif filter_ == "content_priority":
-            return input_filters.filter_content_priority(seeds)
-        else:
-            return seeds
+    def _chain_filters(self, strings, filters):
+        u"""Return a list of strings that satisfiy the requirements
+        of all filters.
 
-    def apply_o_filter(self, filter_, chains):
-        if filter_ == "filter_length":
-            return output_filters.filter_length(chains)
-        if filter_ == "filter_pos":
-            return output_filters.filter_pos(chains)
+        Expects: A list of filter functions.
+        Returns: A list of strings.
+        """
+        strings, output_dict = self._filter_recursive(strings, filters)
+        return strings, output_dict
+
+    def _filter_recursive(self, strings, filters, output_dict=None):
+        u"""Return list of strings or call the next filter function."""
+        print "Inside filter recursive"
+        if output_dict is None:
+            output_dict = OrderedDict({})
+        if filters == []:
+            return strings, output_dict
         else:
-            return chains
+            output_dict[filters[0][0].__name__] = filters[0][0](strings, self.word_pos)
+            return self._filter_recursive(
+                output_dict[filters[0][0].__name__],
+                filters[1:],
+                output_dict
+                )
+
+    def _make_sausage(self):
+        u"""compiles a report on how the reply was made"""
+        message = OrderedDict({})
+        message["final_sentence"] = """<h4>This is how the response <b>\
+        '{final_sentence}'</b> was made:</h4>""".format(**self.sausage)
+        if "input_filter" in self.sausage:
+            message["input_filter"] = """
+            <p> With the <b>{input_filter}</b> input filter, <b>{i_filtered_seeds}\
+            </b> were selected. <p>""".format(**self.sausage)
+        if "unfiltered_chains" in self.sausage:
+            message["unfiltered_chains"] = """<p> After eliminating the \
+            seed words not in the bot's 'lexicon', <b>{sanitized_seeds}</b>\
+            were passed to the Markov Chain sentence generator, yielding \
+            <b>200</b> sentences.</p>""".format(**self.sausage)
+        else:
+            message["no_chains"] = """<p> The seeds were next checked \
+            against the bot's lexicon. The search did not return any\
+             known words, so a default response <b>{final_sentence}</b>\
+            was returned. </p>""".format(**self.sausage)
+        if "o_filter_report" in self.sausage:
+            for s_key, s_value in self.sausage["o_filter_report"].items():
+                if (len(s_value)) > 0:
+                    message[s_key] = """<p> Next, the sentences were passed \
+                    through the <b>{}</b>, after which there were <b>{}</b> sentences\
+                    remaining. </p><p> A sample sentence of what remained\
+                    after this filter is: <b>{}</b></p>\
+                    """.format(s_key, len(s_value), s_value[0])
+        message["final_report"] = """One sentence was selected at random.\
+        </p><p>And that's how the <b>{final_sentence}</b> response was\
+         made!""".format(**self.sausage)
+        return message
 
     def compose_response(
             self,
             input_sent,
-            input_filter=None,
-            output_filter=None,
+            input_key,
+            output_filter,
+            brain
             ):
-        u"""Return a response sentence based on the input."""
-        # Tokenize input
-        seeds = wordpunct_tokenize(input_sent)
-        # Select seed based on input filter
-        if input_filter:
-            seeds = self.apply_i_filter(input_filter, seeds)
-            if isinstance(seeds, basestring):
-                return seeds
-        # Randomly pick a seed from the returned possibilities.
-        print seeds
-        seed = self.i_filter_random(seeds)
-        if seed == "What a funny thing to say!":
-            return seed
-        # Create chains
-        pair = self._pair_seed(seed)
-        chains = self._create_chains(pair)
-        # Return output of filter
-        if output_filter:
-            chains = self.apply_o_filter(output_filter, chains)
-        chains = self.o_filter_random(chains)
-        return chains
+        u"""Return a response sentence and report based on the input."""
+        self.sausage = {}
+        seeds = self._input_filtration(input_sent, input_key)
+        if len(seeds) == 0:
+            output = "You speak nothing but nonsense."
+        else:
+            chains = brains.brain_dict[brain][0](self, seeds)
+            self.sausage["unfiltered_chains"] = chains
+            output = self.output_filtration(output_filter, chains)
+        self.sausage["final_sentence"] = output
+        message = self._make_sausage()
+        return output, message
 
 if __name__ == '__main__':
-    bot = Chatbot()
+    bot = Chatbot(training_file="Doctorow.txt")
     bot.fill_lexicon()
     print "Filled the lexicon!"
     print bot.compose_response(
         "My beautiful carriage is red and blue and it hums while I drive it!",
-        input_filters.filter_content_priority,
-        bot.o_filter_random,
-        bot.bi_lexicon
+        "Content Filter",
+        "Noun-Verb Filter"
         )
+    strings = bot._create_chains(bot._pair_seed('car'))
+    filters = [output_filters.funct_dict["Length Filter"], output_filters.funct_dict["Noun-Verb Filter"]]

@@ -1,15 +1,15 @@
 #output_box{
     width: auto;
     height: auto;
-    background-color: #ffffaa;
-    border: solid 3px #ffffab;
+    background-color: #D6F1FF;
+    border: solid 3px #32657F;
     border-radius: 7pt;
     padding: 10px
 }
 
 body {
     font: 24px Helvetica;
-    background: #999999;
+    background: #32657F;
 }
 
 #main {
@@ -25,9 +25,9 @@ body {
 #main > article {
     margin: 4px;
     padding: 5px;
-    border: 1px solid #cccc33;
+    border: 1px solid #D6F1FF;
     border-radius: 7pt;
-    background: #dddd88;
+    background: #8AD6FF;
     -webkit-flex: 3 1 60%;
     flex: 3 1 60%;
     -webkit-order: 2;
@@ -37,9 +37,9 @@ body {
 #main > #filters {
     margin: 4px;
     padding: 5px;
-    border: 1px solid #8888bb;
+    border: 1px solid #D6F1FF;
     border-radius: 7pt;
-    background: #ccccff;
+    background: #609CB2;
     -webkit-flex: 1 6 20%;
     flex: 1 6 20%;
     -webkit-order: 1;
@@ -49,9 +49,10 @@ body {
 #main > #about {
     margin: 4px;
     padding: 5px;
-    border: 1px solid #8888bb;
+    border: 1px solid #D6F1FF;
     border-radius: 7pt;
-    background: #ccccff;
+    background: #609CB2;
+    font-size: 15px;
     -webkit-flex: 1 6 20%;
     flex: 1 6 20%;
     -webkit-order: 3;
@@ -62,10 +63,10 @@ header, footer {
     display: block;
     margin: 4px;
     padding: 5px;
-    min-height: 60px;
-    border: 1px solid #eebb55;
+    min-height: 80px;
+    border: 1px solid #D6F1FF;
     border-radius: 7pt;
-    background: #ffeebb;
+    background: #ACC1CC;
 }
 
 /* Too narrow to support three columns */
@@ -99,10 +100,30 @@ header{
 
 #submission{
     width: 99%;
+    background: D6F1FF;
+    border:1px solid #32657F;
 }
 
-#hidden{
+.hidden{
     display: none;
+}
+
+.filters{
+    width: 60%;
+    #position: relative;
+}
+
+.desc{
+    font-size: 14px;
+    font-weight:bold;
+}
+.desc .hidden{
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.sausage{
+    font-size: 14px;
 }
 
 /*Inspired by https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes*/

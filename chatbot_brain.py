@@ -63,12 +63,14 @@ class Chatbot(Trainbot):
 
     def sanitize_seeds(self, seeds):
         """returns only seeds that are in the lexicons"""
+        seed_string = ""
         for seed in seeds[:]:
             try:
                 self.bi_lexicon[seed]
+                seed_string += " " + str(seed)
             except KeyError:
                 seeds.remove(seed)
-        self.sausage["sanitized_seeds"] = seeds
+        self.sausage["sanitized_seeds"] = seed_string
         return seeds
 
     def _pair_seed(self, seed):
@@ -114,28 +116,28 @@ class Chatbot(Trainbot):
         '{final_sentence}'</i> was made:</h4>""".format(**self.sausage)
         if "input_filter" in self.sausage:
             message["input_filter"] = """
-            <p> With the {input_filter} input filter, <i>{i_filtered_seeds}\
+            <p> With the <b>{input_filter}</b> input filter, <i>{i_filtered_seeds}\
             </i> were selected. <p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After eliminating the \
-            seed words not in the bot's'lexicon', <i>{sanitized_seeds}</i>\
+            seed words not in the bot's'lexicon', <b><i>{sanitized_seeds}</i></b>\
             were passed to the Markov Chain sentence generator, yielding \
             200 sentences.</p>""".format(**self.sausage)
         else:
             message["no_chains"] = """<p> The seeds were next checked \
             against the bot's lexicon. The search did not return any\
-             known words, so a default response <i>{final_sentence}</i>\
+             known words, so a default response <b><i>{final_sentence}</i></b>\
             was returned. </p>""".format(**self.sausage)
         if "o_filter_report" in self.sausage:
             for s_key, s_value in self.sausage["o_filter_report"].items()[::]:
                 if (len(s_value)) > 0:
                     message[s_key] = """<p> Next, the sentences were passed \
-                    through the {}, after which there were {} sentences \
+                    through the <b>{}</b>, after which there were <b>{}</b> sentences\
                     remaining. </p><p> A sample sentence of what remained\
-                    after this filter is: <i>{}</i>.</p>\
+                    after this filter is: <b><i>{}</i></b>.</p>\
                     """.format(s_key, len(s_value), s_value[0])
         message["final_report"] = """One sentence was selected at random.\
-        </p><p>And that's how the <i>{final_sentence}</i> response was\
+        </p><p>And that's how the <b><i>{final_sentence}</i></b> response was\
          made!""".format(**self.sausage)
         return message
 

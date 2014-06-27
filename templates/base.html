@@ -21,6 +21,12 @@
         output filters that have been selected. If more than one candidate
         sentence remains after the filtering, one is chosen at random.<br><br>Thanks for chatting!
         </p>
+        {% if reply %}
+
+        <a href="https://twitter.com/share" class="twitter-share-button"
+       data-text = "Koanbot says: {{reply}}"
+       data-lang="en">Tweet'dat Shit</a>
+        {% endif %}
     </aside>
     <aside id="filters">
         <h5> Brain N-gram Type:</h5>
@@ -81,5 +87,6 @@
         </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='application.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='twitter.js') }}"> </script>
     </body>
 </html>

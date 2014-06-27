@@ -31,7 +31,7 @@ def add_func_to_dict(name=None):
         function_name = name
         if function_name is None:
             function_name = func.__name__
-        funct_dict[function_name] = func
+        funct_dict[function_name] = func, func.__doc__
         return func
     return wrapper
 

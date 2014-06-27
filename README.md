@@ -1,11 +1,16 @@
-koanbot
+Koanbot
 =======
 
-The koanbot project is a sandbox environment for learning about natural language processing, python programming, and the nltk python package.
+The Koanbot project is a sandbox environment for learning about natural language processing, python programming, and the nltk python package. The koanbot employs a simple sentence analysis system that relies on n-gram generation and input and output filters.
 
-Users who wish to interact with it on a surface level, may view the running koanbot live, located [here](http://ec2-54-213-221-186.us-west-2.compute.amazonaws.com/). For those who wish to dig deeper, read on!
+Users, who wish to interact with it on a surface level, may find the Koanbot located [here](http://ec2-54-213-221-186.us-west-2.compute.amazonaws.com/). For those who wish to dig deeper, read on!
 
-The koanbot employs a simple sentence analysis system that uses a few of the many tools available from the nltk package. Fist it filters the user input:
+###Download Instructions
+To start playing with the project immediately:
+ * Clone the project onto your local computer.
+ * While in the project's root directory, run 'pip install requirements'.
+ * Still in root, run 'python views.py'.
+ * You now have a copy of Koanbot running on your local machine at '/localhost/8000'!
 
 #Input Filters
 
@@ -35,18 +40,29 @@ Again, the process for creating and decorating output filters is quite similar. 
 
 If more than one sentence remains after the output filter, one is chosen at random from the remainder and printed to the website. In the event that no sentences remain, the koanbot will let you know that it doesn't know what to say.
 
-#NLTK
+#Extra Info
+
+##NLTK
 
 The Natural Language Tool Kit is an immense python package that we really only brushed the surface of here. We used it to tag our training data with parts of speech, and to analyze the syntax of the output sentences. One large area for imporovment in our project is finding more ways to utilize this valuable resource.
 
-#Training the Koanbot
+##Training the Koanbot
+
+###New Material
+If you wish to add new material to the Koanbot, this is a very easy process. 
+ * Add the text file to the projects root directory.
+ * Open trainbot.py and put the name of your text in the 'if name = main' block.
+ * Run 'python trainbot.py' from the commanline, while you are in the root directory.
+ * A new set of dictionaries has been created!
+ 
+###The Dictionaries
 
 Training the koanbot involves constructing four dictionaries that the koanbot can access as it processes user input.
-##Word to POS Dictionary
+####Word to POS Dictionary
 This dictionary contains every word in the training text as a key, with a list of all the parts of speech that the word was tagged as throughout the text.
-##POS to Word Dictionary
+####POS to Word Dictionary
 This dictionary is the inverse of the previous one. It contains all the parts of speech that occur in the training text as a key, with a list of all the words that were tagged as that part of speech as a value.
-##Bigram Dictionary
+####Bigram Dictionary
 This dictionary contains every word as a key, with a list of every word that ever followed the key as a value.
-##Trigram Dictionary
+####Trigram Dictionary
 This dictionary contains every pair of words as a key, with a list of every word that ever followed the pair of words as a value.

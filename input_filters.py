@@ -17,7 +17,7 @@ def add_func_to_dict(name=None):
     return wrapper
 
 
-@add_func_to_dict("No Filter Selected"
+@add_func_to_dict("No Filter Selected")
 def no_input_filter_selected(input_):
     u"""All words in the input are passed
     through to be checked against the lexicon."""

@@ -36,14 +36,14 @@ def submit():
     output_.append(request.form['output_filter'])
     output_.append(request.form['output_filter2'])
     output_.append(request.form['output_filter3'])
-    reply = cbot.compose_response(
+    reply, sausage = cbot.compose_response(
         submission,
         input_key=input_,
         output_filter=output_,
         brain=brain_
         )
     print "Reply: " + str(reply)
-    return show_chatbot(submission, reply)
+    return show_chatbot(submission, reply, sausage)
 
 
 if __name__ == '__main__':

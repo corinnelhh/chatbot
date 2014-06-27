@@ -7,14 +7,18 @@ import pdb
 
 
 class Trainbot(object):
-    def __init__(self):
+    def __init__(self, training_file='doctorow.txt'):
+        self.training_file = training_file
         self.tri_lexicon = {}
         self.bi_lexicon = {}
         self.pos_lexicon_word_pos = {}
         self.pos_lexicon_pos_word = {}
         self.stop_puncts = ['.', '!', '?']
-        self.puncts = [',', ';', ':', '"', "'", '-', '--', ",?", '."',',"',
-        "Mr", "Mrs", '?"']
+        self.puncts = [
+            ',', ';', ':', '"', "'",
+            '--', ",?", '."', ',"',
+            "Mr", "Mrs", '?"', '-'
+            ]
 
     def parse_training_input(self, text):
         while True:
@@ -33,14 +37,14 @@ class Trainbot(object):
         our_string = wordpunct_tokenize(our_string)
         return pos_tag(our_string)
 
-    def _pos_lexicons(self, training_file):
+    def _pos_lexicons(self):
         """Creates two pos dictionaries.
 
         One with every word as a key and the values being a list of all it's parts of speech.
         The list may look like [noun,verb,noun,noun] implying that it
         is a noun more often than a verb. The second is the same, but inverted."""
 
-        f = open(training_file)
+        f = open(self.training_file)
         print "opened PART OF SPEECH DICT"
         counter = 0
         for words in self.parse_training_input(f):
@@ -60,8 +64,8 @@ class Trainbot(object):
 
         # return len(self.pos_lexicon_word_pos), self.pos_lexicon_pos_word
 
-    def _fill_lexicon(self, training_file):
-        f = open(training_file)
+    def _fill_lexicon(self):
+        f = open(self.training_file)
         for words in self.parse_training_input(f):
             words = self.remove_non_final_punctuation(words)
             for idx, word in enumerate(words[2:]):
@@ -76,8 +80,8 @@ class Trainbot(object):
                     self.bi_lexicon[first_word].append(second_word)
                     self.tri_lexicon[word_pair].append(word)
 
-    def generate_pos_dict(self, training_file, prefix):
-        self._pos_lexicons(training_file)
+    def generate_pos_dict(self, prefix):
+        self._pos_lexicons(self.training_file)
 
         training_dict_file = "%s/%s_word_pos_dict.txt" % (prefix, prefix)
         dict_text = open(training_dict_file, 'w')
@@ -87,8 +91,8 @@ class Trainbot(object):
         dict_text = open(training_dict_file, 'w')
         dict_text.write(str(tb.pos_lexicon_pos_word))
 
-    def generate_gram_dict(self, training_file, prefix):
-        self._fill_lexicon(training_file)
+    def generate_gram_dict(self, prefix):
+        self._fill_lexicon(self.training_file)
 
         training_dict_file = "%s/%s_bi_gram_dict.txt" % (prefix, prefix)
         dict_text = open(training_dict_file, 'w')
@@ -98,14 +102,31 @@ class Trainbot(object):
         dict_text = open(training_dict_file, 'w')
         dict_text.write(str(tb.tri_lexicon))
 
-    def generate_all_dicts(self, training_file):
-        prefix = str(training_file)[:-4]
+    def generate_all_dicts(self):
+        prefix = str(self.training_file)[:-4]
         if not os.path.exists(prefix):
             os.makedirs(prefix)
-        self.generate_gram_dict(training_file, prefix)
-        self.generate_pos_dict(training_file, prefix)
-        os.rename(training_file, "%s/%s" % (prefix, training_file))
+        self.generate_gram_dict(self.training_file, prefix)
+        self.generate_pos_dict(self.training_file, prefix)
+        os.rename(self.training_file, "%s/%s" % (prefix, self.training_file))
 
+    def reformat_dict(self, dict_):
+        for k, v in dict_.items():
+            pos = {}
+            for i in v:
+                if i not in pos:
+                    pos[i] = 1
+                else:
+                    pos[i] += 1
+            dict_[k] = pos
+
+        for k, v in dict_.items():
+            list_ = []
+            for pos, count in v.items():
+                list_.append((count, pos))
+            list_.sort(reverse=True)
+            dict_[k] = list_
+        return dict_
 
 if __name__ == '__main__':
     tb = Trainbot()

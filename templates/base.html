@@ -9,18 +9,24 @@
     <body>
     <aside id="about">
         <h3>About Koanbot:</h3>
-        <p> Our bot is built with a Markov Chain 'brain', and was trained
-        with texts written by Cory Doctorow. To approximate
+        <p> Our <a href="http://en.wikipedia.org/wiki/Chatterbot">chatbot</a> is built with a <a href="http://en.wikipedia.org/wiki/Markov_chain">Markov Chain</a> 'brain', and was trained
+        with texts written by <a href="http://en.wikipedia.org/wiki/Cory_Doctorow">Cory Doctorow</a>. To approximate
         the back-and-forth of a natural conversation, the bot uses
         the words in each input sentence as its base for the following response.
         If any input filters are selected, the 'seed' words are
         filtered, then passed along to the 'brain'. The brain generates a set
-        of possible response sentences, using n-gram probability to build
+        of possible response sentences, using <a href="http://en.wikipedia.org/wiki/N-gram">n-gram</a> probability to build
         the sentence word-by-word. Once a set of candidate sentences have
         been generated, the candidate sentences are passed through any
         output filters that have been selected. If more than one candidate
-        sentence remains after the filtering, one is chosen at random.
+        sentence remains after the filtering, one is chosen at random.<br><br>Thanks for chatting!
         </p>
+        {% if reply %}
+
+        <a href="https://twitter.com/share" class="twitter-share-button"
+       data-text = "Koanbot says: {{reply}}"
+       data-lang="en">Tweet'dat Shit</a>
+        {% endif %}
     </aside>
     <aside id="filters">
         <h5> Brain N-gram Type:</h5>
@@ -41,12 +47,12 @@
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select class="filters" form="input_form" name="output_filter2" class="hidden" id="output_filter2">
+            <select class="filters hidden" form="input_form" name="output_filter2" class="hidden" id="output_filter2">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
             </select>
-            <select class="filters" form="input_form" name="output_filter3" class="hidden" id="output_filter3">
+            <select class="filters hidden" form="input_form" name="output_filter3" class="hidden" id="output_filter3">
                 {% for key in output_filters.keys() %}
                 <option value = "{{key}}">{{key}}</option>
                 {% endfor %}
@@ -76,10 +82,11 @@
     </main>
         <footer>
             <p>Created by Corinne Hutchinson, Nathan Hubbell, and Joshua Frailey<br>
-            View the source code on <a href="https://github.com/corinnelhh/chatbot">github</a>.<br>
+            View the python source code on <a href="https://github.com/corinnelhh/chatbot">github</a>.<br>
             <a href="mailto:koanbot@gmail.com"> Email us.</a></p>
         </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='application.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='twitter.js') }}"> </script>
     </body>
 </html>

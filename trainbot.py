@@ -7,8 +7,7 @@ import pdb
 
 
 class Trainbot(object):
-    def __init__(self, training_file="tell_tale_heart.txt"):
-        self.training_file = training_file
+    def __init__(self):
         self.tri_lexicon = {}
         self.bi_lexicon = {}
         self.pos_lexicon_word_pos = {}
@@ -34,14 +33,14 @@ class Trainbot(object):
         our_string = wordpunct_tokenize(our_string)
         return pos_tag(our_string)
 
-    def pos_lexicons(self):
+    def _pos_lexicons(self, training_file):
         """Creates two pos dictionaries.
 
         One with every word as a key and the values being a list of all it's parts of speech.
         The list may look like [noun,verb,noun,noun] implying that it
         is a noun more often than a verb. The second is the same, but inverted."""
 
-        f = open(self.training_file)
+        f = open(training_file)
         print "opened PART OF SPEECH DICT"
         counter = 0
         for words in self.parse_training_input(f):
@@ -52,17 +51,17 @@ class Trainbot(object):
                     self.pos_lexicon_word_pos[word].append(pos)
                 else:
                     self.pos_lexicon_word_pos[word] = [pos]
-                if counter%200:
-                    print "Building dict..." + str(counter)
+                if pos in self.pos_lexicon_pos_word:
+                    self.pos_lexicon_pos_word[pos].append(word)
+                else:
+                    self.pos_lexicon_pos_word[pos] = [word]
+            print "Building dict..." + str(counter)
+        print "Done with POS DICT"
 
-                # if pos in self.pos_lexicon_pos_word:
-                #     self.pos_lexicon_pos_word[pos].append(word)
-                # else:
-                #     self.pos_lexicon_pos_word[pos] = [word]
         # return len(self.pos_lexicon_word_pos), self.pos_lexicon_pos_word
 
-    def fill_lexicon(self):
-        f = open(self.training_file)
+    def _fill_lexicon(self, training_file):
+        f = open(training_file)
         for words in self.parse_training_input(f):
             words = self.remove_non_final_punctuation(words)
             for idx, word in enumerate(words[2:]):
@@ -76,3 +75,38 @@ class Trainbot(object):
                 else:
                     self.bi_lexicon[first_word].append(second_word)
                     self.tri_lexicon[word_pair].append(word)
+
+    def generate_pos_dict(self, training_file, prefix):
+        self._pos_lexicons(training_file)
+
+        training_dict_file = "%s/%s_word_pos_dict.txt" % (prefix, prefix)
+        dict_text = open(training_dict_file, 'w')
+        dict_text.write(str(tb.pos_lexicon_word_pos))
+
+        training_dict_file = "%s/%s_pos_word_dict.txt" % (prefix, prefix)
+        dict_text = open(training_dict_file, 'w')
+        dict_text.write(str(tb.pos_lexicon_pos_word))
+
+    def generate_gram_dict(self, training_file, prefix):
+        self._fill_lexicon(training_file)
+
+        training_dict_file = "%s/%s_bi_gram_dict.txt" % (prefix, prefix)
+        dict_text = open(training_dict_file, 'w')
+        dict_text.write(str(tb.bi_lexicon))
+
+        training_dict_file = "%s/%s_tri_gram_dict.txt" % (prefix, prefix)
+        dict_text = open(training_dict_file, 'w')
+        dict_text.write(str(tb.tri_lexicon))
+
+    def generate_all_dicts(self, training_file):
+        prefix = str(training_file)[:-4]
+        if not os.path.exists(prefix):
+            os.makedirs(prefix)
+        self.generate_gram_dict(training_file, prefix)
+        self.generate_pos_dict(training_file, prefix)
+        os.rename(training_file, "%s/%s" % (prefix, training_file))
+
+
+if __name__ == '__main__':
+    tb = Trainbot()
+    tb.generate_all_dicts('quickTest.txt')

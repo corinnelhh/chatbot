@@ -51,8 +51,7 @@ The Natural Language Tool Kit is an immense python package that we really only b
 ###New Material
 If you wish to add new material to the Koanbot, this is a very easy process. 
  * Add the text file to the projects root directory.
- * Open trainbot.py and put the name of your text in the 'if name = main' block.
- * Run 'python trainbot.py' from the commanline, while you are in the root directory.
+ * Run 'python trainbot.py <textfile>' from the commanline, while you are in the root directory.
  * A new set of dictionaries has been created!
  
 ###The Dictionaries

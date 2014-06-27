@@ -5,7 +5,12 @@ The Koanbot project is a sandbox environment for learning about natural language
 
 Users, who wish to interact with it on a surface level, may find the Koanbot located [here](http://ec2-54-213-221-186.us-west-2.compute.amazonaws.com/). For those who wish to dig deeper, read on!
 
-
+###Download Instructions
+To start playing with the project immediately:
+ * Clone the project onto your local computer.
+ * While in the project's root directory, run 'pip install requirements'
+ * Still in root, run 'python views.py'
+ * You now have a copy of Koanbot running on your local machine at '/localhost/8000'!
 
 #Input Filters
 

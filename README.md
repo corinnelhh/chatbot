@@ -43,6 +43,15 @@ The Natural Language Tool Kit is an immense python package that we really only b
 
 ##Training the Koanbot
 
+###New Material
+If you wish to add new material to the Koanbot, this is a very easy process. 
+ * Add the text file to the projects root directory.
+ * Open trainbot.py and put the name of your text in the 'if name = main' block.
+ * Run 'python trainbot.py' from the commanline, while you are in the root directory.
+ * A new set of dictionaries has been created!
+ 
+###The Dictionaries
+
 Training the koanbot involves constructing four dictionaries that the koanbot can access as it processes user input.
 ####Word to POS Dictionary
 This dictionary contains every word in the training text as a key, with a list of all the parts of speech that the word was tagged as throughout the text.

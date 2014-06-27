@@ -11,14 +11,15 @@ def add_func_to_dict(name=None):
         function_name = name
         if function_name is None:
             function_name = func.__name__
-        brain_dict[function_name] = func
+        brain_dict[function_name] = func, func.__doc__
         return func
     return wrapper
 
 
 @add_func_to_dict("Bigram Brain")
 def _create_bi_chains(chatbot_brain, seeds, size=200):
-    u"""Return list of markov generated strings spawned from the seed."""
+    u"""Return list of markov generated strings where each word
+    is based entirely on the word before it."""
     print "the seeds are: " + str(seeds)
     candidates = []
     while len(candidates) < size:
@@ -45,7 +46,8 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
 
 @add_func_to_dict("Trigram Brain")
 def _create_chains(chatbot_brain, seeds, size=200):
-    u"""Return list of markov generated strings spawned from the seed."""
+    u"""Return list of markov generated strings where each word
+    is based on the two words before it."""
     print "the seeds are: " + str(seeds)
     candidates = []
     while len(candidates) < size:

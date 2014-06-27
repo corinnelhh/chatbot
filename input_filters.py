@@ -12,7 +12,7 @@ def add_func_to_dict(name=None):
         function_name = name
         if function_name is None:
             function_name = func.__name__
-        input_funcs[function_name] = func
+        input_funcs[function_name] = func, func.__doc__
         return func
     return wrapper
 

@@ -31,7 +31,7 @@ def add_func_to_dict(name=None):
         function_name = name
         if function_name is None:
             function_name = func.__name__
-        funct_dict[function_name] = func
+        funct_dict[function_name] = func, func.__doc__
         return func
     return wrapper
 
@@ -61,8 +61,8 @@ def filter_length(sentences, bot_dict):
 @add_func_to_dict("Part of Speech Filter")
 def filter_pos(sentences, bot_dict):
     """Takes in a list of sentences and returns a reduced list,
-
-    that contains only sentences that contain the necessarry pos."""
+    that contains only sentences that contain at least one
+    verb, noun, and adjective."""
     content_pos = ['VB', 'NN', 'JJ']
     output_sentences = []
     for sentence in sentences:

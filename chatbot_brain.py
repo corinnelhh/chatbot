@@ -13,8 +13,8 @@ import brains
 
 class Chatbot(Trainbot):
 
-    def __init__(self, training_file="tell_tale_heart.txt"):
-        super(Chatbot, self).__init__(training_file="tell_tale_heart.txt")
+    def __init__(self, training_file="Doctorow.txt"):
+        super(Chatbot, self).__init__(training_file="Doctorow.txt")
         self.training_file = training_file
         self.sausage = {}
 
@@ -33,6 +33,7 @@ class Chatbot(Trainbot):
         return random.choice(sentences)
 
     def output_filtration(self, output_filter, chains):
+        print "inside output_filtration"
         if u"No Filter Selected" in output_filter[0]:
             output = self.o_filter_random(chains)
         else:
@@ -97,6 +98,7 @@ class Chatbot(Trainbot):
 
     def _filter_recursive(self, strings, filters, output_dict=OrderedDict({})):
         u"""Return list of strings or call the next filter function."""
+        print "Inside filter recursive"
         if filters == []:
             return strings, output_dict
         else:

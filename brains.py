@@ -30,12 +30,14 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
                 next_word = random.choice(chatbot_brain.bi_lexicon[seed])
                 candidate.append(next_word)
                 seed = next_word
+                print "Try"
             except KeyError:
                 candidates.append(" ".join(candidate))
                 done = True
             if next_word in chatbot_brain.stop_puncts:
                 candidates.append(" ".join(candidate))
                 done = True
+        print "Post while"
     return candidates
 
 

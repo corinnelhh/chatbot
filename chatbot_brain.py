@@ -31,7 +31,9 @@ class Chatbot(Trainbot):
 
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentences"""
-        return random.choice(sentences)
+        sentence = random.choice(sentences)
+        sentence = sentence[0].upper() + sentence[1:-2] + sentence[-1:]
+        return sentence
 
     def output_filtration(self, output_filter, chains):
         print "inside output_filtration"
@@ -73,7 +75,8 @@ class Chatbot(Trainbot):
                 self.bi_lexicon[seed]
             except KeyError:
                 seeds.remove(seed)
-        self.sausage["sanitized_seeds"] = seeds
+        seed_string = ", ".join(seeds)
+        self.sausage["sanitized_seeds"] = seed_string
         return seeds
 
     def _pair_seed(self, seed):
@@ -126,9 +129,9 @@ class Chatbot(Trainbot):
             </b> were selected. <p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After eliminating the \
-            seed words not in the bot's'lexicon', <b>{sanitized_seeds}</b>\
+            seed words not in the bot's 'lexicon', <b>{sanitized_seeds}</b>\
             were passed to the Markov Chain sentence generator, yielding \
-            200 sentences.</p>""".format(**self.sausage)
+            <b>200</b> sentences.</p>""".format(**self.sausage)
         else:
             message["no_chains"] = """<p> The seeds were next checked \
             against the bot's lexicon. The search did not return any\
@@ -138,9 +141,9 @@ class Chatbot(Trainbot):
             for s_key, s_value in self.sausage["o_filter_report"].items():
                 if (len(s_value)) > 0:
                     message[s_key] = """<p> Next, the sentences were passed \
-                    through the {}, after which there were {} sentences \
+                    through the <b>{}</b>, after which there were <b>{}</b> sentences\
                     remaining. </p><p> A sample sentence of what remained\
-                    after this filter is: <b>{}</b>.</p>\
+                    after this filter is: <b>{}</b></p>\
                     """.format(s_key, len(s_value), s_value[0])
         message["final_report"] = """One sentence was selected at random.\
         </p><p>And that's how the <b>{final_sentence}</b> response was\

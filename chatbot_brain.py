@@ -32,7 +32,6 @@ class Chatbot(Trainbot):
     def o_filter_random(self, sentences):
         u"""Return randomly selected sentence from sentences"""
         sentence = random.choice(sentences)
-        sentence = sentence[0].upper() + sentence[1:-2] + sentence[-1:]
         return sentence
 
     def output_filtration(self, output_filter, chains):
@@ -48,6 +47,7 @@ class Chatbot(Trainbot):
             self.sausage["o_filter_report"] = report
             if len(filtered) > 0:
                 output = self.o_filter_random(filtered)
+                output = output[0].upper() + output[1:-2] + output[-1:]
             else:
                 output = "I'm not sure what to say about that."
         return output

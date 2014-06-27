@@ -32,7 +32,6 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
                 next_word = random.choice(chatbot_brain.bi_lexicon[seed])
                 candidate.append(next_word)
                 seed = next_word
-                print "Try"
             except KeyError:
                 candidates.append(" ".join(candidate))
                 done = True
@@ -41,7 +40,6 @@ def _create_bi_chains(chatbot_brain, seeds, size=200):
                 done = True
             if count > 75:
                 done = True
-        print "Post while"
     return candidates
 
 

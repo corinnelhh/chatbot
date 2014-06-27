@@ -50,13 +50,13 @@ $(document).ready(function(){
 
     $( "#input_filter" ).change(function() {
     if ($("#input_filter").val() == "No Filter Selected") {
-        $("#input_filter").hide();
+        $("#in_descrip").hide();
     }
     else {
         var name = $("#input_filter").val()
         var description = $("#input_filter").find(":selected").attr("data-description");
-        $("#input_filter").text(name + ": " + description);
-        $("#input_filter").show();
+        $("#in_descrip").text(name + ": " + description);
+        $("#in_descrip").show();
     }
     });
 

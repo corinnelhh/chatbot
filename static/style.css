@@ -113,6 +113,15 @@ header{
     #position: relative;
 }
 
+.desc{
+    font-size: 14px;
+    font-weight:bold;
+}
+.desc .hidden{
+    font-size: 12px;
+    font-weight: normal;
+}
+
 .sausage{
     font-size: 14px;
 }

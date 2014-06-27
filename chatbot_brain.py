@@ -17,6 +17,7 @@ class Chatbot(Trainbot):
         super(Chatbot, self).__init__(training_file="Doctorow.txt")
         self.training_file = training_file
         self.sausage = {}
+        self.recursion = 0
 
     def i_filter_random(self, words):
         u"""Return randomly selected, non-punctuation word from words."""
@@ -41,12 +42,15 @@ class Chatbot(Trainbot):
             for _filter in output_filter:
                 if _filter != u"No Filter Selected":
                     all_filters.append(output_filters.funct_dict[_filter])
+            # import pdb
+            # pdb.set_trace()
             filtered, report = self._chain_filters(chains, all_filters)
             self.sausage["o_filter_report"] = report
             if len(filtered) > 0:
                 output = self.o_filter_random(filtered)
             else:
                 output = "I'm not sure what to say about that."
+        print self.recursion
         return output
 
     def _input_filtration(self, input_sent, input_key):
@@ -93,6 +97,7 @@ class Chatbot(Trainbot):
         Expects: A list of filter functions.
         Returns: A list of strings.
         """
+        self.recursion = 0
         strings, output_dict = self._filter_recursive(strings, filters)
         return strings, output_dict
 
@@ -102,6 +107,7 @@ class Chatbot(Trainbot):
         if filters == []:
             return strings, output_dict
         else:
+            self.recursion += 1
             output_dict[filters[0].__name__] = filters[0](strings, self.word_pos)
             return self._filter_recursive(
                 filters[0](strings, self.word_pos),
@@ -112,32 +118,32 @@ class Chatbot(Trainbot):
     def _make_sausage(self):
         u"""compiles a report on how the reply was made"""
         message = OrderedDict({})
-        message["final_sentence"] = """<h4>This is how the response <i>\
-        '{final_sentence}'</i> was made:</h4>""".format(**self.sausage)
+        message["final_sentence"] = """<h4>This is how the response <b>\
+        '{final_sentence}'</b> was made:</h4>""".format(**self.sausage)
         if "input_filter" in self.sausage:
             message["input_filter"] = """
-            <p> With the {input_filter} input filter, <i>{i_filtered_seeds}\
-            </i> were selected. <p>""".format(**self.sausage)
+            <p> With the <b>{input_filter}</b> input filter, <b>{i_filtered_seeds}\
+            </b> were selected. <p>""".format(**self.sausage)
         if "unfiltered_chains" in self.sausage:
             message["unfiltered_chains"] = """<p> After eliminating the \
-            seed words not in the bot's'lexicon', <i>{sanitized_seeds}</i>\
+            seed words not in the bot's'lexicon', <b>{sanitized_seeds}</b>\
             were passed to the Markov Chain sentence generator, yielding \
             200 sentences.</p>""".format(**self.sausage)
         else:
             message["no_chains"] = """<p> The seeds were next checked \
             against the bot's lexicon. The search did not return any\
-             known words, so a default response <i>{final_sentence}</i>\
+             known words, so a default response <b>{final_sentence}</b>\
             was returned. </p>""".format(**self.sausage)
         if "o_filter_report" in self.sausage:
-            for s_key, s_value in self.sausage["o_filter_report"].items()[::]:
+            for s_key, s_value in self.sausage["o_filter_report"].items():
                 if (len(s_value)) > 0:
                     message[s_key] = """<p> Next, the sentences were passed \
                     through the {}, after which there were {} sentences \
                     remaining. </p><p> A sample sentence of what remained\
-                    after this filter is: <i>{}</i>.</p>\
+                    after this filter is: <b>{}</b>.</p>\
                     """.format(s_key, len(s_value), s_value[0])
         message["final_report"] = """One sentence was selected at random.\
-        </p><p>And that's how the <i>{final_sentence}</i> response was\
+        </p><p>And that's how the <b>{final_sentence}</b> response was\
          made!""".format(**self.sausage)
         return message
 

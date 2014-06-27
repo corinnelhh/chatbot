@@ -37,7 +37,7 @@ def add_func_to_dict(name=None):
 
 
 @add_func_to_dict("No Filter Selected")
-def no_o_filter_selected(sentences, self):
+def no_o_filter_selected(sentences, bot_dict):
     return sentences
 
 
@@ -130,11 +130,11 @@ def syntactic_filter_fast(sentences, bot_dict):
     for sentence in sentences:
         print "=================="
         print str(sentence) + "\n"
-        tokens = random.choice(nltk.tokenize.wordpunct_tokenize(sentence))
+        tokens = nltk.tokenize.wordpunct_tokenize(sentence)
         justTags = []
-        print self.pos_lexicon_word_pos
+        # print self.pos_lexicon_word_pos
         for word in tokens[:-1]:
-            tag = self.pos_lexicon_word_pos[word]
+            tag = random.choice(bot_dict[word])
             justTags.append(tag)
         justTags.append(tokens[-1])
         print str(justTags) + "\n"

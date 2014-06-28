@@ -206,7 +206,7 @@ def test_small_talk_filter(_bot_brain):
     tester = wordpunct_tokenize("raining snowing sunny weather")
     weather_opts = ["Talking about the weather is such a bore.",
         "I'm not the weatherman!"]
-    sentence = input_filters.filter_small_talk(tester, lex)
+    sentence = input_filters.filter_small_talk(tester)
     assert sentence in weather_opts
 
 

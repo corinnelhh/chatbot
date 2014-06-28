@@ -3,7 +3,7 @@ Koanbot
 
 The Koanbot project is a sandbox environment for learning about natural language processing, python programming, and the nltk python package. The Koanbot employs a simple sentence analysis system that relies on n-gram generation and input/output filters.
 
-To interact with it on a surface level, visit the Koanbot  [here](http://ec2-54-213-221-186.us-west-2.compute.amazonaws.com/). For those who wish to dig deeper, read on!
+To interact with it on a surface level, visit the Koanbot  [here](http:/ec2-54-187-163-101.us-west-2.compute.amazonaws.com/). For those who wish to dig deeper, read on!
 
 ###Download Instructions
 To start playing with the project immediately:

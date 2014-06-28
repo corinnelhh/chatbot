@@ -127,7 +127,7 @@ class Chatbot(Trainbot):
         message = OrderedDict({})
         message["final_sentence"] = """<h4>This is how the response <b>\
         '{final_sentence}'</b> was made:</h4>""".format(**self.sausage)
-        if "i_filtered_seeds" in self.sausage:
+        if "i_filtered_seeds" in self.sausage and "input_filter" in self.sausage:
             message["input_filter"] = """
             <p> With the <b>{input_filter}</b> input filter, <b>{i_filtered_seeds}\
             </b> were selected. <p>""".format(**self.sausage)

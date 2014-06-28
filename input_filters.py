@@ -25,7 +25,7 @@ def no_input_filter_selected(input_):
 
 
 @add_func_to_dict("Small Talk Filter")
-def filter_small_talk(input_, lexicon=None):
+def filter_small_talk(input_):
     u"""Sentences containing certain keywords
     (such as 'raining' or 'football') return a
     hard-coded response rather than a response
@@ -35,15 +35,14 @@ def filter_small_talk(input_, lexicon=None):
     weather_words = ["weather", "raining", "rain", "snowing",
                      "snows", "sunny", "cloudy"]
     feeling_words = ["happy", "sad", "lonely", "excited"]
-    if input_[:2] == ["It", "means"]:
-        return small_talk_dict('new_word')
+
     for word in input_:
         if word in sports_words:
-            return small_talk_dict('sports')
+            return small_talk_dict('sports'), word
         elif word in weather_words:
-            return small_talk_dict('weather')
+            return small_talk_dict('weather'), word
         elif word in feeling_words:
-            return small_talk_dict('feelings')
+            return small_talk_dict('feelings'), word
     else:
         return input_
 

@@ -8,9 +8,9 @@ To interact with it on a surface level, visit the Koanbot  [here](http:/ec2-54-1
 ###Download Instructions
 To start playing with the project immediately:
  * Clone the project onto your local computer.
- * While in the project's root directory, run 'pip install requirements'.
+ * While in the project's root directory, run 'pip install -r requirements.txt'.
  * Still in root, run 'python views.py'.
- * You now have a copy of Koanbot running on your local machine at '/localhost/8000'!
+ * You now have a copy of Koanbot running on your local machine at 'localhost:8000'!
 
 #Input Filters
 
